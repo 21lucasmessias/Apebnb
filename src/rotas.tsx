@@ -1,15 +1,25 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
+import SplashScreen from "react-native-splash-screen";
+import { tema } from "./global/estilos/tema";
 
 
-const Rotas = () => {
+export const Rotas = () => {
+  useEffect(() => {
+    SplashScreen.hide()
+  }, [])
+
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="dark-content"/>
-    </NavigationContainer>
+    <>
+      <StatusBar barStyle="light-content"/>
+
+      <NavigationContainer>
+        <View style={{flex: 1, backgroundColor: tema.color.azulEscuro}}>
+
+        </View>
+      </NavigationContainer>
+    </>
   );
 }
-
-export default Rotas
