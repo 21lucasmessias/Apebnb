@@ -13,7 +13,7 @@ export const App: React.FC = () => {
 
   return (
     <>
-      <StatusBar barStyle="light-content" translucent/>
+      <StatusBar barStyle="default"/>
       <Rotas/>
     </>
   );
