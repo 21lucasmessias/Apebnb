@@ -1,12 +1,12 @@
 import styled from 'styled-components/native'
 import { tema } from '../../global/estilos/tema';
 
-
-export const Container = styled.View`
+export const Envolvedor = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 
+  width: 100%;
   height: 56px;
   padding: 10px;
 
@@ -17,7 +17,7 @@ export const Filler = styled.View`
   width: 36px;
 `
 
-export const Touchable = styled.TouchableOpacity`
+export const Pressionavel = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 
@@ -27,6 +27,6 @@ export const Touchable = styled.TouchableOpacity`
   border-radius: 10px;
 `
 
-export const Image = styled.Image`
+export const Imagem = styled.Image`
 
 `

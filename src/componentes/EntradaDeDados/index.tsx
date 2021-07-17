@@ -17,7 +17,7 @@ interface iEntradaDeDados extends TextInputProps {
   validador: (entrada: string | undefined) => boolean,
 }
 
-const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, tipoTeclado, tipoAutoCompletar, validador, ...rest}) => {
+const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, tipoTeclado, tipoAutoCompletar, validador, ...rest }) => {
   const [focado, setFocado] = useState(false);
   const [erro, setErro] = useState(false);
   const [verSenha, setVerSenha] = useState(false);
@@ -25,31 +25,31 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, tipoTeclado, tipoAu
   return (
     <Envolvedor>
       <EntradaTexto
-        value = {valor}
-        
-        onFocus=  {() => {
+        value={valor}
+
+        onFocus={() => {
           setFocado(true)
         }}
-  
-        onEndEditing = {() => {
+
+        onEndEditing={() => {
           setFocado(false)
           setErro(!validador(valor))
         }}
 
-        secureTextEntry = {tipoAutoCompletar == 'password' && !verSenha}
-  
-        keyboardType = {tipoTeclado ? tipoTeclado : 'default'}
+        secureTextEntry={tipoAutoCompletar == 'password' && !verSenha}
+
+        keyboardType={tipoTeclado ? tipoTeclado : 'default'}
         autoCompleteType={tipoAutoCompletar}
-  
-        focado = {focado}
-        erro = {erro}
-  
-        {... rest}
+
+        focado={focado}
+        erro={erro}
+
+        {...rest}
       />
 
       {tipoAutoCompletar == 'password' && (
         <TouchableWithoutFeedback onPress={() => setVerSenha(!verSenha)}>
-          <Icon name={verSenha ? 'eye' : 'eye-off'} size={24} color={tema.color.azulEscuro} style={{position:'absolute', right: 54}}/>
+          <Icon name={verSenha ? 'eye' : 'eye-off'} size={24} color={tema.color.azulEscuro} style={{ position: 'absolute', right: 54 }} />
         </TouchableWithoutFeedback>
       )}
 

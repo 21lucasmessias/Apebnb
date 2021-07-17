@@ -1,19 +1,31 @@
 import React from 'react'
 
+import ContextoAmbientesProvider from '../../contextos/ContextoAmbientes'
+
+import { StackScreenProps } from '@react-navigation/stack'
+import { RotasAmbientesParamsList } from './rotas'
+
+import ListaAmbientes from '../../componentes/ListaAmbientes'
+
 import {
-  Container,
-  Wrapper
+  Envolvedor,
+  Corpo,
+  Titulo,
+  SubTitulo
 } from './estilos'
 
-import { Cabecalho } from '../../componentes/Cabecalho'
-
-export const Ambientes: React.FC = () => {
+const Ambientes: React.FC<StackScreenProps<RotasAmbientesParamsList>> = (navigation) => {
   return (
-    <Wrapper>
-      <Cabecalho onBack={() => {}} onPressMore={() => {}} showBack={false} />
-      <Container>
-        
-      </Container>
-    </Wrapper>
+    <ContextoAmbientesProvider>
+      <Envolvedor>
+        <Titulo>Olá Lucas</Titulo>
+        <SubTitulo>Ambientes</SubTitulo>
+        <ListaAmbientes
+          navigation={navigation.navigation}
+        />
+      </Envolvedor>
+    </ContextoAmbientesProvider>
   )
 }
+
+export default Ambientes;

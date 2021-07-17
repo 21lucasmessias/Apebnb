@@ -1,10 +1,12 @@
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 
 import Icon from 'react-native-vector-icons/Feather'
 import { tema } from '../../global/estilos/tema'
 import { iMorador } from '../../models/Morador'
 import { RotasParamsList } from '../../rotas'
+import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas'
 
 import {
   Envolvedor,
@@ -16,7 +18,7 @@ import {
 
 interface iCartaoMorador {
   morador: iMorador,
-  navigation: BottomTabNavigationProp<RotasParamsList>
+  navigation: StackNavigationProp<RotasAmbientesParamsList>
 }
 
 const CartaoMorador: React.FC<iCartaoMorador> = ({ morador, navigation }) => {

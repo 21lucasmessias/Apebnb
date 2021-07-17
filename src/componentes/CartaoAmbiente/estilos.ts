@@ -1,7 +1,13 @@
 import styled from "styled-components/native"
 import { tema } from "../../global/estilos/tema"
 
-export const Pressionavel = styled.TouchableOpacity``;
+interface iPressionavel {
+  ultimo: boolean
+}
+
+export const Pressionavel = styled.TouchableOpacity<iPressionavel>`
+  margin-bottom: ${(props) => props.ultimo ? '60px' : '0px'};
+`;
 
 export const Envolvedor = styled.View`
   flex-direction: row;
