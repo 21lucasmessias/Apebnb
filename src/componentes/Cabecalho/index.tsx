@@ -1,39 +1,37 @@
 import React from 'react'
 
-import { View } from 'react-native'
-
 import Icon from 'react-native-vector-icons/Feather'
 import Logo from '../../assets/Logo.png'
 
 import { tema } from '../../global/estilos/tema'
 
 import {
-  Container,
-  Touchable,
+  Envolvedor,
+  Pressionavel,
   Filler,
-  Image
+  Imagem
 } from './estilos'
+import { StackHeaderProps } from '@react-navigation/stack'
 
 interface iCabecalho {
-  showBack: boolean,
-  onBack: () => void,
-  onPressMore: () => void
+  aoPressionarMais: () => void,
+  stackCabecalhoProps: StackHeaderProps
 }
 
-export const Cabecalho: React.FC<iCabecalho> = ({showBack, onBack, onPressMore}) => {
+export const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}) => {
   return(
-    <Container>
-      {!showBack ? <Filler></Filler> : 
-        <Touchable onPress={onBack}>
+    <Envolvedor>
+      {!stackCabecalhoProps.navigation.canGoBack() ? <Filler></Filler> : 
+        <Pressionavel onPress={stackCabecalhoProps.navigation.goBack}>
           <Icon name='arrow-left' size={24} color={tema.color.ouro}/>
-        </Touchable>
+        </Pressionavel>
       }
 
-      <Image source={Logo}/>
+      <Imagem source={Logo}/>
 
-      <Touchable onPress={onPressMore}>
+      <Pressionavel onPress={aoPressionarMais}>
         <Icon name='more-vertical' size={24} color={tema.color.ouro}/>
-      </Touchable>
-    </Container>
+      </Pressionavel>
+    </Envolvedor>
   )
 }

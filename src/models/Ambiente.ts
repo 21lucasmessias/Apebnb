@@ -1,6 +1,6 @@
 export interface iAmbiente {
   foto: string | null,
-  titulo: string,
+  nome: string,
   descricao: string,
   diasDisponiveis: {
     segunda: boolean,
