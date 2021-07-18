@@ -8,13 +8,12 @@ import { Rotas } from './src/rotas';
 
 export const App: React.FC = () => {
   useEffect(() => {
-    SplashScreen.hide()
+    setTimeout(() => {
+      SplashScreen.hide()
+    }, 1000)
   }, [])
 
   return (
-    <>
-      <StatusBar barStyle="default"/>
-      <Rotas/>
-    </>
+    <Rotas />
   );
 }

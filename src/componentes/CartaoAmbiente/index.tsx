@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas'
+
 import Icon from 'react-native-vector-icons/Feather'
 
 import { tema } from '../../global/estilos/tema'
@@ -15,9 +18,8 @@ import {
   Descricao,
   Separador
 } from './estilos'
-
-import { StackNavigationProp } from '@react-navigation/stack'
-import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas'
+import { useContext } from 'react'
+import { ContextoTeclado } from '../../contextos/ContextoTeclado'
 
 interface iCartaoAmbiente {
   ambiente: iAmbiente,
@@ -26,6 +28,10 @@ interface iCartaoAmbiente {
 }
 
 const CartaoAmbiente: React.FC<iCartaoAmbiente> = ({ ambiente, navigation, ultimo }) => {
+  const {
+    tecladoVisivel
+  } = useContext(ContextoTeclado)
+
   return (
     <Pressionavel
       activeOpacity={0.7}
@@ -34,7 +40,7 @@ const CartaoAmbiente: React.FC<iCartaoAmbiente> = ({ ambiente, navigation, ultim
           ambiente: ambiente
         })
       }}
-      ultimo={ultimo}
+      ultimo={ultimo && tecladoVisivel}
     >
       <Envolvedor>
         {ambiente.foto ? (
