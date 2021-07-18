@@ -1,33 +1,16 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.apebnb">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.apebnb">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.INTERNET" />
 
-    <application
-      android:name=".MainApplication"
-      android:label="@string/app_name"
-      android:icon="@drawable/icon"
-      android:roundIcon="@drawable/adaptive_icon"
-      android:allowBackup="false"
-      android:theme="@style/AppTheme">
+  <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@drawable/icon" android:roundIcon="@drawable/adaptive_icon" android:allowBackup="false" android:theme="@style/AppTheme">
 
-      <activity
-        android:name=".SplashActivity"
-        android:theme="@style/SplashTheme"
-        android:label="@string/app_name">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
+    <activity android:name=".SplashActivity" android:theme="@style/SplashScreenTheme" android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
 
-      <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize"
-        android:exported="true">
-      </activity>
-    </application>
+    <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:exported="true"></activity>
+  </application>
 </manifest>

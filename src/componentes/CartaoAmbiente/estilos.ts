@@ -6,7 +6,7 @@ interface iPressionavel {
 }
 
 export const Pressionavel = styled.TouchableOpacity<iPressionavel>`
-  margin-bottom: ${(props) => props.ultimo ? '60px' : '0px'};
+  margin-bottom: ${(props) => props.ultimo ? '64px' : '0px'};
 `;
 
 export const Envolvedor = styled.View`
@@ -16,9 +16,9 @@ export const Envolvedor = styled.View`
   height: 190px;
 
   padding: 12px;
-  border-radius: 15px;
+  border-radius: 18px;
   
-  background-color: ${tema.color.ouro};
+  background-color: ${tema.color.branco};
 `
 
 export const Foto = styled.Image`
@@ -48,18 +48,19 @@ export const Separador = styled.View`
 
 export const DescricaoEnvolvedor = styled.View`
   width: 48%;
+  overflow: hidden;
 `
 
 export const Titulo = styled.Text`
   text-align: center;
   font-family: ${tema.fontes.WorkSans};
-  font-size: 16px;
-  color: ${tema.color.azulEscuro};
+  font-size: 18px;
+  color: ${tema.color.verdeAzulado};
 `
 
 export const Descricao = styled.Text`
   text-align: justify;
   font-family: ${tema.fontes.WorkSans};
-  font-size: 10px;
+  font-size: 12px;
   color: ${tema.color.azulEscuro};
 `
