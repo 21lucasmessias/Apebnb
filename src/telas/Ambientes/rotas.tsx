@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack';
 import Ambientes from '.';
 import Ambiente from './Ambiente';
 import { iAmbiente } from '../../models/Ambiente';
@@ -16,6 +16,12 @@ export type RotasAmbientesParamsList = {
 const { Navigator, Screen } = createStackNavigator<RotasAmbientesParamsList>();
 
 const RotasAmbientes: React.FC = () => {
+  const forFade = ({ current }: StackCardInterpolationProps) => ({
+    cardStyle: {
+      opacity: current.progress,
+    },
+  });
+
   return (
     <Navigator
       headerMode='float'
@@ -26,6 +32,7 @@ const RotasAmbientes: React.FC = () => {
             aoPressionarMais={() => { }}
           />
         ),
+        cardStyleInterpolator: (props) => forFade(props)
       }}>
       <Screen name="ambientes" component={Ambientes} />
       <Screen name="ambiente" component={Ambiente} />
