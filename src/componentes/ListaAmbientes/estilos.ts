@@ -7,14 +7,11 @@ export const Envolvedor = styled.View`
   background-color: ${tema.color.cinza};
 `
 
-export const FlatList = styled.FlatList`
-`
-
 export const Texto = styled.Text`
   font-family: ${tema.fontes.WorkSans};
   font-size: 16px;
   color: ${tema.color.azulEscuro};
-  text-align: center
+  text-align: center;
 `
 
 export const Separador = styled.View`

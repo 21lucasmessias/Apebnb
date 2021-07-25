@@ -6,7 +6,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import {
   Envolvedor,
-  FlatList,
   Texto,
   Separador
 } from './estilos'
@@ -15,6 +14,7 @@ import { useState } from 'react';
 import BarraPesquisa from '../BarraPesquisa';
 import { useContext } from 'react';
 import { ContextoAmbientes } from '../../contextos/ContextoAmbientes';
+import { FlatList } from 'react-native';
 
 interface iListaAmbientes {
   navigation: StackNavigationProp<RotasAmbientesParamsList, 'ambientes'>
@@ -43,7 +43,7 @@ const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
           <CartaoAmbiente
-            ambiente={item as iAmbiente}
+            ambiente={item}
             navigation={navigation}
             ultimo={index == ambientes.length - 1}
           />
