@@ -14,7 +14,7 @@ import {
   SubTitulo
 } from './estilos'
 
-const Ambientes: React.FC<StackScreenProps<RotasAmbientesParamsList>> = (navigation) => {
+const Ambientes: React.FC<StackScreenProps<RotasAmbientesParamsList, 'ambientes'>> = (navigation) => {
   return (
     <ContextoAmbientesProvider>
       <Envolvedor>

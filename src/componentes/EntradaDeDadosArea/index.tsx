@@ -18,7 +18,7 @@ interface iEntradaDeDados extends TextInputProps {
   validador: (entrada: string | undefined) => boolean,
 }
 
-const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTeclado, tipoAutoCompletar, validador, nome, ...rest }) => {
+const EntradaDeDadosArea: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTeclado, tipoAutoCompletar, validador, nome, ...rest }) => {
   const [focado, setFocado] = useState(false);
   const [erro, setErro] = useState(false);
   const [verSenha, setVerSenha] = useState(false);
@@ -48,6 +48,9 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
 
         placeholder={nome}
 
+        multiline
+        textAlignVertical='top'
+
         {...rest}
       />
 
@@ -61,4 +64,4 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
   )
 })
 
-export default EntradaDeDados
+export default EntradaDeDadosArea

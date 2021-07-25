@@ -7,6 +7,7 @@ export const tema = {
     branco: '#FFFFFF',
     fosco: '#BEC1C2',
     verdeClaro: '#85A85A',
+    magenta: '#F93943'
   },
   fontes: {
     WorkSans: 'WorkSans-Regular'
