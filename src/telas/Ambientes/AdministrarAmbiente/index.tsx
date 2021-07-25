@@ -26,9 +26,9 @@ import { useRef } from 'react'
 import { View } from 'react-native'
 import { iAmbiente } from '../../../models/Ambiente'
 
-interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'ambiente'> {}
+interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'administrarAmbiente'> {}
 
-const Ambiente: React.FC<iAmbienteScreen> = ({ route }) => {
+const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
   const { ambiente } = route.params
   const [titulo, setTitulo] = useState('')
   const [descricao, setDescricao] = useState('')
@@ -99,4 +99,4 @@ const Ambiente: React.FC<iAmbienteScreen> = ({ route }) => {
   )
 }
 
-export default Ambiente
+export default AdministrarAmbiente
