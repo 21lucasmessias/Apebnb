@@ -7,15 +7,18 @@ import {
 
 interface iBotao {
   texto: string,
-  aoPressionar: () => void
+  aoPressionar: () => void,
+  tipo: 'preenchido' | 'wireframe'
 }
 
-export const Botao: React.FC<iBotao> = ({ texto, aoPressionar }) => {
+const Botao: React.FC<iBotao> = ({ texto, aoPressionar, tipo }) => {
   return (
-    <Pressionavel onPress={aoPressionar} activeOpacity={0.7}>
-      <Texto>
+    <Pressionavel onPress={aoPressionar} activeOpacity={0.7} tipo={tipo}>
+      <Texto tipo={tipo}>
         {texto}
       </Texto>
     </Pressionavel>
   )
 }
+
+export default Botao

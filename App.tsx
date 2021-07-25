@@ -10,7 +10,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
       SplashScreen.hide()
-    }, 1000)
+    }, 1500)
   }, [])
 
   return (

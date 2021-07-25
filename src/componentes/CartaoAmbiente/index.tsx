@@ -20,10 +20,11 @@ import {
 } from './estilos'
 import { useContext } from 'react'
 import { ContextoTeclado } from '../../contextos/ContextoTeclado'
+import { Keyboard } from 'react-native'
 
 interface iCartaoAmbiente {
   ambiente: iAmbiente,
-  navigation: StackNavigationProp<RotasAmbientesParamsList>,
+  navigation: StackNavigationProp<RotasAmbientesParamsList, 'ambientes'>,
   ultimo: boolean
 }
 
@@ -36,6 +37,7 @@ const CartaoAmbiente: React.FC<iCartaoAmbiente> = ({ ambiente, navigation, ultim
     <Pressionavel
       activeOpacity={0.7}
       onPress={() => {
+        Keyboard.dismiss()
         navigation.navigate('ambiente', {
           ambiente: ambiente
         })

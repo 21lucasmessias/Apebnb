@@ -17,7 +17,7 @@ import { useContext } from 'react';
 import { ContextoAmbientes } from '../../contextos/ContextoAmbientes';
 
 interface iListaAmbientes {
-  navigation: StackNavigationProp<RotasAmbientesParamsList>
+  navigation: StackNavigationProp<RotasAmbientesParamsList, 'ambientes'>
 }
 
 const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {

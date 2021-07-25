@@ -11,13 +11,12 @@ export const Envolvedor = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
 `;
 
 export const EntradaTexto = styled.TextInput<iEntradaTexto>`
   flex: 1;
-  height: 50px;
-
-  text-decoration-line: none;
+  height: 130px;
 
   padding-left: 19px;
   padding-right: ${(props) => props.autoCompleteType == 'password' ? '60px' : '19px'};

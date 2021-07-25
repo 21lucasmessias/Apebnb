@@ -36,30 +36,42 @@ export const Rotas = () => {
               right: 18,
               borderRadius: 15,
               backgroundColor: tema.color.azulEscuro,
-              borderTopWidth: 0
+              borderTopWidth: 0,
             },
-            keyboardHidesTabBar: true
+            keyboardHidesTabBar: true,
           }}
           tabBar={(props) => <TabBar {...props} />}
         >
           <Screen component={RotasAmbientes} name='ambientes'
             options={{
               tabBarIcon: ({ color, focused }) => (
-                <Icon name='clock' size={24} color={focused ? tema.color.verdeClaro : color} />
+                <Icon
+                  name='clock'
+                  size={24}
+                  color={focused ? tema.color.verdeClaro : color}
+                />
               )
             }}
           />
           <Screen component={Moradores} name='moradores'
             options={{
               tabBarIcon: ({ color, focused }) => (
-                <Icon name='home' size={24} color={focused ? tema.color.verdeClaro : color} />
+                <Icon
+                  name='home'
+                  size={24}
+                  color={focused ? tema.color.verdeClaro : color}
+                />
               )
             }}
           />
           <Screen component={Reservas} name='reservas'
             options={{
               tabBarIcon: ({ color, focused }) => (
-                <Icon name='user' size={24} color={focused ? tema.color.verdeClaro : color} />
+                <Icon
+                  name='user'
+                  size={24}
+                  color={focused ? tema.color.verdeClaro : color}
+                />
               )
             }}
           />
