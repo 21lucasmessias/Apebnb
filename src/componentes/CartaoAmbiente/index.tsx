@@ -21,6 +21,7 @@ import {
 import { useContext } from 'react'
 import { ContextoTeclado } from '../../contextos/ContextoTeclado'
 import { Keyboard } from 'react-native'
+import { useState } from 'react'
 
 interface iCartaoAmbiente {
   ambiente: iAmbiente,
@@ -33,12 +34,14 @@ const CartaoAmbiente: React.FC<iCartaoAmbiente> = ({ ambiente, navigation, ultim
     tecladoVisivel
   } = useContext(ContextoTeclado)
 
+  const [adminUser, setAdminUser] = useState(false)
+
   return (
     <Pressionavel
       activeOpacity={0.7}
       onPress={() => {
         Keyboard.dismiss()
-        navigation.navigate('ambiente', {
+        navigation.navigate( adminUser ? 'administrarAmbiente' : 'visualizarAmbiente', {
           ambiente: ambiente
         })
       }}
