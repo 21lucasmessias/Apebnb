@@ -8,35 +8,25 @@ export const Conteiner = styled.View`
   background-color: ${tema.color.cinza};
 `
 
-export const Envolvedor = styled.ScrollView`
+export const Envolvedor = styled.View`
   flex: 1;
   flex-direction: column;
-`
-
-export const Foto = styled.Image`
-  width: 100%;
-  height: 196px;
-  border-radius: 10px;
-`
-
-export const FotoVaziaEnvolvedor = styled.View`
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  height: 196px;
-
-  border-radius: 10px;  
-  
-  background-color: ${tema.color.verdeAzulado};
+  position: relative;
 `
 
 export const Divisor = styled.View`
   height: 8px;
 `
-
 export const EnvolvedorBotoes = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 12px;
+`
+
+export const SubTitulo = styled.Text`
+  font-family: ${tema.fontes.WorkSans};
+  color: ${tema.color.azulEscuro};
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 24px;
 `

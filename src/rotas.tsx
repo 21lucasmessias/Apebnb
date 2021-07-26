@@ -5,13 +5,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import Icon from 'react-native-vector-icons/Feather'
 
-import { Moradores } from './telas/Moradores'
 import { Reservas } from './telas/Reservas'
 
 import { tema } from './global/estilos/tema'
 import RotasAmbientes from './telas/Ambientes/rotas'
 import TabBar from './componentes/TabBar'
 import ContextoTecladoProvider from './contextos/ContextoTeclado'
+import RotasMoradores from './telas/Moradores/rotas'
 
 export type RotasParamsList = {
   ambientes: undefined,
@@ -53,7 +53,7 @@ export const Rotas = () => {
               )
             }}
           />
-          <Screen component={Moradores} name='moradores'
+          <Screen component={RotasMoradores} name='moradores'
             options={{
               tabBarIcon: ({ color, focused }) => (
                 <Icon

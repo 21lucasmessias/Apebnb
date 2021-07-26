@@ -75,6 +75,8 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
             setDiaString={setDiaString}
           />
 
+          <Divisor/>
+
           <EntradaDeHorario
             setRelogioVisivel={setHorarioVisivel}
             horarioEscolhido={horarioEscolhido}
