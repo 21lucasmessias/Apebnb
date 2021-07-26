@@ -6,7 +6,7 @@ interface iPressionavel {
 }
 
 export const Pressionavel = styled.TouchableOpacity<iPressionavel>`
-  margin-bottom: ${(props) => props.ultimo ? '64px' : '0px'};
+  margin-bottom: ${(props) => props.ultimo ? '18px' : '0px'};
 `;
 
 export const Envolvedor = styled.View`

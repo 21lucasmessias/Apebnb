@@ -1,67 +1,135 @@
-import React, { useState } from 'react'
-import { KeyboardTypeOptions, TextInputAndroidProps, TextInputProps, TouchableWithoutFeedback } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { StyleSheet, KeyboardTypeOptions, TextInputAndroidProps, TextInputProps, View } from 'react-native'
+
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
 import Icon from 'react-native-vector-icons/Feather'
 import { tema } from '../../global/estilos/tema'
+import { comBouncing, semBouncing } from '../../utils/Animacoes'
 
 import {
-  Envolvedor,
   EntradaTexto
 } from './estilos'
 
-interface iEntradaDeDados extends TextInputProps {
+interface iEntradaDeDadosArea extends TextInputProps {
   valor: string,
   setValor: React.Dispatch<React.SetStateAction<string>>,
   nome: string,
-  tipoTeclado?: KeyboardTypeOptions,
-  tipoAutoCompletar?: TextInputAndroidProps['autoCompleteType'],
   validador: (entrada: string | undefined) => boolean,
 }
 
-const EntradaDeDadosArea: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTeclado, tipoAutoCompletar, validador, nome, ...rest }) => {
+const EntradaDeDadosArea: React.FC<iEntradaDeDadosArea> = (({ valor, setValor, validador, nome, ...rest }) => {
+  const entradaTextoRef = useRef(null)
+
   const [focado, setFocado] = useState(false);
   const [erro, setErro] = useState(false);
-  const [verSenha, setVerSenha] = useState(false);
+
+  const topPlaceHolder = useSharedValue(10)
+  const leftPlaceHolder = useSharedValue(20)
+  const colorPlaceHolder = useSharedValue(tema.color.fosco)
+
+  const heightEnvolvedor = useSharedValue(160)
+
+  const placeHolderAnimacao = useAnimatedStyle(() => {
+    return {
+      top: topPlaceHolder.value,
+      left: leftPlaceHolder.value,
+      color: colorPlaceHolder.value
+    }
+  })
+
+  const envolvedorAnimacao = useAnimatedStyle(() => {
+    return {
+      height: heightEnvolvedor.value
+    }
+  })
+
+  useEffect(() => {
+    if(valor != ''){
+      topPlaceHolder.value = withSpring(-5, comBouncing)
+      leftPlaceHolder.value = withSpring(4, comBouncing)
+      colorPlaceHolder.value = tema.color.azulEscuro
+
+      heightEnvolvedor.value = withSpring(190, semBouncing)
+    } else {
+      topPlaceHolder.value = withSpring(15, comBouncing)
+      leftPlaceHolder.value = withSpring(20, comBouncing)
+      colorPlaceHolder.value = tema.color.fosco
+
+      heightEnvolvedor.value = withSpring(160, semBouncing)
+    }
+  }, [valor])
 
   return (
-    <Envolvedor>
-      <EntradaTexto
-        value={valor}
-        onChangeText={setValor}
+    <Animated.View style={[styles.envolvedor, envolvedorAnimacao]}>
+      <Animated.View        
+        style={
+          [styles.envolvedorEntrada,
+            {
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: focado ? tema.color.azulEscuro : erro ? tema.color.magenta : tema.color.verdeAzulado,
+            }
+          ]
+        }
+      >
+        <EntradaTexto
+          value={valor}
+          onChangeText={setValor}
 
-        onFocus={() => {
-          setFocado(true)
-        }}
+          onFocus={() => {
+            setFocado(true)
+          }}
 
-        onEndEditing={() => {
-          setFocado(false)
-          setErro(!validador(valor))
-        }}
+          onEndEditing={() => {
+            setFocado(false)
+            setErro(!validador(valor))
+          }}
 
-        secureTextEntry={tipoAutoCompletar == 'password' && !verSenha}
+          focado={focado}
+          erro={erro}
 
-        keyboardType={tipoTeclado ? tipoTeclado : 'default'}
-        autoCompleteType={tipoAutoCompletar}
+          multiline
+          scrollEnabled
+          textAlignVertical='top'
+          
+          ref={entradaTextoRef}
 
-        focado={focado}
-        erro={erro}
+          {...rest}
+        />
+      </Animated.View>
 
-        placeholder={nome}
 
-        multiline
-        textAlignVertical='top'
+      <Animated.Text
+        // @ts-ignore: Unreachable code error
+        onPress={() => entradaTextoRef.current?.focus()}
+        style={[styles.placeHolder, placeHolderAnimacao]}
+      >
+        {nome}
+      </Animated.Text>
 
-        {...rest}
-      />
-
-      {tipoAutoCompletar == 'password' && (
-        <TouchableWithoutFeedback onPress={() => setVerSenha(!verSenha)}>
-          <Icon name={verSenha ? 'eye' : 'eye-off'} size={24} color={tema.color.azulEscuro} style={{ position: 'absolute', right: 54 }} />
-        </TouchableWithoutFeedback>
-      )}
-
-    </Envolvedor>
+    </Animated.View>
   )
+})
+
+const styles = StyleSheet.create({
+  placeHolder: {
+    position: 'absolute',
+    fontFamily: tema.fontes.WorkSans,
+    fontSize: 20,
+  },
+
+  envolvedor: {
+    width: '100%',
+    justifyContent: 'flex-end'
+  },
+
+  envolvedorEntrada: {
+    height: 160,
+    width: '100%',
+    borderRadius: 10,  
+    backgroundColor: tema.color.branco,
+  }
 })
 
 export default EntradaDeDadosArea

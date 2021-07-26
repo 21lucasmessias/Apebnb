@@ -3,7 +3,7 @@ import { tema } from '../../../global/estilos/tema'
 
 export const Conteiner = styled.View`
   flex: 1;
-  padding: 12px;
+  padding: 16px;
   
   background-color: ${tema.color.cinza};
 `
@@ -34,6 +34,7 @@ export const FotoVaziaEnvolvedor = styled.View`
 
 export const Divisor = styled.View`
   height: 18px;
+  width: 18px;
 `
 
 export const DivisorVisivel = styled.View`

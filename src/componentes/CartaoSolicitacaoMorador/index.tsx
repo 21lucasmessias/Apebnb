@@ -17,13 +17,13 @@ import {
   Texto
 } from './estilos'
 
-interface iCartaoMorador {
+interface iCartaoSolicitacaoMorador {
   morador: iMorador,
-  navigation: StackNavigationProp<RotasMoradoresParamsList, 'moradores'>,
+  navigation: StackNavigationProp<RotasMoradoresParamsList, 'solicitacoes'>,
   ultimo: boolean
 }
 
-const CartaoMorador: React.FC<iCartaoMorador> = ({ morador, navigation, ultimo }) => {
+const CartaoSolicitacaoMorador: React.FC<iCartaoSolicitacaoMorador> = ({ morador, navigation, ultimo }) => {
   const {
     tecladoVisivel
   } = useContext(ContextoTeclado)
@@ -33,7 +33,7 @@ const CartaoMorador: React.FC<iCartaoMorador> = ({ morador, navigation, ultimo }
       activeOpacity={0.7}
       onPress={() => {
         Keyboard.dismiss()
-        navigation.navigate( 'administrarMorador', {
+        navigation.navigate( 'aprovarMorador', {
           morador: morador
         })
       }}
@@ -52,10 +52,13 @@ const CartaoMorador: React.FC<iCartaoMorador> = ({ morador, navigation, ultimo }
           <Texto>
             {morador.nome}
           </Texto>
+          <Texto>
+            {morador.numero}
+          </Texto>
         </DetalhesEnvolvedor>
       </Envolvedor>
     </Pressionavel>
   )
 }
 
-export default CartaoMorador
+export default CartaoSolicitacaoMorador
