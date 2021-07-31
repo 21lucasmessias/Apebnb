@@ -31,7 +31,7 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
   const leftPlaceHolder = useSharedValue(20)
   const colorPlaceHolder = useSharedValue(tema.color.fosco)
 
-  const heightEnvolvedor = useSharedValue(60)
+  const heightEnvolvedor = useSharedValue(65)
 
   const placeHolderAnimacao = useAnimatedStyle(() => {
     return {
@@ -53,18 +53,18 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
       leftPlaceHolder.value = withSpring(4, comBouncing)
       colorPlaceHolder.value = tema.color.azulEscuro
 
-      heightEnvolvedor.value = withSpring(80, semBouncing)
+      heightEnvolvedor.value = withSpring(90, semBouncing)
     } else {
       topPlaceHolder.value = withSpring(15, comBouncing)
       leftPlaceHolder.value = withSpring(20, comBouncing)
       colorPlaceHolder.value = tema.color.fosco
 
-      heightEnvolvedor.value = withSpring(55, semBouncing)
+      heightEnvolvedor.value = withSpring(65, semBouncing)
     }
   }, [valor])
 
   return (
-    <Animated.View style={[styles.envolvedor, envolvedorAnimacao]}>
+    <Animated.View style={[envolvedorAnimacao]}>
       <Animated.View        
         style={
           [styles.envolvedorEntrada,
@@ -81,7 +81,6 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
           onChangeText={setValor}
 
           onFocus={() => {
-            console.log('teste')
             setFocado(true)
           }}
 
@@ -128,7 +127,6 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
       >
         {nome}
       </Animated.Text>
-
     </Animated.View>
   )
 })
@@ -140,12 +138,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-  envolvedor: {
-    width: '100%',
-    height: 50,
-    justifyContent: 'flex-end'
-  },
-
   envolvedorEntrada: {
     flexDirection: 'row',
     position: 'absolute',
@@ -153,7 +145,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,  
     backgroundColor: tema.color.branco,
-    height: 52
+    height: 55,
+    bottom: 8
   }
 })
 
