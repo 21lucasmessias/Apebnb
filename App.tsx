@@ -1,10 +1,9 @@
 import React, { useEffect } from "react"
 
-import { StatusBar } from 'react-native';
-
 import SplashScreen from "react-native-splash-screen";
 
 import { Rotas } from './src/rotas';
+import RotasAutenticacao from "./src/telas/Autenticacao/rotas";
 
 export const App: React.FC = () => {
   useEffect(() => {
@@ -14,6 +13,6 @@ export const App: React.FC = () => {
   }, [])
 
   return (
-    <Rotas />
+    <RotasAutenticacao />
   );
 }
