@@ -21,54 +21,63 @@ const ContextoMoradoresProvider: React.FC<iContextoMoradoresProvider> = ({ child
   useEffect(() => {
     setMoradores([
       {
+        id: '1',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '2',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '3',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '4',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '5',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '6',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '7',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '8',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '9',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
@@ -78,54 +87,63 @@ const ContextoMoradoresProvider: React.FC<iContextoMoradoresProvider> = ({ child
 
     setMoradoresFiltrados([
       {
+        id: '1',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '2',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '3',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '4',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '5',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '6',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '7',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '8',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
         numero: '998540419'
       },
       {
+        id: '9',
         nome: "Lucas",
         cpf: '00000000000',
         email: 'lucas@gmail.com',
