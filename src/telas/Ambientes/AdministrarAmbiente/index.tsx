@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+
+import { View } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAmbientesParamsList } from '../rotas'
 
-import { tema } from '../../../global/estilos/tema'
 
 import Icon from 'react-native-vector-icons/Feather'
+
+import { iAmbiente } from '../../../models/Ambiente'
+import { validadorTituloAmbiente, validadorDescricaoAmbiente } from '../../../utils/Validadores'
+import { tema } from '../../../global/estilos/tema'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import EntradaDeDadosArea from '../../../componentes/EntradaDeDadosArea'
 import SeletorDiasSemana from '../../../componentes/SeletorDiasSemana'
 import Botao from '../../../componentes/Botao'
-
-import { validadorTituloAmbiente, validadorDescricaoAmbiente } from '../../../utils/Validadores'
 
 import {
   Conteiner,
@@ -22,9 +25,6 @@ import {
   Divisor,
   EnvolvedorBotoes
 } from './estilos'
-import { useRef } from 'react'
-import { View } from 'react-native'
-import { iAmbiente } from '../../../models/Ambiente'
 
 interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'administrarAmbiente'> {}
 
@@ -41,6 +41,7 @@ const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
     })
 
     let ambiente: iAmbiente = {
+      id: '1',
       descricao: descricao,
       nome: titulo,
       diasDisponiveis: {

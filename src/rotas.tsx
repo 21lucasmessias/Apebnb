@@ -3,21 +3,21 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import Icon from 'react-native-vector-icons/Feather'
-
-import { Reservas } from './telas/Reservas'
-
-import { tema } from './global/estilos/tema'
-import RotasAmbientes from './telas/Ambientes/rotas'
-import TabBar from './componentes/TabBar'
 import ContextoTecladoProvider from './contextos/ContextoTeclado'
+
+import Icon from 'react-native-vector-icons/Feather'
+import { tema } from './global/estilos/tema'
+
+import RotasAmbientes from './telas/Ambientes/rotas'
 import RotasMoradores from './telas/Moradores/rotas'
+import RotasReservas from './telas/Reservas/rotas'
 
 export type RotasParamsList = {
   ambientes: undefined,
   moradores: undefined,
   reservas: undefined,
 }
+import TabBar from './componentes/TabBar'
 
 const { Navigator, Screen } = createBottomTabNavigator<RotasParamsList>()
 
@@ -42,7 +42,7 @@ export const Rotas = () => {
           }}
           tabBar={(props) => <TabBar {...props} />}
         >
-          <Screen component={RotasAmbientes} name='ambientes'
+          <Screen component={RotasReservas} name='reservas'
             options={{
               tabBarIcon: ({ color, focused }) => (
                 <Icon
@@ -53,7 +53,7 @@ export const Rotas = () => {
               )
             }}
           />
-          <Screen component={RotasMoradores} name='moradores'
+          <Screen component={RotasAmbientes} name='ambientes'
             options={{
               tabBarIcon: ({ color, focused }) => (
                 <Icon
@@ -64,7 +64,7 @@ export const Rotas = () => {
               )
             }}
           />
-          <Screen component={Reservas} name='reservas'
+          <Screen component={RotasMoradores} name='moradores'
             options={{
               tabBarIcon: ({ color, focused }) => (
                 <Icon

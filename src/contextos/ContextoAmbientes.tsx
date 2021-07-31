@@ -21,6 +21,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
   useEffect(() => {
     setAmbientes([
       {
+        id: '1',
         nome: "Salão de Jogos",
         descricao: "Lorem ipsum condimentum orci posuere class mattis fringilla donec, turpis luctus quam leo interdum senectus sem, venenatis taciti enim facilisis sit laoreet feugiat. viverra nisl senectus lectus lobortis mattis eu turpis sem scelerisque tempor nisi pellentesque euismod hac, convallis pellentesque donec pretium porttitor.",
         diasDisponiveis: {
@@ -35,6 +36,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
         foto: null
       },
       {
+        id: '2',
         nome: "Salão de Jogos",
         descricao: "Lorem ipsum condimentum orci posuere class mattis fringilla donec, turpis luctus quam leo interdum senectus sem, venenatis taciti enim facilisis sit laoreet feugiat. viverra nisl senectus lectus lobortis mattis eu turpis sem scelerisque tempor nisi pellentesque euismod hac, convallis pellentesque donec pretium porttitor.",
         diasDisponiveis: {
@@ -49,6 +51,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
         foto: null
       },
       {
+        id: '3',
         nome: "Salão de Jogos",
         descricao: "Lorem ipsum condimentum orci posuere class mattis fringilla donec, turpis luctus quam leo interdum senectus sem, venenatis taciti enim facilisis sit laoreet feugiat. viverra nisl senectus lectus lobortis mattis eu turpis sem scelerisque tempor nisi pellentesque euismod hac, convallis pellentesque donec pretium porttitor.",
         diasDisponiveis: {
@@ -66,6 +69,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
 
     setAmbientesFiltrados([
       {
+        id: '1',
         nome: "Salão de Jogos",
         descricao: "Lorem ipsum condimentum orci posuere class mattis fringilla donec, turpis luctus quam leo interdum senectus sem, venenatis taciti enim facilisis sit laoreet feugiat. viverra nisl senectus lectus lobortis mattis eu turpis sem scelerisque tempor nisi pellentesque euismod hac, convallis pellentesque donec pretium porttitor.",
         diasDisponiveis: {
@@ -80,6 +84,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
         foto: null
       },
       {
+        id: '2',
         nome: "Salão de Jogos",
         descricao: "Lorem ipsum condimentum orci posuere class mattis fringilla donec, turpis luctus quam leo interdum senectus sem, venenatis taciti enim facilisis sit laoreet feugiat. viverra nisl senectus lectus lobortis mattis eu turpis sem scelerisque tempor nisi pellentesque euismod hac, convallis pellentesque donec pretium porttitor.",
         diasDisponiveis: {
@@ -94,6 +99,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
         foto: null
       },
       {
+        id: '3',
         nome: "Salão de Jogos",
         descricao: "Lorem ipsum condimentum orci posuere class mattis fringilla donec, turpis luctus quam leo interdum senectus sem, venenatis taciti enim facilisis sit laoreet feugiat. viverra nisl senectus lectus lobortis mattis eu turpis sem scelerisque tempor nisi pellentesque euismod hac, convallis pellentesque donec pretium porttitor.",
         diasDisponiveis: {
