@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Icon from 'react-native-vector-icons/Feather'
-import Logo from '../../assets/Logo.png'
+import Logo from '../../assets/LogoStack.png'
 
 import { tema } from '../../global/estilos/tema'
 
@@ -18,7 +18,7 @@ interface iCabecalho {
   stackCabecalhoProps: StackHeaderProps
 }
 
-export const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}) => {
+const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}) => {
   return(
     <Envolvedor>
       {!stackCabecalhoProps.navigation.canGoBack() ? <Filler></Filler> : 
@@ -35,3 +35,5 @@ export const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalh
     </Envolvedor>
   )
 }
+
+export default Cabecalho

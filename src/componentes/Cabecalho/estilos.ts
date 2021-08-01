@@ -10,7 +10,7 @@ export const Envolvedor = styled.View`
   height: 56px;
   padding: 10px;
 
-  background-color: ${tema.color.cinza};
+  background-color: ${tema.color.azulEscuro};
 `
 
 export const Filler = styled.View`
@@ -28,5 +28,4 @@ export const Pressionavel = styled.TouchableOpacity`
 `
 
 export const Imagem = styled.Image`
-
 `
