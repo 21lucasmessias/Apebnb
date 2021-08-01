@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { Keyboard } from 'react-native'
 
-import Icon from 'react-native-vector-icons/Feather'
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAutenticacaoParamsList } from '../rotas'
 
+import Icon from 'react-native-vector-icons/Feather'
+
+import { validadorDeEmail, validadorEntradaStringNumero } from '../../../utils/Validadores'
+import { tema } from '../../../global/estilos/tema'
+
 import Botao from '../../../componentes/Botao'
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
-import { HeaderAnimacoes } from './animacoes'
 
-import { validadorString } from '../../../utils/Validadores'
-import { tema } from '../../../global/estilos/tema'
+import { HeaderAnimacoes } from './animacoes'
 
 import {
   Voltar,
@@ -26,7 +30,12 @@ import {
 interface iEntrarScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'entrar'> {}
 
 const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
-  const [nome, setNome] = useState('')
+  const {
+    autenticar
+  } = useContext(ContextoAutenticacao)
+
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
 
   return (
     <Conteiner>
@@ -37,19 +46,21 @@ const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
         </Descricao>
       </TextoConteiner>
 
-      <FormEnvolvedor contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      <FormEnvolvedor keyboardShouldPersistTaps='always' contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
         <EntradaDeDados 
           nome='Email'
-          validador={validadorString}
-          valor={nome}
-          setValor={setNome}
+          validador={validadorDeEmail}
+          valor={email}
+          setValor={setEmail}
+          tipoTeclado='email-address'
         />
 
         <EntradaDeDados 
           nome='Senha'
-          validador={validadorString}
-          valor={nome}
-          setValor={setNome}
+          validador={validadorEntradaStringNumero}
+          valor={senha}
+          setValor={setSenha}
+          tipoAutoCompletar='password'
         />
 
         <EsqueceuSenha onPress={() => {navigation.navigate('recuperarSenha')}}> 
@@ -62,7 +73,10 @@ const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
       <EnvolvedorBotoes>
         <Botao
           texto='Entrar'
-          aoPressionar={() => {}}
+          aoPressionar={() => {
+            Keyboard.dismiss()
+            autenticar(email, senha)
+          }}
           tipo='preenchido'
         />
       </EnvolvedorBotoes>

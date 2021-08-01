@@ -9,7 +9,6 @@ import ListaAmbientes from '../../componentes/ListaAmbientes'
 
 import {
   Envolvedor,
-  Corpo,
   Titulo,
   SubTitulo
 } from './estilos'

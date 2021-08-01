@@ -1,18 +1,16 @@
-import React, { useEffect } from "react"
+import React from "react"
 
-import SplashScreen from "react-native-splash-screen";
+import ContextoAutenticacaoProvider from "./src/contextos/ContextoAutenticacao";
+import ContextoTecladoProvider from "./src/contextos/ContextoTeclado";
 
-import { Rotas } from './src/rotas';
-import RotasAutenticacao from "./src/telas/Autenticacao/rotas";
+import Rotas from "./src/rotas";
 
 export const App: React.FC = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hide()
-    }, 1500)
-  }, [])
-
   return (
-    <RotasAutenticacao />
+    <ContextoAutenticacaoProvider>
+      <ContextoTecladoProvider>
+        <Rotas />  
+      </ContextoTecladoProvider>
+    </ContextoAutenticacaoProvider>
   );
 }

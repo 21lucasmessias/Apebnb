@@ -1,14 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { StyleSheet, KeyboardTypeOptions, TextInputAndroidProps, TextInputProps, View } from 'react-native'
+import React, {
+  useState,
+  useEffect,
+  useRef
+} from 'react'
 
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { 
+  StyleSheet,
+  KeyboardTypeOptions,
+  TextInputAndroidProps,
+  TextInputProps,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native'
+
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring
+} from 'react-native-reanimated'
 
 import Icon from 'react-native-vector-icons/Feather'
 import { tema } from '../../global/estilos/tema'
 import { comBouncing, semBouncing } from '../../utils/Animacoes'
 
 import {
-  EntradaTexto
+  EntradaTexto,
+  Texto
 } from './estilos'
 
 interface iEntradaDeDados extends TextInputProps {
@@ -65,7 +82,7 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
 
   return (
     <Animated.View style={[envolvedorAnimacao]}>
-      <Animated.View        
+      <View
         style={
           [styles.envolvedorEntrada,
             {
@@ -111,22 +128,30 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
               setVerSenha(!verSenha)
             }}
             style={{
-              paddingRight: 12
+              paddingRight: 12,
             }}
           >
             <Icon name={verSenha ? 'eye' : 'eye-off'} size={24} color={tema.color.azulEscuro} />
           </View>
         )}
-      </Animated.View>
+      </View>
 
-
-      <Animated.Text
-        // @ts-ignore: Unreachable code error
-        onPress={() => entradaTextoRef.current?.focus()}
-        style={[styles.placeHolder, placeHolderAnimacao]}
+      <Animated.View 
+        style={[styles.placeHolder, placeHolderAnimacao]} 
+        focusable={false}
       >
-        {nome}
-      </Animated.Text>
+        <TouchableWithoutFeedback
+          onLongPress={() => {}}
+          onPress={() => {
+            // @ts-ignore: Unreachable code error
+            if(!entradaTextoRef.current?.isFocused()) entradaTextoRef.current?.focus()
+          }}
+        >
+          <Texto>
+            {nome}
+          </Texto>
+        </TouchableWithoutFeedback>
+      </Animated.View>
     </Animated.View>
   )
 })
@@ -134,8 +159,6 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
 const styles = StyleSheet.create({
   placeHolder: {
     position: 'absolute',
-    fontFamily: tema.fontes.WorkSans,
-    fontSize: 20,
   },
 
   envolvedorEntrada: {

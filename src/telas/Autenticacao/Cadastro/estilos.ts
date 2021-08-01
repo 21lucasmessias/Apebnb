@@ -32,6 +32,7 @@ export const Descricao = styled.Text`
 `
 
 export const EnvolvedorBotoes = styled.View`
+  height: 50px;
   margin: 12px 38px;
   justify-content: center;
 `

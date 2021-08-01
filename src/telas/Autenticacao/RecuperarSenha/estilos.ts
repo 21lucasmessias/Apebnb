@@ -31,16 +31,7 @@ export const Descricao = styled.Text`
 `
 
 export const EnvolvedorBotoes = styled.View`
+  height: 50px;
   margin: 12px 38px;
   justify-content: center;
-`
-
-export const EsqueceuSenha = styled.TouchableOpacity`
-`
-
-export const TextoSenha = styled.Text`
-  font-family: ${tema.fontes.WorkSans};
-  font-size: 14px;
-  color: ${tema.color.azulEscuro};
-  text-align: right;
 `

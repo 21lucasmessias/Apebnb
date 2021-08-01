@@ -2,15 +2,14 @@ import React, {useEffect, useState} from 'react'
 import { View } from 'react-native'
 
 import moment from 'moment'
+import { Agenda, AgendaItemsMap, LocaleConfig } from 'react-native-calendars'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasReservasParamsList } from './rotas'
 
-
 import { iReserva } from '../../models/Reserva'
 import { traduzir } from '../../utils/Traduzir'
 
-import { Agenda } from 'react-native-calendars'
 import CartaoReserva from '../../componentes/CartaoReserva'
 
 import {
@@ -22,12 +21,22 @@ import {
 } from './estilos'
 
 
-export const Reservas: React.FC<StackScreenProps<RotasReservasParamsList, 'reservas'>> = ({ navigation }) => {
-  const hoje = new Date() 
+const Reservas: React.FC<StackScreenProps<RotasReservasParamsList, 'reservas'>> = ({ navigation }) => {
+  const hoje = new Date()
 
-  const [items, setItems] = useState<{[key: string]: iReserva[]}>()
+  const [items, setItems] = useState<AgendaItemsMap<iReserva>>()
 
   useEffect(() => {
+    LocaleConfig.locales['br'] = {
+      monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+      monthNamesShort: ['Jan.','Fev.','Mar.','Abr.','Mai.','Jun.','Jul.','Ago.','Set.','Out.','Nov.','Dec.'],
+      dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sabado'],
+      dayNamesShort: ['Dom.','Seg.','Ter.','Qua.','Qui.','Sex.','Sab.'],
+      today: 'Hoje'
+    };
+
+    LocaleConfig.defaultLocale = 'br'
+
     setItems({
       '2021-07-26': [
         {
@@ -113,7 +122,7 @@ export const Reservas: React.FC<StackScreenProps<RotasReservasParamsList, 'reser
             reserva={item}
           />
         }
-        renderDay={(date, item) => {
+        renderDay={(date) => {
           if(date){
 
             return(
@@ -128,7 +137,11 @@ export const Reservas: React.FC<StackScreenProps<RotasReservasParamsList, 'reser
             <View style={{width: 60}}></View>
           )
         }}
+        renderEmptyDate={() => <></>}
+        rowHasChanged={(r1, r2) => r1.id !== r2.id}
       />
     </Container>
   )
 }
+
+export default Reservas

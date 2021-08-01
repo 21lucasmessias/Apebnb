@@ -19,3 +19,8 @@ export const EntradaTexto = styled.TextInput<iEntradaTexto>`
   font-size: 22px;
   color: ${tema.color.azulEscuro};
 `
+
+export const Texto = styled.Text`
+  font-family: ${tema.fontes.WorkSans};
+  font-size: 20px;
+`

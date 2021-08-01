@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+
 import moment from 'moment'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -7,8 +8,12 @@ import { RotasReservasParamsList } from '../rotas'
 import Icon from 'react-native-vector-icons/Feather'
 
 import { tema } from '../../../global/estilos/tema'
+import { iReserva } from '../../../models/Reserva'
+import { iAmbiente } from '../../../models/Ambiente'
 
 import Botao from '../../../componentes/Botao'
+import VisualizacaoDeData from '../../../componentes/VisualizacaoDeData'
+import VisualizacaoDeHorario from '../../../componentes/VisualizacaoDeHorario'
 
 import {
   Conteiner,
@@ -22,11 +27,6 @@ import {
   DivisorVisivel,
   EnvolvedorData
 } from './estilos'
-import { useEffect } from 'react'
-import { iAmbiente } from '../../../models/Ambiente'
-import VisualizacaoDeData from '../../../componentes/VisualizacaoDeData'
-import VisualizacaoDeHorario from '../../../componentes/VisualizacaoDeHorario'
-import { iReserva } from '../../../models/Reserva'
 
 interface iReservaScreen extends StackScreenProps<RotasReservasParamsList, 'visualizarReserva'> {}
 

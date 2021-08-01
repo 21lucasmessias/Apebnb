@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { Keyboard, StyleSheet, ScrollView } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
+
+import { ContextoTeclado } from '../../../contextos/ContextoTeclado'
 
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
@@ -13,6 +15,7 @@ import { comBouncing, semBouncing } from '../../../utils/Animacoes'
 
 import Icon from 'react-native-vector-icons/Feather'
 
+import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import Botao from '../../../componentes/Botao'
 
 import {
@@ -21,8 +24,6 @@ import {
   Divisor,
   BotaoConteiner
 } from './estilos'
-import EntradaDeDados from '../../../componentes/EntradaDeDados'
-import { ContextoTeclado } from '../../../contextos/ContextoTeclado'
 
 interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'administrarMorador'> {}
 
@@ -92,7 +93,7 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
 
       <Divisor/>
 
-      <ScrollView showsVerticalScrollIndicator={false} focusable keyboardDismissMode='interactive'>
+      <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} focusable keyboardDismissMode='interactive'>
         <EntradaDeDados
           nome='Nome completo'
           valor={nome}

@@ -11,10 +11,6 @@ export const Envolvedor = styled.View`
   padding-left: 16px;
 `
 
-export const Corpo = styled.View`
-  flex: 1;
-`
-
 export const Titulo = styled.Text`
   font-family: ${tema.fontes.WorkSans};
   color: ${tema.color.azulEscuro};
