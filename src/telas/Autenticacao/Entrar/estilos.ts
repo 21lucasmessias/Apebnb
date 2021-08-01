@@ -1,6 +1,5 @@
 import styled from 'styled-components/native'
 import { tema } from '../../../global/estilos/tema'
-import { height } from '../../../utils/Utils'
 
 export const Conteiner = styled.View`
   flex: 1;
@@ -32,6 +31,7 @@ export const Descricao = styled.Text`
 `
 
 export const EnvolvedorBotoes = styled.View`
+  height: 50px;
   margin: 12px 38px;
   justify-content: center;
 `

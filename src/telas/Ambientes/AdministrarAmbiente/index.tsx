@@ -5,7 +5,6 @@ import { View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAmbientesParamsList } from '../rotas'
 
-
 import Icon from 'react-native-vector-icons/Feather'
 
 import { iAmbiente } from '../../../models/Ambiente'

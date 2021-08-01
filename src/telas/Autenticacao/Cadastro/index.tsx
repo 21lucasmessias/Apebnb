@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 
-import Icon from 'react-native-vector-icons/Feather'
-
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAutenticacaoParamsList } from '../rotas'
 
+import Icon from 'react-native-vector-icons/Feather'
+
+import { tema } from '../../../global/estilos/tema'
+import { validadorEntradaStringNumero, validadorString } from '../../../utils/Validadores'
 
 import Botao from '../../../componentes/Botao'
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 
-import { validadorString } from '../../../utils/Validadores'
+import { HeaderAnimacoes } from './animacoes'
 
 import {
   Voltar,
@@ -19,8 +21,6 @@ import {
   Descricao,
   EnvolvedorBotoes,
 } from './estilos'
-import { tema } from '../../../global/estilos/tema'
-import { HeaderAnimacoes } from './animacoes'
 
 interface iCadastroScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'cadastro'> {}
 
@@ -37,7 +37,7 @@ const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
         </Descricao>
       </TextoConteiner>
 
-      <FormEnvolvedor contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      <FormEnvolvedor keyboardShouldPersistTaps='always' contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
         <EntradaDeDados 
           nome='Nome completo'
           validador={validadorString}
@@ -61,9 +61,10 @@ const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
 
         <EntradaDeDados 
           nome='Senha'
-          validador={validadorString}
           valor={nome}
           setValor={setNome}
+          validador={validadorEntradaStringNumero}
+          tipoAutoCompletar='password'
         />
       </FormEnvolvedor>
 

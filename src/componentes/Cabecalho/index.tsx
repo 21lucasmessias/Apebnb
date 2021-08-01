@@ -12,6 +12,8 @@ import {
   Imagem
 } from './estilos'
 import { StackHeaderProps } from '@react-navigation/stack'
+import { useContext } from 'react'
+import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao'
 
 interface iCabecalho {
   aoPressionarMais: () => void,
@@ -19,6 +21,10 @@ interface iCabecalho {
 }
 
 const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}) => {
+  const {
+    logout
+  } = useContext(ContextoAutenticacao)
+
   return(
     <Envolvedor>
       {!stackCabecalhoProps.navigation.canGoBack() ? <Filler></Filler> : 
@@ -29,7 +35,7 @@ const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}
 
       <Imagem source={Logo}/>
 
-      <Pressionavel onPress={aoPressionarMais}>
+      <Pressionavel onPress={logout}>
         <Icon name='more-vertical' size={24} color={tema.color.ouro}/>
       </Pressionavel>
     </Envolvedor>

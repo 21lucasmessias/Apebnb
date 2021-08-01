@@ -19,8 +19,6 @@ import {
   FormEnvolvedor,
   Descricao,
   EnvolvedorBotoes,
-  EsqueceuSenha,
-  TextoSenha
 } from './estilos'
 import { Dialog } from 'react-native-paper'
 import { Keyboard } from 'react-native'
@@ -36,7 +34,7 @@ const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
       <HeaderAnimacoes />
       <TextoConteiner>
         <Descricao>
-          Insirua seu e-mail para{'\n'}recuperar a senha
+          Insira seu e-mail para{'\n'}recuperar a senha
         </Descricao>
       </TextoConteiner>
 
