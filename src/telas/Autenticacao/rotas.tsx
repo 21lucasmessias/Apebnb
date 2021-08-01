@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack';
+
 import Inicio from './Inicio';
 import Cadastro from './Cadastro';
-import ContextoTecladoProvider from '../../contextos/ContextoTeclado';
 import Entrar from './Entrar';
 import RecuperarSenha from './RecuperarSenha';
 
@@ -25,21 +25,19 @@ const RotasAutenticacao: React.FC = () => {
   });
 
   return (
-    <ContextoTecladoProvider>
-      <NavigationContainer>
-        <Navigator
-          headerMode='none'
-          screenOptions={{
-            cardStyleInterpolator: (props) => forFade(props)
-          }}
-        >
-          <Screen name="inicio" component={Inicio} />
-          <Screen name="cadastro" component={Cadastro} />
-          <Screen name="entrar" component={Entrar} />
-          <Screen name="recuperarSenha" component={RecuperarSenha} />
-        </Navigator>
-      </NavigationContainer>
-    </ContextoTecladoProvider>
+    <NavigationContainer independent>
+      <Navigator
+        headerMode='none'
+        screenOptions={{
+          cardStyleInterpolator: (props) => forFade(props)
+        }}
+      >
+        <Screen name="inicio" component={Inicio} />
+        <Screen name="cadastro" component={Cadastro} />
+        <Screen name="entrar" component={Entrar} />
+        <Screen name="recuperarSenha" component={RecuperarSenha} />
+      </Navigator>
+    </NavigationContainer>
   );
 };
 

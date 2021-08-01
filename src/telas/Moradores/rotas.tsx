@@ -1,16 +1,19 @@
 import React from 'react';
 
+import { NavigationContainer } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
-
 import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack';
-import { Cabecalho } from '../../componentes/Cabecalho';
-import { RotasParamsList } from '../../rotas';
+
+import { RotasParamsList } from '../../rotasBottomTab';
 import { iMorador } from '../../models/Morador';
+
 import Moradores from '.';
 import CriarMorador from './CriarMorador';
 import AdministrarMorador from './AdministrarMorador';
 import Solicitacoes from './Solicitacoes';
 import AprovarMorador from './Solicitacoes/AprovarMorador';
+
+import Cabecalho from '../../componentes/Cabecalho';
 
 export type RotasMoradoresParamsList = {
   moradores: undefined;
@@ -34,43 +37,70 @@ const RotasMoradores: React.FC<BottomTabScreenProps<RotasParamsList, 'moradores'
   });
 
   return (
-    <Navigator
-      headerMode='float'
-      screenOptions={{
-        header: props => (
-          <Cabecalho
-            stackCabecalhoProps={props}
-            aoPressionarMais={() => { }}
+    <NavigationContainer independent>
+      <Navigator
+        headerMode='float'
+        screenOptions={{
+          header: props => (
+            <Cabecalho
+              stackCabecalhoProps={props}
+              aoPressionarMais={() => { }}
+            />
+          ),
+          cardStyleInterpolator: (props) => forFade(props)
+        }}>
+          <Screen
+            name="moradores"
+            component={Moradores}
+            listeners={{
+              focus: () => navigation.setOptions({
+                tabBarVisible: true
+              }),
+            }}
           />
-        ),
-        cardStyleInterpolator: (props) => forFade(props)
-      }}>
-        <Screen name="moradores" component={Moradores} listeners={{
-          focus: () => navigation.setOptions({
-            tabBarVisible: true
-          }),
-        }}/>
-        <Screen name="criarMorador" component={CriarMorador} listeners={{
-          focus: () => navigation.setOptions({
-            tabBarVisible: false
-          }),
-        }}/>
-        <Screen name="administrarMorador" component={AdministrarMorador} listeners={{
-          focus: () => navigation.setOptions({
-            tabBarVisible: false
-          }),
-        }}/>
-        <Screen name="solicitacoes" component={Solicitacoes} listeners={{
-          focus: () => navigation.setOptions({
-            tabBarVisible: false
-          }),
-        }}/>
-        <Screen name="aprovarMorador" component={AprovarMorador} listeners={{
-          focus: () => navigation.setOptions({
-            tabBarVisible: false
-          }),
-        }}/>
-    </Navigator>
+
+          <Screen
+            name="criarMorador"
+            component={CriarMorador}
+            listeners={{
+              focus: () => navigation.setOptions({
+                tabBarVisible: false
+              }),
+            }}
+          />
+
+          <Screen
+            name="administrarMorador"
+            component={AdministrarMorador}
+            listeners={{
+              focus: () => navigation.setOptions({
+                tabBarVisible: false
+              }),
+            }}
+          />
+
+          <Screen
+            name="solicitacoes"
+            component={Solicitacoes}
+            listeners={{
+              focus: () => navigation.setOptions({
+                tabBarVisible: false
+              }),
+            }}
+          />
+
+          <Screen
+            name="aprovarMorador"
+            component={AprovarMorador}
+            listeners={{
+              focus: () => navigation.setOptions({
+                tabBarVisible: false
+              }),
+            }}
+          />
+
+      </Navigator>
+    </NavigationContainer>
   );
 };
 
