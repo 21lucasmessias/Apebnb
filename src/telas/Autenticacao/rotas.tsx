@@ -25,19 +25,17 @@ const RotasAutenticacao: React.FC = () => {
   });
 
   return (
-    <NavigationContainer independent>
-      <Navigator
-        headerMode='none'
-        screenOptions={{
-          cardStyleInterpolator: (props) => forFade(props)
-        }}
-      >
-        <Screen name="inicio" component={Inicio} />
-        <Screen name="cadastro" component={Cadastro} />
-        <Screen name="entrar" component={Entrar} />
-        <Screen name="recuperarSenha" component={RecuperarSenha} />
-      </Navigator>
-    </NavigationContainer>
+    <Navigator
+      headerMode='none'
+      screenOptions={{
+        cardStyleInterpolator: (props) => forFade(props)
+      }}
+    >
+      <Screen name="inicio" component={Inicio} />
+      <Screen name="cadastro" component={Cadastro} />
+      <Screen name="entrar" component={Entrar} />
+      <Screen name="recuperarSenha" component={RecuperarSenha} />
+    </Navigator>
   );
 };
 

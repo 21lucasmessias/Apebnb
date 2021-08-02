@@ -18,8 +18,7 @@ export const Divisor = styled.View`
   height: 8px;
 `
 export const EnvolvedorBotoes = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+  height: 50px;
   margin-top: 12px;
 `
 

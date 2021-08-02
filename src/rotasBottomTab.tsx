@@ -23,59 +23,58 @@ const { Navigator, Screen } = createBottomTabNavigator<RotasParamsList>()
 
 const RotasBottomTab = () => {
   return (
-    <NavigationContainer independent>
-      <Navigator
-        tabBarOptions={{
-          showLabel: false,
-          style: {
-            elevation: 0,
-            position: 'absolute',
-            bottom: 8,
-            left: 18,
-            right: 18,
-            borderRadius: 15,
-            backgroundColor: tema.color.azulEscuro,
-            borderTopWidth: 0,
-          },
-          keyboardHidesTabBar: true,
+    <Navigator
+      tabBarOptions={{
+        showLabel: false,
+        style: {
+          elevation: 0,
+          position: 'absolute',
+          bottom: 8,
+          left: 18,
+          right: 18,
+          borderRadius: 15,
+          backgroundColor: tema.color.azulEscuro,
+          borderTopWidth: 0,
+          maxHeight: 50
+        },
+        keyboardHidesTabBar: true,
+      }}
+      tabBar={(props) => <TabBar {...props} />}
+    >
+      <Screen component={RotasAmbientes} name='ambientes'
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name='home'
+              size={24}
+              color={focused ? tema.color.verdeClaro : color}
+            />
+          )
         }}
-        tabBar={(props) => <TabBar {...props} />}
-      >
-        <Screen component={RotasReservas} name='reservas'
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <Icon
-                name='clock'
-                size={24}
-                color={focused ? tema.color.verdeClaro : color}
-              />
-            )
-          }}
-        />
-        <Screen component={RotasAmbientes} name='ambientes'
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <Icon
-                name='home'
-                size={24}
-                color={focused ? tema.color.verdeClaro : color}
-              />
-            )
-          }}
-        />
-        <Screen component={RotasMoradores} name='moradores'
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <Icon
-                name='user'
-                size={24}
-                color={focused ? tema.color.verdeClaro : color}
-              />
-            )
-          }}
-        />
-      </Navigator>
-    </NavigationContainer>
+      />
+      <Screen component={RotasReservas} name='reservas'
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name='clock'
+              size={24}
+              color={focused ? tema.color.verdeClaro : color}
+            />
+          )
+        }}
+      />
+      <Screen component={RotasMoradores} name='moradores'
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name='user'
+              size={24}
+              color={focused ? tema.color.verdeClaro : color}
+            />
+          )
+        }}
+      />
+    </Navigator>
   );
 }
 

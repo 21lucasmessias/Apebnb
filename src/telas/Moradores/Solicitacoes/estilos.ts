@@ -18,12 +18,3 @@ export const SubTitulo = styled.Text`
   text-align: center;
   margin-bottom: 12px;
 `
-
-export const EnvolvedorBotoes = styled.View`
-  flex-direction: row;
-  margin-bottom: 22px;
-`
-
-export const Divisor = styled.View`
-  width: 8px;
-`
