@@ -20,9 +20,9 @@ export const SubTitulo = styled.Text`
 `
 
 export const EnvolvedorBotoes = styled.View`
-  width: 100%;
+  height: 50px;
   flex-direction: row;
-  margin-bottom: 22px;
+  margin-bottom: 12px;
 `
 
 export const Divisor = styled.View`
