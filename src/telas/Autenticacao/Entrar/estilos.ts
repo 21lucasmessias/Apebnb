@@ -35,12 +35,24 @@ export const EnvolvedorBotoes = styled.View`
   margin: 12px 38px;
 `
 
-export const EsqueceuSenha = styled.TouchableOpacity`
+export const EsqueceuSenha = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const Filler = styled.View`
+  flex: 1;
 `
 
 export const TextoSenha = styled.Text`
   font-family: ${tema.fontes.WorkSans};
   font-size: 14px;
   color: ${tema.color.azulEscuro};
-  text-align: right;
+`
+
+export const TextoErro = styled.Text`
+  font-family: ${tema.fontes.WorkSans};
+  font-size: 16px;
+  color: ${tema.color.magenta};
+  text-align: center;
 `
