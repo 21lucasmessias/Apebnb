@@ -18,7 +18,7 @@ export type RotasParamsList = {
 const { Navigator, Screen } = createStackNavigator<RotasParamsList>()
 
 const Rotas: React.FC = () => {
-  const { usuarioLogado } = useContext(ContextoAutenticacao)
+  const { userUid } = useContext(ContextoAutenticacao)
 
   const forFade = ({ current }: StackCardInterpolationProps) => ({
     cardStyle: {
@@ -41,7 +41,7 @@ const Rotas: React.FC = () => {
         }}
       >
         {
-          usuarioLogado ? (
+          userUid ? (
             <Screen
               name='funcionalidades'
               component={RotasBottomTab}

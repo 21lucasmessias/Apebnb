@@ -47,7 +47,7 @@ const RotasBottomTab = () => {
             <Icon
               name='home'
               size={24}
-              color={focused ? tema.color.verdeClaro : color}
+              color={focused ? tema.color.branco : color}
             />
           )
         }}
@@ -58,7 +58,7 @@ const RotasBottomTab = () => {
             <Icon
               name='clock'
               size={24}
-              color={focused ? tema.color.verdeClaro : color}
+              color={focused ? tema.color.branco : color}
             />
           )
         }}
@@ -69,7 +69,7 @@ const RotasBottomTab = () => {
             <Icon
               name='user'
               size={24}
-              color={focused ? tema.color.verdeClaro : color}
+              color={focused ? tema.color.branco : color}
             />
           )
         }}

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Keyboard } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 
 import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
@@ -24,14 +25,16 @@ import {
   Descricao,
   EnvolvedorBotoes,
   EsqueceuSenha,
-  TextoSenha
+  TextoSenha,
+  Filler
 } from './estilos'
 
 interface iEntrarScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'entrar'> {}
 
 const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
   const {
-    autenticar
+    autenticar,
+    carregando,
   } = useContext(ContextoAutenticacao)
 
   const [email, setEmail] = useState('')
@@ -63,12 +66,20 @@ const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
           tipoAutoCompletar='password'
         />
 
-        <EsqueceuSenha onPress={() => {navigation.navigate('recuperarSenha')}}> 
-          <TextoSenha>
+        <EsqueceuSenha >
+          <Filler/>
+          <TextoSenha onPress={() => {navigation.navigate('recuperarSenha')}}>
             Esqueceu a senha?
           </TextoSenha>
         </EsqueceuSenha>
       </FormEnvolvedor>
+
+      <ActivityIndicator
+        style={{position: 'absolute', bottom: 70, alignSelf: 'center'}}
+        animating={carregando}
+        size='large'
+        color={tema.color.verdeAzulado}
+      />
 
       <EnvolvedorBotoes>
         <Botao
@@ -80,6 +91,7 @@ const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
           tipo='preenchido'
         />
       </EnvolvedorBotoes>
+      
       <Voltar onPress={() => navigation.goBack()}>
           <Icon name='arrow-left' size={24} color={tema.color.ouro}/>
       </Voltar>

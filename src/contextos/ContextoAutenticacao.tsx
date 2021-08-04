@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-import firebase from "firebase";
-import "firebase/auth";
-import "firebase/storage"
+import { app, auth, db } from '../configs/firebase'
 
-import {
-  API_KEY,
-  APP_ID,
-  AUTH_DOMAIN,
-  MEASUREMENT_ID,
-  MESSAGING_SENDER_ID,
-  PROJECT_ID,
-  STORAGE_BUCKET
-} from 'react-native-dotenv'
+import { ToastAndroid } from 'react-native';
 
 interface iContextoAutenticacao {
-  usuarioLogado: string | undefined,
+  userUid: string | null,
   autenticar: (email: string, senha: string) => void,
-  logout: () => void
+  logout: () => void,
+  carregando: boolean,
+  criarConta: (nome: string, cpf: string, email: string, senha: string) => void,
 }
 
 export const ContextoAutenticacao = React.createContext({} as iContextoAutenticacao)
@@ -27,51 +19,68 @@ type iContextoAutenticacaoProvider = {
 }
 
 const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({ children }) => {
-  const [usuarioLogado, setUsuarioLogado] = useState<string | undefined>()
+  const [userUid, setUserUid] = useState<string | null>(null)
+  const [carregando, setCarregando] = useState(false)
 
   useEffect(() => {
-    inicializarFirebase()
-
-    firebase.auth().onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
-        setUsuarioLogado(user.uid)
+        setUserUid(user.uid)
       } else {
-        setUsuarioLogado(undefined)
+        setUserUid(null)
       }
     });
   }, [])
 
-  const inicializarFirebase = () => {
-    var firebaseConfig = {
-      apiKey: API_KEY,
-      authDomain: AUTH_DOMAIN,
-      projectId: PROJECT_ID,
-      storageBucket: STORAGE_BUCKET,
-      messagingSenderId: MESSAGING_SENDER_ID,
-      appId: APP_ID,
-      measurementId: MEASUREMENT_ID
-    };
+  const autenticar = (email: string, senha: string) => {
+    setCarregando(true)
 
-    if(!firebase.apps.length){
-      firebase.initializeApp(firebaseConfig);
-    } else {
-      firebase.app()
-    }
+    auth.signInWithEmailAndPassword(email, senha)
+    .then()
+    .catch((err) => {
+      ToastAndroid.showWithGravityAndOffset(
+        "Credencias inválidas.",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        120
+      );
+    })
+    .finally(() => setCarregando(false))
   }
 
-  const autenticar = (email: string, senha: string) => {
-    firebase
-    .auth()
-    .signInWithEmailAndPassword(email, senha)
+  const criarConta = (nome: string, cpf: string, email: string, senha: string) => {
+    setCarregando(true)
+
+    auth.createUserWithEmailAndPassword(email, senha)
+    .then(async (res) => {
+      if(res.user){
+        db.collection("users").doc(`${res.user.uid}`).set({
+          nome: nome,
+          cpf: cpf,
+          email: email
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }
+    })
     .catch((err) => {
-      console.log(err)
+      ToastAndroid.showWithGravityAndOffset(
+        "Credencias inválidas.",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        0,
+        120
+      );
+    })
+    .finally(() => {
+      setCarregando(false)
     })
   }
 
   const logout = () => {
-    firebase
-    .auth()
-    .signOut()
+    auth.signOut()
     .catch(err => {
       console.log(err)
     })
@@ -79,9 +88,11 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
 
   return (
     <ContextoAutenticacao.Provider value={{
-      usuarioLogado: usuarioLogado,
-      autenticar: autenticar,
-      logout: logout
+      userUid,
+      autenticar,
+      logout,
+      carregando,
+      criarConta
     }}>
       {children}
     </ContextoAutenticacao.Provider >
