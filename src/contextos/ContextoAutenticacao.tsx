@@ -6,10 +6,11 @@ import { ToastAndroid } from 'react-native';
 
 interface iContextoAutenticacao {
   userUid: string | null,
+  carregando: boolean,
   autenticar: (email: string, senha: string) => void,
   logout: () => void,
-  carregando: boolean,
   criarConta: (nome: string, cpf: string, email: string, senha: string) => void,
+  recuperarSenha: (email: string) => void
 }
 
 export const ContextoAutenticacao = React.createContext({} as iContextoAutenticacao)
@@ -86,13 +87,24 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     })
   }
 
+  const recuperarSenha = (email: string) => {
+    auth.sendPasswordResetEmail(email)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
   return (
     <ContextoAutenticacao.Provider value={{
       userUid,
+      carregando,
       autenticar,
       logout,
-      carregando,
-      criarConta
+      criarConta,
+      recuperarSenha
     }}>
       {children}
     </ContextoAutenticacao.Provider >
