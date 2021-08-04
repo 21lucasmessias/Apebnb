@@ -22,10 +22,13 @@ import {
 } from './estilos'
 import { Dialog } from 'react-native-paper'
 import { Keyboard } from 'react-native'
+import { useContext } from 'react'
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 interface iRecuperarSenhaScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'recuperarSenha'> {}
 
 const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
+  const { recuperarSenha } = useContext(ContextoAutenticacao)
   const [email, setEmail] = useState('')
   const [dialogoVisivel, setDialogoVisivel] = useState(false)
 
@@ -53,6 +56,7 @@ const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
           aoPressionar={() => {
             Keyboard.dismiss()
             if(validadorDeEmail(email)){
+              recuperarSenha(email)
               setDialogoVisivel(true)
             }
           }}
