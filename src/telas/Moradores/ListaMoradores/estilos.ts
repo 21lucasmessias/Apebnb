@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { tema } from '../../global/estilos/tema';
+import { tema } from '../../../global/estilos/tema';
 
 export const Envolvedor = styled.View`
   flex: 1;
@@ -11,15 +11,6 @@ export const Envolvedor = styled.View`
   padding-left: 16px;
 `
 
-export const Titulo = styled.Text`
-  font-family: ${tema.fontes.WorkSans};
-  color: ${tema.color.azulEscuro};
-  font-size: 32px;
-  margin-top: 6px;
-  margin-bottom: 12px;
-  margin-right: 12px;
-`
-
 export const SubTitulo = styled.Text`
   font-family: ${tema.fontes.WorkSans};
   color: ${tema.color.azulEscuro};
@@ -28,6 +19,12 @@ export const SubTitulo = styled.Text`
   margin-bottom: 12px;
 `
 
-export const NomeView = styled.View`
+export const EnvolvedorBotoes = styled.View`
+  height: 50px;
   flex-direction: row;
+  margin-bottom: 12px;
+`
+
+export const Divisor = styled.View`
+  width: 8px;
 `

@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react'
 
-import { app, auth, db } from '../configs/firebase'
+import { auth, db } from '../configs/firebase'
+
+import firebase from 'firebase'
 
 import { ToastAndroid } from 'react-native';
+import { iUsuario } from '../models/Usuario';
+
+type iUser = {
+  isAdmin: boolean | undefined,
+  uid: string | null
+}
 
 interface iContextoAutenticacao {
-  userUid: string | null,
+  user: iUser,
   carregando: boolean,
   autenticar: (email: string, senha: string) => void,
   logout: () => void,
@@ -19,18 +27,48 @@ type iContextoAutenticacaoProvider = {
   children: React.ReactNode
 }
 
+export const converterUsuarioFirebase = {
+  toFirestore: (data: iUsuario) => data,
+  fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => snap.data() as iUsuario
+}
+
 const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({ children }) => {
-  const [userUid, setUserUid] = useState<string | null>(null)
+  const [user, setUser] = useState<iUser>({
+    isAdmin: undefined,
+    uid: null
+  })
   const [carregando, setCarregando] = useState(false)
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        setUserUid(user.uid)
+        let usuarioAdmin: boolean | undefined = undefined
+
+        db.collection('users')
+        .withConverter(converterUsuarioFirebase)
+        .doc(`${user.uid}`)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            usuarioAdmin = doc.data()!.isAdmin
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(() => {
+          setUser({
+            isAdmin: usuarioAdmin,
+            uid: user.uid
+          })
+        })
       } else {
-        setUserUid(null)
+        setUser({
+          isAdmin: undefined,
+          uid: null
+        })
       }
-    });
+    })
   }, [])
 
   const autenticar = (email: string, senha: string) => {
@@ -56,10 +94,17 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     auth.createUserWithEmailAndPassword(email, senha)
     .then(async (res) => {
       if(res.user){
-        db.collection("users").doc(`${res.user.uid}`).set({
+        db.collection('moradores').doc(`${res.user.uid}`).set({
           nome: nome,
           cpf: cpf,
-          email: email
+          email: email,
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+        db.collection('users').doc(`${res.user.uid}`).set({
+          isAdmin: false
         })
         .catch((err) => {
           console.log(err)
@@ -68,7 +113,7 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     })
     .catch((err) => {
       ToastAndroid.showWithGravityAndOffset(
-        "Credencias inválidas.",
+        'Credencias inválidas.',
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
         0,
@@ -88,6 +133,8 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
   }
 
   const recuperarSenha = (email: string) => {
+    setCarregando(true)
+
     auth.sendPasswordResetEmail(email)
     .then((res) => {
       console.log(res)
@@ -95,11 +142,14 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     .catch((err) => {
       console.log(err)
     })
+    .finally(() => {
+      setCarregando(false)
+    })
   }
 
   return (
     <ContextoAutenticacao.Provider value={{
-      userUid,
+      user,
       carregando,
       autenticar,
       logout,

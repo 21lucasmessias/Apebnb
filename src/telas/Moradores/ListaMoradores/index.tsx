@@ -1,10 +1,10 @@
 import React from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { RotasMoradoresParamsList } from './rotas'
-import ContextoMoradoresProvider from '../../contextos/ContextoMoradores'
+import { RotasMoradoresParamsList } from '../rotas'
+import ContextoMoradoresProvider from '../../../contextos/ContextoMoradores'
 
-import ListaMoradores from '../../componentes/ListaMoradores'
+import ListaMoradores from '../../../componentes/ListaMoradores'
 
 import {
   Envolvedor,
@@ -12,7 +12,7 @@ import {
   EnvolvedorBotoes,
   Divisor
 } from './estilos'
-import Botao from '../../componentes/Botao'
+import Botao from '../../../componentes/Botao'
 
 const Moradores: React.FC<StackScreenProps<RotasMoradoresParamsList, 'moradores'>> = (navigation) => {
   return (

@@ -1,30 +1,26 @@
 import React, { useContext, useEffect } from 'react'
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
+
+import { forFade } from './utils/Animacoes';
 
 import { ContextoAutenticacao } from './contextos/ContextoAutenticacao'
 
 import SplashScreen from "react-native-splash-screen";
 
-import RotasBottomTab from './rotasBottomTab'
+import RotasFuncionalidades from './rotasFuncionalidades'
 import RotasAutenticacao from './telas/Autenticacao/rotas'
 
 export type RotasParamsList = {
-  funcionalidades: undefined;
-  autenticacao: undefined;
+  funcionalidades: undefined,
+  autenticacao: undefined,
 };
 
 const { Navigator, Screen } = createStackNavigator<RotasParamsList>()
 
-const Rotas: React.FC = () => {
-  const { userUid } = useContext(ContextoAutenticacao)
-
-  const forFade = ({ current }: StackCardInterpolationProps) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  });
+const Rotas:  React.FC = () => {
+  const { user } = useContext(ContextoAutenticacao)
 
   useEffect(() => {
     setTimeout(() => {
@@ -41,10 +37,10 @@ const Rotas: React.FC = () => {
         }}
       >
         {
-          userUid ? (
+          user.uid ? (
             <Screen
               name='funcionalidades'
-              component={RotasBottomTab}
+              component={RotasFuncionalidades}
             />
           ) : (
             <Screen

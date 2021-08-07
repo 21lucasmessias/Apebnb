@@ -17,7 +17,7 @@ import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao'
 
 interface iCabecalho {
   aoPressionarMais: () => void,
-  stackCabecalhoProps: StackHeaderProps
+  stackCabecalhoProps?: StackHeaderProps
 }
 
 const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}) => {
@@ -27,7 +27,7 @@ const Cabecalho: React.FC<iCabecalho> = ({aoPressionarMais, stackCabecalhoProps}
 
   return(
     <Envolvedor>
-      {!stackCabecalhoProps.navigation.canGoBack() ? <Filler></Filler> : 
+      {!stackCabecalhoProps?.navigation.canGoBack() ? <Filler></Filler> : 
         <Pressionavel onPress={stackCabecalhoProps.navigation.goBack}>
           <Icon name='arrow-left' size={24} color={tema.color.ouro}/>
         </Pressionavel>

@@ -2,14 +2,15 @@ import React from 'react'
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import { RotasParamsList } from '../../rotasBottomTab'
+import { RotasFuncionalidadesParamsList } from '../../rotasFuncionalidades'
 import { iReserva } from '../../models/Reserva'
-
-import Reservas from '.'
+import { forFade } from '../../utils/Animacoes'
 
 import Cabecalho from '../../componentes/Cabecalho'
+
+import Reservas from '.'
 import VisualizarReserva from './VisualizarReserva'
 
 export type RotasReservasParamsList = {
@@ -21,13 +22,7 @@ export type RotasReservasParamsList = {
 
 const { Navigator, Screen } = createStackNavigator<RotasReservasParamsList>()
 
-const RotasReservas: React.FC<BottomTabScreenProps<RotasParamsList, 'reservas'>> = ({navigation}) => {
-  const forFade = ({ current }: StackCardInterpolationProps) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  })
-
+const RotasReservas: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsList, 'reservas'>> = ({navigation}) => {
   return (
     <NavigationContainer independent>
       <Navigator

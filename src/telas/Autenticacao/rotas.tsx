@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { forFade } from '../../utils/Animacoes';
 
 import Inicio from './Inicio';
 import Cadastro from './Cadastro';
@@ -18,12 +19,6 @@ export type RotasAutenticacaoParamsList = {
 const { Navigator, Screen } = createStackNavigator<RotasAutenticacaoParamsList>();
 
 const RotasAutenticacao: React.FC = () => {
-  const forFade = ({ current }: StackCardInterpolationProps) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  });
-
   return (
     <Navigator
       headerMode='none'
