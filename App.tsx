@@ -9,7 +9,7 @@ export const App: React.FC = () => {
   return (
     <ContextoAutenticacaoProvider>
       <ContextoTecladoProvider>
-        <Rotas />  
+        <Rotas/>
       </ContextoTecladoProvider>
     </ContextoAutenticacaoProvider>
   );

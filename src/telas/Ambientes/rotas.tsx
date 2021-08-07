@@ -2,15 +2,17 @@ import React from 'react';
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 
-import { createStackNavigator, StackCardInterpolationProps } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+
+import { forFade } from '../../utils/Animacoes';
 
 import Ambientes from '.';
 import AdministrarAmbiente from './AdministrarAmbiente';
 import VisualizarAmbiente from './VisualizarAmbiente';
 
 import { iAmbiente } from '../../models/Ambiente';
-import { RotasParamsList } from '../../rotasBottomTab';
+import { RotasFuncionalidadesParamsList } from '../../rotasFuncionalidades';
 
 import Cabecalho from '../../componentes/Cabecalho';
 
@@ -26,13 +28,7 @@ export type RotasAmbientesParamsList = {
 
 const { Navigator, Screen } = createStackNavigator<RotasAmbientesParamsList>();
 
-const RotasAmbientes: React.FC<BottomTabScreenProps<RotasParamsList, 'ambientes'>> = ({navigation}) => {
-  const forFade = ({ current }: StackCardInterpolationProps) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  });
-
+const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsList, 'ambientes'>> = ({navigation}) => {
   return (
     <NavigationContainer independent>
       <Navigator
