@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+
+import { db } from '../configs/firebase'
+
 import { iMorador } from '../models/Morador'
 
+import { showToast } from '../utils/Animacoes'
+import { converterMoradorFirebase } from './ContextoMorador'
+
 interface iContextoMoradores {
-  moradores: Array<iMorador>,
-  setMoradores: React.Dispatch<React.SetStateAction<iMorador[]>>,
-  moradoresFiltrados: iMorador[],
-  setMoradoresFiltrados: React.Dispatch<React.SetStateAction<iMorador[]>>
+  getAllMoradoresAprovados: () => Promise<iMorador[]>,
+  getAllMoradoresDesaprovados: () => Promise<iMorador[]>,
+  setAprovado: (morador: iMorador) => void,
+  adicionarAutoRefreshMoradoresReprovados: (fetchMoradoresReprovados: () => void) => () => void
+  adicionarAutoRefreshMoradoresAprovados: (fetchMoradoresAprovados: () => void) => () => void
 }
 
 export const ContextoMoradores = React.createContext({} as iContextoMoradores)
@@ -15,149 +22,87 @@ type iContextoMoradoresProvider = {
 }
 
 const ContextoMoradoresProvider: React.FC<iContextoMoradoresProvider> = ({ children }) => {
-  const [moradores, setMoradores] = useState<Array<iMorador>>([])
-  const [moradoresFiltrados, setMoradoresFiltrados] = useState<Array<iMorador>>([])
+  const adicionarAutoRefreshMoradoresReprovados = (fetchMoradoresReprovados: () => void) => {
+    return db.collection('moradores')
+    .withConverter(converterMoradorFirebase)
+    .where('aprovado', '==', false)
+    .onSnapshot(() => {
+      fetchMoradoresReprovados()
+    })
+  }
 
-  useEffect(() => {
-    setMoradores([
-      {
-        id: '1',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '2',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '3',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '4',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '5',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '6',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '7',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '8',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '9',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      }
-    ])
+  const adicionarAutoRefreshMoradoresAprovados = (fetchMoradoresAprovados: () => void) => {
+    return db.collection('moradores')
+    .withConverter(converterMoradorFirebase)
+    .where('aprovado', '==', true)
+    .onSnapshot(() => {
+      fetchMoradoresAprovados()
+    })
+  }
 
-    setMoradoresFiltrados([
-      {
-        id: '1',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '2',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '3',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '4',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '5',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '6',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '7',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '8',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      },
-      {
-        id: '9',
-        nome: "Lucas",
-        cpf: '00000000000',
-        email: 'lucas@gmail.com',
-        numero: '998540419'
-      }
-    ])
-  }, [])
+  const getAllMoradoresAprovados = () => {
+    return db.collection('moradores')
+    .withConverter(converterMoradorFirebase)
+    .where('aprovado', '==', true)
+    .get()
+    .then((res) => {
+      const moradores: iMorador[] = res.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+        }
+      })
+
+      return moradores
+    })
+    .catch((err) => {
+      console.log(err)
+      return [] as iMorador[]
+    })
+  }
+
+  const getAllMoradoresDesaprovados = () => {
+    return db.collection('moradores')
+    .withConverter(converterMoradorFirebase)
+    .where('aprovado', '==', false)
+    .get()
+    .then((res) => {
+      const moradores: iMorador[] = res.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+        }
+      })
+
+      return moradores
+    })
+    .catch((err) => {
+      console.log(err)
+      return [] as iMorador[]
+    })
+  }
+
+  const setAprovado = (morador: iMorador) => {
+    db.collection('moradores')
+    .withConverter(converterMoradorFirebase)
+    .doc(morador.id)
+    .set({
+      ...morador,
+      aprovado: true,
+    })
+    .catch((err) => {
+      console.log(err)
+      showToast('Algo deu errado.')
+    })
+  }
 
   return (
     <ContextoMoradores.Provider value={{
-      moradores: moradores,
-      setMoradores: setMoradores,
-      moradoresFiltrados: moradoresFiltrados,
-      setMoradoresFiltrados: setMoradoresFiltrados
+      getAllMoradoresAprovados,
+      getAllMoradoresDesaprovados,
+      setAprovado,
+      adicionarAutoRefreshMoradoresReprovados,
+      adicionarAutoRefreshMoradoresAprovados
     }}>
       {children}
     </ContextoMoradores.Provider >

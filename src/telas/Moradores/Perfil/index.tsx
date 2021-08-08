@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { ScrollView } from 'react-native'
+import { Keyboard, ScrollView } from 'react-native'
 
 import { ActivityIndicator } from 'react-native-paper'
 
@@ -11,6 +11,7 @@ import { RotasMoradoresParamsList } from '../rotas'
 import { tema } from '../../../global/estilos/tema'
 import { validadorEntradaStringNumero } from '../../../utils/Validadores'
 import AnimacoesPerfil from './animacoes'
+import { showToast } from '../../../utils/Animacoes'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import Botao from '../../../componentes/Botao'
@@ -30,24 +31,27 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
 
   const [carregando, setCarregando] = useState(true)
 
+  const [id, setId] = useState('')
+  const [foto, setFoto] = useState('')
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [cpf, setCPF] = useState('')
   const [numero, setNumero] = useState('')
   const [senha, setSenha] = useState('')
   const [confirmarSenha, setConfirmarSenha] = useState('')
-  const [foto, setFoto] = useState('')
+  const [aprovado, setAprovado] = useState(false)
 
   useEffect(() => {
     getDadosMorador()
     .then((res) => {
       if(res) {
-        setNome(res.nome)
+        setId(res.id)
         setNome(res.nome)
         setEmail(res.email)
         setCPF(res.cpf)
         setNumero(res.numero ? res.numero : '')
         setFoto(res.foto ? res.foto : '')
+        setAprovado(res.aprovado)
       }
 
       setCarregando(false)
@@ -55,21 +59,24 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
   }, [])
  
   const salvarMorador = () => {
-    if(senha === confirmarSenha) {
-      setDadosMorador({
-        cpf,
-        email,
-        nome,
-        foto,
-        numero
-      }, senha)
-      .then((res) => {
-        console.log("deu boa")
-      })
-      .catch((err) => {
-        console.log("deu ruim")
-      }) 
-    }
+    Keyboard.dismiss()
+
+    setDadosMorador({
+      id,
+      cpf,
+      email,
+      nome,
+      foto,
+      numero,
+      aprovado
+    }, senha === confirmarSenha ? senha : null)
+    .then((res) => {
+      showToast('Dados alterados com sucesso')
+    })
+    .catch((err) => {
+      console.log(err)
+      showToast('Algo deu errado. Contate o desenvolvedor.')
+    })
   }
 
   return (carregando ? (

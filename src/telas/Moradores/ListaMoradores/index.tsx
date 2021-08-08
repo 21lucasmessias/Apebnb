@@ -1,10 +1,11 @@
 import React from 'react'
-import { StackScreenProps } from '@react-navigation/stack'
 
+import { StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
 import ContextoMoradoresProvider from '../../../contextos/ContextoMoradores'
 
 import ListaMoradores from '../../../componentes/ListaMoradores'
+import Botao from '../../../componentes/Botao'
 
 import {
   Envolvedor,
@@ -12,7 +13,6 @@ import {
   EnvolvedorBotoes,
   Divisor
 } from './estilos'
-import Botao from '../../../componentes/Botao'
 
 const Moradores: React.FC<StackScreenProps<RotasMoradoresParamsList, 'moradores'>> = (navigation) => {
   return (
@@ -28,12 +28,6 @@ const Moradores: React.FC<StackScreenProps<RotasMoradoresParamsList, 'moradores'
           />
 
           <Divisor/>
-
-          <Botao
-            aoPressionar={() => {navigation.navigation.navigate('criarMorador')}}
-            texto='Inclusão manual'
-            tipo='preenchido'
-          />
         </EnvolvedorBotoes>
 
         <ListaMoradores

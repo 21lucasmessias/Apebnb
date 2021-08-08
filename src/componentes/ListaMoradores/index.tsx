@@ -1,57 +1,90 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+
+import { FlatList } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+
+import { ContextoMoradores } from '../../contextos/ContextoMoradores';
 
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RotasMoradoresParamsList } from '../../telas/Moradores/rotas';
+
+import { tema } from '../../global/estilos/tema';
+import { iMorador } from '../../models/Morador';
+
+import BarraPesquisa from '../BarraPesquisa';
+import CartaoMorador from '../CartaoMorador';
 
 import {
   Envolvedor,
   Texto,
   Separador
 } from './estilos'
-import { RotasMoradoresParamsList } from '../../telas/Moradores/rotas';
-import { useState } from 'react';
-import BarraPesquisa from '../BarraPesquisa';
-import { useContext } from 'react';
-import { FlatList } from 'react-native';
-import CartaoMorador from '../CartaoMorador';
-import { ContextoMoradores } from '../../contextos/ContextoMoradores';
 
 interface iListaMoradores {
   navigation: StackNavigationProp<RotasMoradoresParamsList, 'moradores'>
 }
 
 const ListaMoradores: React.FC<iListaMoradores> = ({ navigation }) => {
-  const [buscar, setBuscar] = useState('')
+  const [carregando, setCarregando] = useState(true)
+  const [moradores, setMoradores] = useState<Array<iMorador>>([])
+  const [moradoresFiltrados, setMoradoresFiltrados] = useState<Array<iMorador>>([])
+
   const {
-    moradores,
-    setMoradoresFiltrados,
-    moradoresFiltrados
+    getAllMoradoresAprovados,
+    adicionarAutoRefreshMoradoresAprovados
   } = useContext(ContextoMoradores)
+
+  useEffect(() => {
+    const unsubscribe = adicionarAutoRefreshMoradoresAprovados(fetchMoradoresAprovados)
+
+    fetchMoradoresAprovados()
+
+    return unsubscribe
+  }, [])
+
+  const fetchMoradoresAprovados = () => {
+    setCarregando(true)
+
+    getAllMoradoresAprovados()
+    .then((res) => {
+      setMoradores(res)
+      setMoradoresFiltrados(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      setCarregando(false)
+    })
+  }
 
   return (
     <Envolvedor>
       <BarraPesquisa
         placeholder='Buscar por nome'
-        valor={buscar}
-        setValor={setBuscar}
         setDadosFiltrados={setMoradoresFiltrados}
         dadosOriginais={moradores}
       />
 
-      <FlatList
-        data={moradoresFiltrados}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <CartaoMorador
-            morador={item}
-            navigation={navigation}
-            ultimo={index == moradores.length - 1}
-          />
-        )}
-        ListEmptyComponent={() => <Texto>Sem resultados disponíveis</Texto>}
-        ItemSeparatorComponent={() => <Separador></Separador>}
+      { carregando ? (
+        <ActivityIndicator size='large' color={tema.color.azulEscuro} />
+      ) : (
+        <FlatList
+          data={moradoresFiltrados}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <CartaoMorador
+              morador={item}
+              navigation={navigation}
+              ultimo={index == moradores.length - 1}
+            />
+          )}
+          ListEmptyComponent={() => <Texto>Sem resultados disponíveis</Texto>}
+          ItemSeparatorComponent={() => <Separador></Separador>}
 
-        showsVerticalScrollIndicator={false}
-      />
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </Envolvedor>
   )
 }

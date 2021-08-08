@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
+import firebase from 'firebase'
 import { auth, db } from '../configs/firebase'
 
-import firebase from 'firebase'
-
-import { ToastAndroid } from 'react-native';
 import { iUsuario } from '../models/Usuario';
+import { converterMoradorFirebase } from './ContextoMorador';
+import { showToast } from '../utils/Animacoes';
 
 type iUser = {
   isAdmin: boolean | undefined,
@@ -55,6 +55,7 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
         })
         .catch((err) => {
           console.log(err)
+          showToast('Credencias inválidas.')
         })
         .finally(() => {
           setUser({
@@ -77,13 +78,8 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     auth.signInWithEmailAndPassword(email, senha)
     .then()
     .catch((err) => {
-      ToastAndroid.showWithGravityAndOffset(
-        "Credencias inválidas.",
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        120
-      );
+      console.log(err)
+      showToast('Credencias inválidas.')
     })
     .finally(() => setCarregando(false))
   }
@@ -94,31 +90,35 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     auth.createUserWithEmailAndPassword(email, senha)
     .then(async (res) => {
       if(res.user){
-        db.collection('moradores').doc(`${res.user.uid}`).set({
+        db.collection('moradores')
+        .withConverter(converterMoradorFirebase)
+        .doc(`${res.user.uid}`)
+        .set({
+          id: res.user.uid,
           nome: nome,
           cpf: cpf,
           email: email,
+          aprovado: false
         })
         .catch((err) => {
           console.log(err)
+          showToast('Algo deu errado. Contate o desenvolvedor.')
         })
 
-        db.collection('users').doc(`${res.user.uid}`).set({
+        db.collection('users')
+        .doc(`${res.user.uid}`)
+        .set({
           isAdmin: false
         })
         .catch((err) => {
           console.log(err)
+          showToast('Algo deu errado. Contate o desenvolvedor.')
         })
       }
     })
     .catch((err) => {
-      ToastAndroid.showWithGravityAndOffset(
-        'Credencias inválidas.',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        0,
-        120
-      );
+      console.log(err)
+      showToast('Credencias inválidas.')
     })
     .finally(() => {
       setCarregando(false)
@@ -129,6 +129,7 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     auth.signOut()
     .catch(err => {
       console.log(err)
+      showToast('Algo deu errado. Contate o desenvolvedor.')
     })
   }
 
@@ -141,6 +142,7 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     })
     .catch((err) => {
       console.log(err)
+      showToast('Algo deu errado. Contate o desenvolvedor.')
     })
     .finally(() => {
       setCarregando(false)

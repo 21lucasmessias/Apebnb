@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { ScrollView } from 'react-native'
 
+import { ContextoMoradores } from '../../../../contextos/ContextoMoradores'
+
+import Icon from 'react-native-vector-icons/Feather'
+
 import { RotasMoradoresParamsList } from '../../rotas'
 import { validadorEntradaStringNumero } from '../../../../utils/Validadores'
+import { tema } from '../../../../global/estilos/tema'
 
 import Botao from '../../../../componentes/Botao'
 import EntradaDeDados from '../../../../componentes/EntradaDeDados'
@@ -14,64 +19,66 @@ import {
   Envolvedor,
   Divisor,
   EnvolvedorBotoes,
-  SubTitulo
+  SubTitulo,
+  Foto,
+  EnvolvedorFoto
 } from './estilos'
 
 interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'aprovarMorador'> {}
 
-const AprovarMorador: React.FC<iMoradorScreen> = ({route}) => {
-  const {morador} = route.params
-
-  const [nome, setNome] = useState(morador.nome ? morador.nome : '')
-  const [email, setEmail] = useState(morador.email ? morador.email : '')
-  const [cpf, setCPF] = useState(morador.cpf ? morador.cpf : '')
-  const [celular, setCelular] = useState(morador.numero ? morador.numero : '')
+const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
+  const { morador } = route.params
+  const { setAprovado } = useContext(ContextoMoradores)
  
-  const salvarMorador = () => {
-    console.log({
-      nome: nome,
-      email: email,
-      cpf: cpf,
-    })
+  const aprovarMorador = () => {
+    setAprovado(morador)
+    navigation.goBack()
   }
 
   return (
     <Conteiner>
       <Envolvedor>
         <SubTitulo>Verifique os dados do Morador</SubTitulo>
+        {morador.foto ? (
+            <Foto source={{ uri: morador.foto }} />
+          ) : (
+            <EnvolvedorFoto>
+              <Icon name='camera' size={24} color={tema.color.azulEscuro} />
+            </EnvolvedorFoto>
+          )}
         <ScrollView showsVerticalScrollIndicator={false}>
           <EntradaDeDados
             nome='Nome completo'
-            valor={nome}
-            setValor={setNome}
+            valor={morador.nome}
             validador={validadorEntradaStringNumero}
+            editable={false}
           />
 
           <Divisor/>
           
           <EntradaDeDados
             nome='CPF'
-            valor={cpf}
-            setValor={setCPF}
+            valor={morador.cpf}
             validador={validadorEntradaStringNumero}
+            editable={false}
           />
       
           <Divisor/>
 
           <EntradaDeDados
             nome='Email'
-            valor={email}
-            setValor={setEmail}
+            valor={morador.email}
             validador={validadorEntradaStringNumero}
+            editable={false}
           />
 
           <Divisor/>
 
           <EntradaDeDados
             nome='Celular'
-            valor={celular}
-            setValor={setCelular}
+            valor={morador.numero? morador.numero : ''}
             validador={validadorEntradaStringNumero}
+            editable={false}
           />
 
           <Divisor/>
@@ -79,7 +86,7 @@ const AprovarMorador: React.FC<iMoradorScreen> = ({route}) => {
       </Envolvedor>
 
       <EnvolvedorBotoes>
-        <Botao tipo='preenchido' texto="Aprovar" aoPressionar={salvarMorador}/>
+        <Botao tipo='preenchido' texto="Aprovar" aoPressionar={aprovarMorador}/>
       </EnvolvedorBotoes>
     </Conteiner>
   )
