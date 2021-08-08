@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { TextInputProps } from 'react-native'
 
 import Icon from 'react-native-vector-icons/Feather'
+
 import { tema } from '../../global/estilos/tema'
 import { iAmbiente } from '../../models/Ambiente'
 import { iMorador } from '../../models/Morador'
@@ -12,15 +13,15 @@ import {
 } from './estilos'
 
 interface iBarraPesquisa extends TextInputProps {
-  valor: string,
-  setValor: React.Dispatch<React.SetStateAction<string>>,
   dadosOriginais: Array<iAmbiente | iMorador>,
   setDadosFiltrados: React.Dispatch<React.SetStateAction<Array<any>>>,
 }
 
-const BarraPesquisa: React.FC<iBarraPesquisa> = (({ valor, setValor, dadosOriginais, setDadosFiltrados, ...rest }) => {
+const BarraPesquisa: React.FC<iBarraPesquisa> = (({ dadosOriginais, setDadosFiltrados, ...rest }) => {
+  const [buscar, setBuscar] = useState('')
+
   const filtrarDados = (text: string) => {
-    setValor(text);
+    setBuscar(text);
 
     if (text) {
       let novosDados = dadosOriginais.filter((item) => {
@@ -39,7 +40,7 @@ const BarraPesquisa: React.FC<iBarraPesquisa> = (({ valor, setValor, dadosOrigin
   return (
     <Envolvedor>
       <EntradaTexto
-        value={valor}
+        value={buscar}
         onChangeText={filtrarDados}
         {...rest}
       />

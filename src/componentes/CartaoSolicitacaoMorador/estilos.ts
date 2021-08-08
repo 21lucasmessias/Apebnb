@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+
 import { tema } from "../../global/estilos/tema";
 
 interface iPressionavel {
@@ -12,8 +13,10 @@ export const Pressionavel = styled.TouchableOpacity<iPressionavel>`
 export const Envolvedor = styled.View`
   flex-direction: row;
   
-  height: 58px;
+  height: 78px;
   width: 100%;
+
+  align-items: center;
 
   padding: 4px;
   padding-left: 12px;
@@ -24,21 +27,18 @@ export const Envolvedor = styled.View`
 `;
 
 export const Foto = styled.Image`
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   
   border-radius: 50px;
 `;
 
 export const FotoVaziaEnvolvedor = styled.View`
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
 
   align-items: center;
   justify-content: center;
-
-  width: 50px;
-  height: 50px;
 
   border-radius: 50px;  
   

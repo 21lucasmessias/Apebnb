@@ -1,4 +1,5 @@
 import { StackCardInterpolationProps } from "@react-navigation/stack";
+import { ToastAndroid } from "react-native";
 
 export const semBouncing = {
   restDisplacementThreshold: 0,
@@ -15,3 +16,11 @@ export const forFade = ({ current }: StackCardInterpolationProps) => ({
     opacity: current.progress,
   },
 });
+
+export const showToast = (msg: string) => ToastAndroid.showWithGravityAndOffset(
+  msg,
+  ToastAndroid.SHORT,
+  ToastAndroid.BOTTOM,
+  0,
+  120
+)

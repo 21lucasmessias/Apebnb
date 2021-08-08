@@ -1,17 +1,22 @@
 import React, { useState, useContext } from 'react'
+import { Keyboard } from 'react-native'
+
+import { ActivityIndicator } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/Feather'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAutenticacaoParamsList } from '../rotas'
 
-import Icon from 'react-native-vector-icons/Feather'
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 import { tema } from '../../../global/estilos/tema'
 import { validadorCPF, validadorDeEmail, validadorEntradaStringNumero, validadorString } from '../../../utils/Validadores'
+import { height } from '../../../utils/Utils'
+import { showToast } from '../../../utils/Animacoes'
+import { HeaderAnimacoes } from './animacoes'
 
 import Botao from '../../../componentes/Botao'
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
-
-import { HeaderAnimacoes } from './animacoes'
 
 import {
   Voltar,
@@ -21,10 +26,6 @@ import {
   Descricao,
   EnvolvedorBotoes,
 } from './estilos'
-import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
-import { ActivityIndicator } from 'react-native-paper'
-import { Keyboard, ToastAndroid } from 'react-native'
-import { height } from '../../../utils/Utils'
 
 interface iCadastroScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'cadastro'> {}
 
@@ -44,15 +45,16 @@ const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
       return true
     }
     
-    ToastAndroid.showWithGravityAndOffset(
-      "Credencias inválidas.",
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-      0,
-      120
-    );
+    showToast('Credencias inválidas.')
 
     return false;
+  }
+
+  const realizarCadastro = () => {
+    Keyboard.dismiss()
+    if(verificarEntradas()){
+      criarConta(nome, cpf, email, senha)
+    }
   }
 
   return (
@@ -106,12 +108,7 @@ const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
       <EnvolvedorBotoes>
         <Botao
           texto='Realizar Cadastro'
-          aoPressionar={() => {
-            Keyboard.dismiss()
-            if(verificarEntradas()){
-              criarConta(nome, cpf, email, senha)
-            }
-          }}
+          aoPressionar={realizarCadastro}
           tipo='preenchido'
         />
       </EnvolvedorBotoes>

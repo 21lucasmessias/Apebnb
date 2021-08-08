@@ -1,27 +1,25 @@
-import React from 'react'
-import { iAmbiente } from '../../models/Ambiente'
-import CartaoAmbiente from '../CartaoAmbiente'
+import React, { useContext } from 'react'
+import { FlatList } from 'react-native';
 
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas';
+
+import { ContextoAmbientes } from '../../contextos/ContextoAmbientes';
+
+import CartaoAmbiente from '../CartaoAmbiente'
+import BarraPesquisa from '../BarraPesquisa';
 
 import {
   Envolvedor,
   Texto,
   Separador
 } from './estilos'
-import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas';
-import { useState } from 'react';
-import BarraPesquisa from '../BarraPesquisa';
-import { useContext } from 'react';
-import { ContextoAmbientes } from '../../contextos/ContextoAmbientes';
-import { FlatList } from 'react-native';
 
 interface iListaAmbientes {
   navigation: StackNavigationProp<RotasAmbientesParamsList, 'ambientes'>
 }
 
 const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {
-  const [buscar, setBuscar] = useState('')
   const {
     ambientes,
     setAmbientesFiltrados,
@@ -32,8 +30,6 @@ const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {
     <Envolvedor>
       <BarraPesquisa
         placeholder='Buscar por nome'
-        valor={buscar}
-        setValor={setBuscar}
         setDadosFiltrados={setAmbientesFiltrados}
         dadosOriginais={ambientes}
       />

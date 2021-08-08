@@ -29,3 +29,24 @@ export const SubTitulo = styled.Text`
   text-align: center;
   margin-bottom: 24px;
 `
+
+export const Foto = styled.Image`
+  width: 100%;
+  height: 196px;
+  border-radius: 50px;
+`
+
+export const EnvolvedorFoto = styled.View`
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+
+  width: 150px;
+  height: 150px;
+
+  border-radius: 150px;
+
+  background-color: ${tema.color.verdeAzulado};
+
+  margin-bottom: 12px;
+`

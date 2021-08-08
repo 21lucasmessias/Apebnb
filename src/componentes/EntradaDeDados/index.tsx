@@ -25,12 +25,13 @@ import { comBouncing, semBouncing } from '../../utils/Animacoes'
 
 import {
   EntradaTexto,
-  Texto
+  Texto,
+  EnvolvedorEntrada
 } from './estilos'
 
 interface iEntradaDeDados extends TextInputProps {
   valor: string,
-  setValor: React.Dispatch<React.SetStateAction<string>>,
+  setValor?: React.Dispatch<React.SetStateAction<string>>,
   nome: string,
   tipoTeclado?: KeyboardTypeOptions,
   tipoAutoCompletar?: TextInputAndroidProps['autoCompleteType'],
@@ -66,11 +67,11 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
 
   useEffect(() => {
     if(valor != ''){
-      topPlaceHolder.value = withSpring(-5, comBouncing)
-      leftPlaceHolder.value = withSpring(4, comBouncing)
+      topPlaceHolder.value = withSpring(-8, comBouncing)
+      leftPlaceHolder.value = withSpring(12, comBouncing)
       colorPlaceHolder.value = tema.color.azulEscuro
 
-      heightEnvolvedor.value = withSpring(90, semBouncing)
+      heightEnvolvedor.value = withSpring(86, semBouncing)
     } else {
       topPlaceHolder.value = withSpring(15, comBouncing)
       leftPlaceHolder.value = withSpring(20, comBouncing)
@@ -82,17 +83,7 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
 
   return (
     <Animated.View style={[envolvedorAnimacao]}>
-      <View
-        style={
-          [styles.envolvedorEntrada,
-            {
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: focado ? tema.color.azulEscuro : erro ? tema.color.magenta : tema.color.verdeAzulado
-            }
-          ]
-        }
-      >
+      <EnvolvedorEntrada erro={erro} focado={focado}>
         <EntradaTexto
           value={valor}
           onChangeText={setValor}
@@ -134,7 +125,7 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
             <Icon name={verSenha ? 'eye' : 'eye-off'} size={24} color={tema.color.azulEscuro} />
           </View>
         )}
-      </View>
+      </EnvolvedorEntrada>
 
       <Animated.View 
         style={[styles.placeHolder, placeHolderAnimacao]} 
@@ -160,17 +151,6 @@ const styles = StyleSheet.create({
   placeHolder: {
     position: 'absolute',
   },
-
-  envolvedorEntrada: {
-    flexDirection: 'row',
-    position: 'absolute',
-    width: '100%',
-    alignItems: 'center',
-    borderRadius: 10,  
-    backgroundColor: tema.color.branco,
-    height: 55,
-    bottom: 8
-  }
 })
 
 export default EntradaDeDados

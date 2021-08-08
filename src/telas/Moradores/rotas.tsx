@@ -10,7 +10,6 @@ import { forFade } from '../../utils/Animacoes';
 
 import TelaPerfil from './Perfil';
 import Moradores from './ListaMoradores';
-import CriarMorador from './CriarMorador';
 import AdministrarMorador from './AdministrarMorador';
 import Solicitacoes from './Solicitacoes';
 import AprovarMorador from './Solicitacoes/AprovarMorador';
@@ -18,13 +17,13 @@ import AprovarMorador from './Solicitacoes/AprovarMorador';
 import Cabecalho from '../../componentes/Cabecalho';
 import { useContext } from 'react';
 import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao';
+import ContextoMoradoresProvider from '../../contextos/ContextoMoradores';
 
 export type RotasMoradoresParamsList = {
   moradores: undefined,
   administrarMorador: {
     morador: iMorador
   },
-  criarMorador: undefined,
   solicitacoes: undefined,
   aprovarMorador: {
     morador: iMorador
@@ -42,68 +41,60 @@ const RotasMoradores: React.FC<iRotasMoradores> = ({ navigation }) => {
   return (
     <NavigationContainer independent>
       { user.isAdmin ? (
-        <Navigator
-          headerMode='float'
-          screenOptions={{
-            header: props => (
-              <Cabecalho
-                stackCabecalhoProps={props}
-                aoPressionarMais={() => { }}
-              />
-            ),
-            cardStyleInterpolator: (props) => forFade(props)
-          }}
-        >
-          <Screen
-            name="moradores"
-            component={Moradores}
-            listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: true
-              }),
+        <ContextoMoradoresProvider>
+          <Navigator
+            headerMode='float'
+            screenOptions={{
+              header: props => (
+                <Cabecalho
+                  stackCabecalhoProps={props}
+                  aoPressionarMais={() => { }}
+                />
+              ),
+              cardStyleInterpolator: (props) => forFade(props)
             }}
-          />
+          >
+            <Screen
+              name="moradores"
+              component={Moradores}
+              listeners={{
+                focus: () => navigation.setOptions({
+                  tabBarVisible: true
+                }),
+              }}
+            />
 
-          <Screen
-            name="criarMorador"
-            component={CriarMorador}
-            listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
-            }}
-          />
+            <Screen
+              name="administrarMorador"
+              component={AdministrarMorador}
+              listeners={{
+                focus: () => navigation.setOptions({
+                  tabBarVisible: false
+                }),
+              }}
+            />
 
-          <Screen
-            name="administrarMorador"
-            component={AdministrarMorador}
-            listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
-            }}
-          />
+            <Screen
+              name="solicitacoes"
+              component={Solicitacoes}
+              listeners={{
+                focus: () => navigation.setOptions({
+                  tabBarVisible: false
+                }),
+              }}
+            />
 
-          <Screen
-            name="solicitacoes"
-            component={Solicitacoes}
-            listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
-            }}
-          />
-
-          <Screen
-            name="aprovarMorador"
-            component={AprovarMorador}
-            listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
-            }}
-          />
-        </Navigator>
+            <Screen
+              name="aprovarMorador"
+              component={AprovarMorador}
+              listeners={{
+                focus: () => navigation.setOptions({
+                  tabBarVisible: false
+                }),
+              }}
+            />
+          </Navigator>
+        </ContextoMoradoresProvider>
       ) : (
         <Navigator
           headerMode='float'

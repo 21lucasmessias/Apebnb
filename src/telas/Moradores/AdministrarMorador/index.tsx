@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { ScrollView, Keyboard } from 'react-native'
 
-import { ContextoTeclado } from '../../../contextos/ContextoTeclado'
-
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { ContextoMorador } from '../../../contextos/ContextoMorador'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
 
-import { tema } from '../../../global/estilos/tema'
-import { width } from '../../../utils/Utils'
 import { validadorEntradaStringNumero } from '../../../utils/Validadores'
-import { comBouncing, semBouncing } from '../../../utils/Animacoes'
+import { showToast } from '../../../utils/Animacoes'
+import AnimacoesAdministrarMorador from './animacoes'
 
-import Icon from 'react-native-vector-icons/Feather'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import Botao from '../../../componentes/Botao'
@@ -29,56 +25,35 @@ interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'adm
 
 const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
   const { morador } = route.params
-  const { tecladoVisivel } = useContext(ContextoTeclado)
+  const { setDadosMorador } = useContext(ContextoMorador)
 
-  const [nome, setNome] = useState(morador.nome)
-  const [email, setEmail] = useState('')
-  const [cpf, setCPF] = useState('')
-  const [celular, setCelular] = useState('')
-  const [senha, setSenha] = useState('')
-  const [confirmarSenha, setConfirmarSenha] = useState('')
-
-  const widthFoto = useSharedValue(width/3)
-  const heightFoto = useSharedValue(width/3)
-  const borderRadiusFoto = useSharedValue(width/3)
-  
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      width: widthFoto.value,
-      height: heightFoto.value,
-      borderRadius: borderRadiusFoto.value
-    };
-  });
-
-  const esconderFoto = () => {
-    widthFoto.value = withSpring(width - 24, semBouncing)
-    heightFoto.value = withSpring(50, semBouncing)
-    borderRadiusFoto.value = withSpring(15, comBouncing)
-  }
-
-  const mostrarFoto = () => {
-    widthFoto.value = withSpring(width/3, semBouncing)
-    heightFoto.value = withSpring(width/3, semBouncing)
-    borderRadiusFoto.value = withSpring(width/3, comBouncing)
-  }
-
-  useEffect(() => {
-    if(!tecladoVisivel){
-      esconderFoto()
-    } else {
-      mostrarFoto()
-    }
-  }, [tecladoVisivel])
+  const [foto, setFoto] = useState<string>(morador.foto ? morador.foto : '')
+  const [nome, setNome] = useState<string>(morador.nome)
+  const [email, setEmail] = useState<string>(morador.email)
+  const [cpf, setCPF] = useState<string>(morador.cpf)
+  const [numero, setNumero] = useState<string>(morador.numero ? morador.numero : '')
+  const [senha, setSenha] = useState<string>('')
+  const [confirmarSenha, setConfirmarSenha] = useState<string>('')
  
   const salvarMorador = () => {
-    console.log({
-      nome: nome,
-      email: email,
-      cpf: cpf,
-      celular: celular,
-      senha: senha,
-      confirmarSenha: confirmarSenha,
+    Keyboard.dismiss()
+
+    setDadosMorador({
+      id: morador.id,
+      cpf,
+      email,
+      nome,
+      foto,
+      numero,
+      aprovado: morador.aprovado
+    }, senha === confirmarSenha ? senha : null)
+    .then((res) => {
+      showToast('Dados alterados com sucesso')
     })
+    .catch((err) => {
+      console.log(err)
+      showToast('Algo deu errado. Contate o desenvolvedor.')
+    }) 
   }
 
   return (
@@ -86,14 +61,12 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
       {morador.foto ? (
         <Foto source={{ uri: morador.foto }} />
       ) : (
-        <Animated.View style={[animatedStyle, styles.fotoConteiner]}>
-          <Icon name='camera' size={24} color={tema.color.azulEscuro} />
-        </Animated.View>
+        <AnimacoesAdministrarMorador />
       )}
 
       <Divisor/>
 
-      <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} focusable keyboardDismissMode='interactive'>
+      <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false}>
         <EntradaDeDados
           nome='Nome completo'
           valor={nome}
@@ -125,8 +98,8 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
 
         <EntradaDeDados
           nome='Celular'
-          valor={celular}
-          setValor={setCelular}
+          valor={numero}
+          setValor={setNumero}
           validador={validadorEntradaStringNumero}
           tipoTeclado='numeric'
         />
@@ -160,14 +133,5 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
     </Envolvedor>
   )
 }
-
-const styles = StyleSheet.create({
-  fotoConteiner: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: tema.color.verdeAzulado,
-  }
-})
 
 export default AdministrarMorador

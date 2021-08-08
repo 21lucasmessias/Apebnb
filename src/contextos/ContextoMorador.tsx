@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import firebase from 'firebase'
 import { auth, db } from '../configs/firebase'
 
-import { iMorador } from '../models/Morador';
-import { ToastAndroid } from 'react-native';
-import { useContext } from 'react';
 import { ContextoAutenticacao } from './ContextoAutenticacao';
+
+import { iMorador } from '../models/Morador';
+import { showToast } from '../utils/Animacoes';
 
 interface iContextoMorador {
   getDadosMorador: () => Promise<iMorador | undefined>,
@@ -24,14 +24,6 @@ export const converterMoradorFirebase = {
   toFirestore: (data: iMorador) => data,
   fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => snap.data() as iMorador
 }
-
-const showToast = () => ToastAndroid.showWithGravityAndOffset(
-  "Dados invalidos.",
-  ToastAndroid.SHORT,
-  ToastAndroid.BOTTOM,
-  0,
-  120
-)
 
 const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children }) => {
   const { user } = useContext(ContextoAutenticacao)
@@ -62,16 +54,17 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
     })
     .catch((err) => {
       console.log(err)
+      showToast('Algo deu errado. Contate o desenvolvedor.')
       return dados
     })
   }
 
-  const setDadosMorador = (morador: iMorador, password: string | null) => {  
+  const setDadosMorador = (morador: iMorador, senha: string | null) => {  
     return new Promise<boolean>((res, rej) => {
-      if(password){
-        auth.currentUser!.updatePassword(password)
+      if(senha){
+        auth.currentUser!.updatePassword(senha)
         .catch((err) => {
-          showToast()
+          showToast('Algo deu errado. Contate o desenvolvedor.')
           console.log(`Error in updatePassword`, err)
           rej(false)
         })
@@ -79,16 +72,10 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
   
       db.collection('moradores')
       .withConverter(converterMoradorFirebase)
-      .doc(`${user.uid}`)
-      .set({
-        foto: morador.foto,
-        nome: morador.nome,
-        email: morador.email,
-        cpf: morador.cpf,
-        numero: morador.numero
-      })
+      .doc(morador.id)
+      .set(morador)
       .catch((err) => {
-        showToast()
+        showToast('Algo deu errado. Contate o desenvolvedor.')
         console.log(`Error in updateMorador`, err)
         rej(false)
       })

@@ -1,14 +1,15 @@
 import React from 'react'
-import { StackScreenProps } from '@react-navigation/stack'
 
+import { StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
 import ContextoMoradoresProvider from '../../../contextos/ContextoMoradores'
+
+import ListaSolicitacoesMoradores from '../../../componentes/ListaSolicitacoesMoradores'
 
 import {
   Envolvedor,
   SubTitulo,
 } from './estilos'
-import ListaSolicitacoesMoradores from '../../../componentes/ListaSolicitacoesMoradores'
 
 const Solicitacoes: React.FC<StackScreenProps<RotasMoradoresParamsList, 'solicitacoes'>> = (navigation) => {
   return (
@@ -16,9 +17,7 @@ const Solicitacoes: React.FC<StackScreenProps<RotasMoradoresParamsList, 'solicit
       <Envolvedor>
         <SubTitulo>Solicitações</SubTitulo>
 
-        <ListaSolicitacoesMoradores
-          navigation={navigation.navigation}
-        />
+        <ListaSolicitacoesMoradores navigation={navigation.navigation}/>
       </Envolvedor>
     </ContextoMoradoresProvider>
   )
