@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Keyboard } from 'react-native'
 
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas'
+
+import { ContextoTeclado } from '../../contextos/ContextoTeclado'
+import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao'
 
 import Icon from 'react-native-vector-icons/Feather'
 
@@ -18,10 +22,6 @@ import {
   Descricao,
   Separador
 } from './estilos'
-import { useContext } from 'react'
-import { ContextoTeclado } from '../../contextos/ContextoTeclado'
-import { Keyboard } from 'react-native'
-import { useState } from 'react'
 
 interface iCartaoAmbiente {
   ambiente: iAmbiente,
@@ -30,18 +30,15 @@ interface iCartaoAmbiente {
 }
 
 const CartaoAmbiente: React.FC<iCartaoAmbiente> = ({ ambiente, navigation, ultimo }) => {
-  const {
-    tecladoVisivel
-  } = useContext(ContextoTeclado)
-
-  const [adminUser, setAdminUser] = useState(false)
+  const { tecladoVisivel } = useContext(ContextoTeclado)
+  const { user } = useContext(ContextoAutenticacao)
 
   return (
     <Pressionavel
       activeOpacity={0.7}
       onPress={() => {
         Keyboard.dismiss()
-        navigation.navigate( adminUser ? 'administrarAmbiente' : 'visualizarAmbiente', {
+        navigation.navigate( user.isAdmin ? 'administrarAmbiente' : 'visualizarAmbiente', {
           ambiente: ambiente
         })
       }}

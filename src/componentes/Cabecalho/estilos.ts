@@ -1,13 +1,19 @@
 import styled from 'styled-components/native'
 import { tema } from '../../global/estilos/tema';
+import { height } from '../../utils/Utils';
+
+export const Conteiner = styled.View`
+  flex: 1;
+`
 
 export const Envolvedor = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 
+  height: 55px;
+
   width: 100%;
-  height: 56px;
   padding: 10px;
 
   background-color: ${tema.color.azulEscuro};
@@ -18,6 +24,7 @@ export const Filler = styled.View`
 `
 
 export const Pressionavel = styled.TouchableOpacity`
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 

@@ -1,12 +1,11 @@
-import React, { useState, useRef, useContext } from 'react'
+import React, { useRef, useState, useContext } from 'react'
 
-import { View, Keyboard } from 'react-native'
-
-import { RouteProp } from '@react-navigation/native'
-import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack'
-import { RotasAmbientesParamsList } from '../rotas'
+import { Keyboard, View } from 'react-native'
 
 import { ContextoAmbientes } from '../../../contextos/ContextoAmbientes'
+
+import { StackScreenProps } from '@react-navigation/stack'
+import { RotasAmbientesParamsList } from '../rotas'
 
 import Icon from 'react-native-vector-icons/Feather'
 
@@ -19,8 +18,6 @@ import EntradaDeDadosArea from '../../../componentes/EntradaDeDadosArea'
 import SeletorDiasSemana from '../../../componentes/SeletorDiasSemana'
 import Botao from '../../../componentes/Botao'
 
-import Cabecalho from '../../../componentes/Cabecalho'
-
 import {
   Conteiner,
   Envolvedor,
@@ -30,17 +27,16 @@ import {
   EnvolvedorBotoes
 } from './estilos'
 
-interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'administrarAmbiente'> {}
+interface iCriarAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'criarAmbiente'> {}
 
-const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
-  const { ambiente } = route.params
+const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = () => {
+  const { criarAmbiente } = useContext(ContextoAmbientes)
 
-  const { atualizarAmbiente } = useContext(ContextoAmbientes)
-
-  const [nome, setNome] = useState(ambiente.nome)
-  const [descricao, setDescricao] = useState(ambiente.descricao)
-  const [foto, setFoto] = useState(ambiente.foto ? ambiente.foto : '')
   const diasSemanaRef = useRef<View>(null)
+
+  const [foto, setFoto] = useState<string | null>(null)
+  const [nome, setNome] = useState('')
+  const [descricao, setDescricao] = useState('')
 
   const salvarAmbiente = () => {
     Keyboard.dismiss()
@@ -51,7 +47,7 @@ const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
     })
 
     let novoAmbiente: iAmbiente = {
-      id: ambiente.id,
+      id: '',
       descricao: descricao,
       nome: nome,
       foto: foto,
@@ -65,8 +61,8 @@ const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
         domingo: diasSemana[6]
       },
     }
-    
-    atualizarAmbiente(novoAmbiente)
+
+    criarAmbiente(novoAmbiente)
   }
 
   return (
@@ -100,7 +96,7 @@ const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
 
         <Divisor />
 
-        <SeletorDiasSemana ref={diasSemanaRef} diasDisponiveis={ambiente.diasDisponiveis}/>
+        <SeletorDiasSemana ref={diasSemanaRef}/>
       </Envolvedor>
 
       <EnvolvedorBotoes>
@@ -110,31 +106,4 @@ const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
   )
 }
 
-
-interface iCabecalhoAdministrarAmbiente {
-  props: StackHeaderProps
-}
-
-export const CabecalhoAdministrarAmbiente: React.FC<iCabecalhoAdministrarAmbiente> = ({props}) => {
-  const { removerAmbiente } = useContext(ContextoAmbientes)
-
-  return (
-    <Cabecalho
-      stackCabecalhoProps={props}
-      menusAdicionais={[
-        {
-          acao: () => {
-            removerAmbiente((props.scene.route as RouteProp<RotasAmbientesParamsList, "administrarAmbiente">).params.ambiente)
-            .then(() => {
-              props.navigation.goBack()
-            })
-          },
-          nome: 'trash-2',
-          texto: 'Excluir'
-        }
-      ]}
-  />
-  )
-}
-
-export default AdministrarAmbiente
+export default CriarAmbienteScreen

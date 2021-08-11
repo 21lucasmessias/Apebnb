@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import moment from "moment"
 
 import { tema } from "../../global/estilos/tema"
-import { width } from "../../utils/Utils"
+import { height, width } from "../../utils/Utils"
 
 import { validadorData } from "../../utils/Validadores"
 
@@ -88,30 +88,31 @@ export const DialogData: React.FC<iDialogData> = ({calendarioVisivel, setCalenda
   
   return(
     <Dialog
-        visible={calendarioVisivel}
-        onDismiss={() => setCalendarioVisivel(false)}
-      >
-        <Dialog.Content>
-          <CalendarPicker
-            onDateChange={aoMudarDiaPeloCalendario}
-            disabledDates={(date) => diasDesabilitados(date)}
-            previousTitleStyle={{
-              left: 24
-            }}
-            nextTitleStyle={{
-              right: 24
-            }}
-            width={width * 0.9}
-          />
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Botao
-            texto='Confirmar'
-            aoPressionar={() => setCalendarioVisivel(false)}
-            tipo='preenchido'
-          />
-        </Dialog.Actions>
-      </Dialog>
+      visible={calendarioVisivel}
+      onDismiss={() => setCalendarioVisivel(false)}
+      style={{height: height * 0.6, justifyContent: 'space-between'}}
+    >
+      <Dialog.Content>
+        <CalendarPicker
+          onDateChange={aoMudarDiaPeloCalendario}
+          disabledDates={(date) => diasDesabilitados(date)}
+          previousTitleStyle={{
+            left: 24
+          }}
+          nextTitleStyle={{
+            right: 24
+          }}
+          width={width * 0.9}
+        />
+      </Dialog.Content>
+      <Dialog.Actions>
+        <Botao
+          texto='Confirmar'
+          aoPressionar={() => setCalendarioVisivel(false)}
+          tipo='preenchido'
+        />
+      </Dialog.Actions>
+    </Dialog>
   )
 }
 

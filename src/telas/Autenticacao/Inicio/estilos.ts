@@ -43,7 +43,7 @@ export const Descricao = styled.Text`
 `
 
 export const EnvolvedorBotoes = styled.View`
-  height: 136px;
+  height: 112px;
   margin: 12px 38px;
 `
 

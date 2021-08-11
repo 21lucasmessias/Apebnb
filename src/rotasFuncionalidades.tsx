@@ -15,6 +15,7 @@ import RotasMoradores from './telas/Moradores/rotas'
 import RotasReservas from './telas/Reservas/rotas'
 
 import TabBar from './componentes/TabBar'
+import { height } from './utils/Utils'
 
 export type RotasFuncionalidadesParamsList = {
   ambientes: undefined,
@@ -31,19 +32,13 @@ const RotasFuncionalidades: React.FC<StackScreenProps<RotasParamsList, 'funciona
         tabBarOptions={{
           showLabel: false,
           style: {
-            elevation: 0,
             position: 'absolute',
-            bottom: 8,
-            left: 18,
-            right: 18,
+            top: height - 124,
+            marginHorizontal: 18,
             borderRadius: 15,
             backgroundColor: tema.color.azulEscuro,
-            borderTopWidth: 0,
-            maxHeight: 50
           },
-          keyboardHidesTabBar: true,
         }}
-        tabBar={(props) => <TabBar {...props} />}
       >
         <Screen component={RotasAmbientes} name='ambientes'
           options={{

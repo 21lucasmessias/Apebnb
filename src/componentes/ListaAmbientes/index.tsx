@@ -1,10 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+
 import { FlatList } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RotasAmbientesParamsList } from '../../telas/Ambientes/rotas';
 
 import { ContextoAmbientes } from '../../contextos/ContextoAmbientes';
+
+import { iAmbiente } from '../../models/Ambiente';
+import { tema } from '../../global/estilos/tema';
 
 import CartaoAmbiente from '../CartaoAmbiente'
 import BarraPesquisa from '../BarraPesquisa';
@@ -20,11 +25,38 @@ interface iListaAmbientes {
 }
 
 const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {
+  const [carregando, setCarregando] = useState(true)
+  const [ambientes, setAmbientes] = useState<Array<iAmbiente>>([])
+  const [ambientesFiltrados, setAmbientesFiltrados] = useState<Array<iAmbiente>>([])
+
   const {
-    ambientes,
-    setAmbientesFiltrados,
-    ambientesFiltrados
+    adicionarAutoRefreshAmbientes,
+    getAllAmbientes
   } = useContext(ContextoAmbientes)
+
+  useEffect(() => {
+    const unsubscribe = adicionarAutoRefreshAmbientes(fetchAmbientes)
+
+    fetchAmbientes()
+
+    return unsubscribe
+  }, [])
+
+  const fetchAmbientes = () => {
+    setCarregando(true)
+
+    getAllAmbientes()
+    .then((res) => {
+      setAmbientes(res)
+      setAmbientesFiltrados(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
+      setCarregando(false)
+    })
+  }
 
   return (
     <Envolvedor>
@@ -34,21 +66,26 @@ const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {
         dadosOriginais={ambientes}
       />
 
-      <FlatList
-        data={ambientesFiltrados}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <CartaoAmbiente
-            ambiente={item}
-            navigation={navigation}
-            ultimo={index == ambientes.length - 1}
-          />
-        )}
-        ListEmptyComponent={() => <Texto>Sem resultados disponíveis</Texto>}
-        ItemSeparatorComponent={() => <Separador></Separador>}
+      { carregando ? (
+        <ActivityIndicator size='large' color={tema.color.azulEscuro} />
+      ) : (
 
-        showsVerticalScrollIndicator={false}
-      />
+        <FlatList
+          data={ambientesFiltrados}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <CartaoAmbiente
+              ambiente={item}
+              navigation={navigation}
+              ultimo={index == ambientes.length - 1}
+            />
+          )}
+          ListEmptyComponent={() => <Texto>Sem resultados disponíveis</Texto>}
+          ItemSeparatorComponent={() => <Separador></Separador>}
+
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </Envolvedor>
   )
 }

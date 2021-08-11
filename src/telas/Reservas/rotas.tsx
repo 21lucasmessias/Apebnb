@@ -31,10 +31,13 @@ const RotasReservas: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLis
           header: props => (
             <Cabecalho
               stackCabecalhoProps={props}
-              aoPressionarMais={() => { }}
             />
           ),
-          cardStyleInterpolator: (props) => forFade(props)
+          cardStyleInterpolator: (props) => forFade(props),
+          headerTransparent: true,
+          cardStyle: {
+            marginTop: 60
+          },
         }}>
         <Screen
           name="reservas"

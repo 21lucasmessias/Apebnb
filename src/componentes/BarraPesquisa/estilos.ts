@@ -24,5 +24,5 @@ export const EntradaTexto = styled.TextInput`
   font-size: 18px;
   color: ${tema.color.azulEscuro};
 
-  background-color: ${tema.color.cinza};
+  background-color: ${tema.color.branco};
 `
