@@ -28,7 +28,7 @@ const EntradaDeDadosArea: React.FC<iEntradaDeDadosArea> = (({ valor, setValor, v
   const leftPlaceHolder = useSharedValue(20)
   const colorPlaceHolder = useSharedValue(tema.color.fosco)
 
-  const heightEnvolvedor = useSharedValue(160)
+  const heightEnvolvedor = useSharedValue(140)
 
   const placeHolderAnimacao = useAnimatedStyle(() => {
     return {
@@ -46,17 +46,17 @@ const EntradaDeDadosArea: React.FC<iEntradaDeDadosArea> = (({ valor, setValor, v
 
   useEffect(() => {
     if(valor != ''){
-      topPlaceHolder.value = withSpring(-5, comBouncing)
+      topPlaceHolder.value = withSpring(0, comBouncing)
       leftPlaceHolder.value = withSpring(4, comBouncing)
       colorPlaceHolder.value = tema.color.azulEscuro
 
-      heightEnvolvedor.value = withSpring(190, semBouncing)
+      heightEnvolvedor.value = withSpring(170, semBouncing)
     } else {
-      topPlaceHolder.value = withSpring(15, comBouncing)
+      topPlaceHolder.value = withSpring(12, comBouncing)
       leftPlaceHolder.value = withSpring(20, comBouncing)
       colorPlaceHolder.value = tema.color.fosco
 
-      heightEnvolvedor.value = withSpring(160, semBouncing)
+      heightEnvolvedor.value = withSpring(140, semBouncing)
     }
   }, [valor])
 
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
 
   envolvedorEntrada: {
-    height: 160,
+    height: 140,
     width: '100%',
     borderRadius: 10,  
     backgroundColor: tema.color.branco,

@@ -7,7 +7,7 @@ type iPressionavel = {
 
 export const Pressionavel = styled.TouchableOpacity<iPressionavel>`
   flex: 1;
-  max-height: 50px;
+  height: 50px;
 
   border-radius: 10px;
 
