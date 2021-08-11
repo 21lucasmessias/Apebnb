@@ -3,16 +3,17 @@ import { ScrollView, Keyboard } from 'react-native'
 
 import { ContextoMorador } from '../../../contextos/ContextoMorador'
 
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
+import { RouteProp } from '@react-navigation/native'
 
 import { validadorEntradaStringNumero } from '../../../utils/Validadores'
 import { showToast } from '../../../utils/Animacoes'
 import AnimacoesAdministrarMorador from './animacoes'
 
-
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import Botao from '../../../componentes/Botao'
+import Cabecalho from '../../../componentes/Cabecalho'
 
 import {
   Envolvedor,
@@ -131,6 +132,32 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
         <Botao tipo='preenchido' texto="Salvar" aoPressionar={salvarMorador}/>
       </BotaoConteiner>
     </Envolvedor>
+  )
+}
+
+interface iCabecalhoAdministrarMorador {
+  props: StackHeaderProps
+}
+
+export const CabecalhoAdministrarMorador: React.FC<iCabecalhoAdministrarMorador> = ({props}) => {
+  const { removerMorador } = useContext(ContextoMorador)
+
+  return (
+    <Cabecalho
+      stackCabecalhoProps={props}
+      menusAdicionais={[
+        {
+          acao: () => {
+            removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "administrarMorador">).params.morador)
+            .then(() => {
+              props.navigation.goBack()
+            })
+          },
+          nome: 'trash',
+          texto: 'Excluir'
+        }
+      ]}
+    />
   )
 }
 

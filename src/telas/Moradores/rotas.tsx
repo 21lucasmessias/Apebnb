@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack';
-
 import { RotasFuncionalidadesParamsList } from '../../rotasFuncionalidades';
+
+import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao';
+import ContextoMoradoresProvider from '../../contextos/ContextoMoradores';
+
 import { iMorador } from '../../models/Morador';
 import { forFade } from '../../utils/Animacoes';
 
 import TelaPerfil from './Perfil';
 import Moradores from './ListaMoradores';
-import AdministrarMorador from './AdministrarMorador';
+import AdministrarMorador, { CabecalhoAdministrarMorador } from './AdministrarMorador';
 import Solicitacoes from './Solicitacoes';
-import AprovarMorador from './Solicitacoes/AprovarMorador';
+import AprovarMorador, { CabecalhoAprovarMorador } from './Solicitacoes/AprovarMorador';
 
 import Cabecalho from '../../componentes/Cabecalho';
-import { useContext } from 'react';
-import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao';
-import ContextoMoradoresProvider from '../../contextos/ContextoMoradores';
 
 export type RotasMoradoresParamsList = {
   moradores: undefined,
@@ -33,9 +33,7 @@ export type RotasMoradoresParamsList = {
 
 const { Navigator, Screen } = createStackNavigator<RotasMoradoresParamsList>();
 
-type iRotasMoradores = BottomTabScreenProps<RotasFuncionalidadesParamsList, 'moradores'>;
-
-const RotasMoradores: React.FC<iRotasMoradores> = ({ navigation }) => {
+const RotasMoradores: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsList, 'moradores'>> = ({ navigation }) => {
   const { user } = useContext(ContextoAutenticacao)
 
   return (
@@ -45,13 +43,10 @@ const RotasMoradores: React.FC<iRotasMoradores> = ({ navigation }) => {
           <Navigator
             headerMode='float'
             screenOptions={{
-              header: props => (
-                <Cabecalho
-                  stackCabecalhoProps={props}
-                  aoPressionarMais={() => { }}
-                />
-              ),
-              cardStyleInterpolator: (props) => forFade(props)
+              cardStyleInterpolator: (props) => forFade(props),
+              headerTransparent: true,
+              cardStyle: { marginTop: 60 },
+              header: props => <Cabecalho stackCabecalhoProps={props}/>,
             }}
           >
             <Screen
@@ -71,6 +66,9 @@ const RotasMoradores: React.FC<iRotasMoradores> = ({ navigation }) => {
                 focus: () => navigation.setOptions({
                   tabBarVisible: false
                 }),
+              }}
+              options={{
+                header: props => <CabecalhoAdministrarMorador props={props}/>
               }}
             />
 
@@ -92,6 +90,9 @@ const RotasMoradores: React.FC<iRotasMoradores> = ({ navigation }) => {
                   tabBarVisible: false
                 }),
               }}
+              options={{
+                header: props => <CabecalhoAprovarMorador props={props}/>
+              }}
             />
           </Navigator>
         </ContextoMoradoresProvider>
@@ -99,13 +100,12 @@ const RotasMoradores: React.FC<iRotasMoradores> = ({ navigation }) => {
         <Navigator
           headerMode='float'
           screenOptions={{
-            header: props => (
-              <Cabecalho
-                stackCabecalhoProps={props}
-                aoPressionarMais={() => {}}
-              />
-            ),
-            cardStyleInterpolator: (props) => forFade(props)
+            header: props => <Cabecalho stackCabecalhoProps={props}/>,
+            cardStyleInterpolator: (props) => forFade(props),
+            headerTransparent: true,
+            cardStyle: {
+              marginTop: 60
+            },
           }}
         >
           <Screen
