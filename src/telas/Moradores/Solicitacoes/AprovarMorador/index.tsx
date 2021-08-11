@@ -1,18 +1,22 @@
 import React, { useContext } from 'react'
 
-import { StackScreenProps } from '@react-navigation/stack'
 import { ScrollView } from 'react-native'
 
+import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { RotasMoradoresParamsList } from '../../rotas'
+
 import { ContextoMoradores } from '../../../../contextos/ContextoMoradores'
+import { ContextoMorador } from '../../../../contextos/ContextoMorador'
 
 import Icon from 'react-native-vector-icons/Feather'
 
-import { RotasMoradoresParamsList } from '../../rotas'
 import { validadorEntradaStringNumero } from '../../../../utils/Validadores'
 import { tema } from '../../../../global/estilos/tema'
 
 import Botao from '../../../../componentes/Botao'
 import EntradaDeDados from '../../../../componentes/EntradaDeDados'
+import Cabecalho from '../../../../componentes/Cabecalho'
 
 import {
   Conteiner,
@@ -89,6 +93,32 @@ const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
         <Botao tipo='preenchido' texto="Aprovar" aoPressionar={aprovarMorador}/>
       </EnvolvedorBotoes>
     </Conteiner>
+  )
+}
+
+interface iCabecalhoAprovarMorador {
+  props: StackHeaderProps
+}
+
+export const CabecalhoAprovarMorador: React.FC<iCabecalhoAprovarMorador> = ({props}) => {
+  const { removerMorador } = useContext(ContextoMorador)
+
+  return (
+    <Cabecalho
+      stackCabecalhoProps={props}
+      menusAdicionais={[
+        {
+          acao: () => {
+            removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "aprovarMorador">).params.morador)
+            .then(() => {
+              props.navigation.goBack()
+            })
+          },
+          nome: 'trash',
+          texto: 'Excluir'
+        }
+      ]}
+  />
   )
 }
 

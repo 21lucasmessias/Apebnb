@@ -11,7 +11,8 @@ import { showToast } from '../utils/Animacoes';
 interface iContextoMorador {
   getDadosMorador: () => Promise<iMorador | undefined>,
   setDadosMorador: (morador: iMorador, password: string | null) => Promise<boolean>,
-  adicionarListenerNomeMorador: (refreshUserNome: (nome: string) => void) => () => void
+  adicionarListenerNomeMorador: (refreshUserNome: (nome: string) => void) => () => void,
+  removerMorador: (morador: iMorador) => Promise<void>
 }
 
 type iContextoMoradorProvider = {
@@ -84,11 +85,30 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
     })  
   }
 
+  const removerMorador = async (morador: iMorador) => {
+    const batch = db.batch()
+    const moradorRef = db.collection('moradores').doc(morador.id)
+    const userRef = db.collection('users').doc(morador.id)
+
+    try {
+      batch.delete(moradorRef)
+      batch.delete(userRef)
+      
+      await batch.commit()
+      
+      showToast('Morador removido com sucesso.')
+    } catch(err) {
+      console.log(err)
+      showToast('Erro ao remover morador.')
+    }
+  }
+
   return (
     <ContextoMorador.Provider value={{
       getDadosMorador,
       setDadosMorador,
-      adicionarListenerNomeMorador
+      adicionarListenerNomeMorador,
+      removerMorador
     }}>
       {children}
     </ContextoMorador.Provider >

@@ -40,27 +40,29 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
   const [carregando, setCarregando] = useState(false)
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        let usuarioAdmin: boolean | undefined = undefined
-
         db.collection('users')
         .withConverter(converterUsuarioFirebase)
-        .doc(`${user.uid}`)
+        .doc(user.uid)
         .get()
         .then(doc => {
           if (doc.exists) {
-            usuarioAdmin = doc.data()!.isAdmin
+            setUser({
+              isAdmin: doc.data()!.isAdmin,
+              uid: user.uid
+            })
+          } else {
+            showToast('Usuário excluído.')
+            user.delete()
           }
         })
         .catch((err) => {
           console.log(err)
           showToast('Credencias inválidas.')
-        })
-        .finally(() => {
           setUser({
-            isAdmin: usuarioAdmin,
-            uid: user.uid
+            isAdmin: undefined,
+            uid: null
           })
         })
       } else {
@@ -70,13 +72,14 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
         })
       }
     })
+    
+    return unsubscribe
   }, [])
 
   const autenticar = (email: string, senha: string) => {
     setCarregando(true)
 
     auth.signInWithEmailAndPassword(email, senha)
-    .then()
     .catch((err) => {
       console.log(err)
       showToast('Credencias inválidas.')
