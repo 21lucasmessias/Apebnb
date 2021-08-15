@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import firebase from 'firebase'
 import { auth, db } from '../configs/firebase'
 
-import { iUsuario } from '../models/Usuario';
 import { converterMoradorFirebase } from './ContextoMorador';
 import { showToast } from '../utils/Animacoes';
+import { iMorador } from '../models/Morador';
 
 type iUser = {
   isAdmin: boolean | undefined,
@@ -14,11 +14,10 @@ type iUser = {
 
 interface iContextoAutenticacao {
   user: iUser,
-  carregando: boolean,
-  autenticar: (email: string, senha: string) => void,
-  logout: () => void,
-  criarConta: (nome: string, cpf: string, email: string, senha: string) => void,
-  recuperarSenha: (email: string) => void
+  autenticar: (email: string, senha: string) => Promise<void>,
+  criarConta: (nome: string, cpf: string, email: string, senha: string) => Promise<void>,
+  logout: () => Promise<void>,
+  recuperarSenha: (email: string) => Promise<void>
 }
 
 export const ContextoAutenticacao = React.createContext({} as iContextoAutenticacao)
@@ -28,8 +27,8 @@ type iContextoAutenticacaoProvider = {
 }
 
 export const converterUsuarioFirebase = {
-  toFirestore: (data: iUsuario) => data,
-  fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => snap.data() as iUsuario
+  toFirestore: (data: iMorador) => data,
+  fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => snap.data() as iMorador
 }
 
 const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({ children }) => {
@@ -37,16 +36,16 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     isAdmin: undefined,
     uid: null
   })
-  const [carregando, setCarregando] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        db.collection('users')
-        .withConverter(converterUsuarioFirebase)
-        .doc(user.uid)
-        .get()
-        .then(doc => {
+        try {
+          const doc = await db.collection('users')
+            .withConverter(converterUsuarioFirebase)
+            .doc(user.uid)
+            .get()
+    
           if (doc.exists) {
             setUser({
               isAdmin: doc.data()!.isAdmin,
@@ -56,15 +55,14 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
             showToast('Usuário excluído.')
             user.delete()
           }
-        })
-        .catch((err) => {
+        } catch(err) {
           console.log(err)
           showToast('Credencias inválidas.')
           setUser({
             isAdmin: undefined,
             uid: null
           })
-        })
+        }
       } else {
         setUser({
           isAdmin: undefined,
@@ -76,86 +74,64 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     return unsubscribe
   }, [])
 
-  const autenticar = (email: string, senha: string) => {
-    setCarregando(true)
-
-    auth.signInWithEmailAndPassword(email, senha)
-    .catch((err) => {
+  const autenticar = async (email: string, senha: string) => {
+    try {
+      await auth.signInWithEmailAndPassword(email, senha)
+    } catch(err) {
       console.log(err)
       showToast('Credencias inválidas.')
-    })
-    .finally(() => setCarregando(false))
+    }
   }
 
-  const criarConta = (nome: string, cpf: string, email: string, senha: string) => {
-    setCarregando(true)
+  const criarConta = async (nome: string, cpf: string, email: string, senha: string) => {
+    try{
+      const res = await auth.createUserWithEmailAndPassword(email, senha)
 
-    auth.createUserWithEmailAndPassword(email, senha)
-    .then(async (res) => {
       if(res.user){
-        db.collection('moradores')
-        .withConverter(converterMoradorFirebase)
-        .doc(`${res.user.uid}`)
-        .set({
-          id: res.user.uid,
-          nome: nome,
-          cpf: cpf,
-          email: email,
-          aprovado: false
-        })
-        .catch((err) => {
+        try {
+          await db.collection('moradores')
+            .withConverter(converterMoradorFirebase)
+            .doc(`${res.user.uid}`)
+            .set({
+              id: res.user.uid,
+              nome: nome,
+              cpf: cpf,
+              email: email,
+              aprovado: false,
+              isAdmin: false
+            })
+        } catch(err) {
           console.log(err)
           showToast('Algo deu errado. Contate o desenvolvedor.')
-        })
-
-        db.collection('users')
-        .doc(`${res.user.uid}`)
-        .set({
-          isAdmin: false
-        })
-        .catch((err) => {
-          console.log(err)
-          showToast('Algo deu errado. Contate o desenvolvedor.')
-        })
+        }
       }
-    })
-    .catch((err) => {
+    } catch(err) {
       console.log(err)
       showToast('Credencias inválidas.')
-    })
-    .finally(() => {
-      setCarregando(false)
-    })
+    }
   }
 
-  const logout = () => {
-    auth.signOut()
-    .catch(err => {
+  const logout = async () => {
+    try {
+      await auth.signOut()
+    } catch(err) {
       console.log(err)
       showToast('Algo deu errado. Contate o desenvolvedor.')
-    })
+    }
   }
 
-  const recuperarSenha = (email: string) => {
-    setCarregando(true)
-
-    auth.sendPasswordResetEmail(email)
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
+  const recuperarSenha = async (email: string) => {
+    try {
+      await auth.sendPasswordResetEmail(email)
+    } catch(err){
       console.log(err)
       showToast('Algo deu errado. Contate o desenvolvedor.')
-    })
-    .finally(() => {
-      setCarregando(false)
-    })
+    }
   }
 
   return (
     <ContextoAutenticacao.Provider value={{
       user,
-      carregando,
       autenticar,
       logout,
       criarConta,

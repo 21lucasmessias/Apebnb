@@ -35,7 +35,7 @@ const Ambientes: React.FC<StackScreenProps<RotasAmbientesParamsList, 'ambientes'
   }
 
   useEffect(() => {
-    const removerListener = adicionarListenerNomeMorador(refreshUserNome)
+    const removerListener = adicionarListenerNomeMorador(user.uid as string, refreshUserNome)
 
     return removerListener
   }, [])

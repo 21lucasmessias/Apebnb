@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { Keyboard } from 'react-native'
 
+import { Dialog } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/Feather'
+
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAutenticacaoParamsList } from '../rotas'
@@ -20,10 +24,6 @@ import {
   Descricao,
   EnvolvedorBotoes,
 } from './estilos'
-import { Dialog } from 'react-native-paper'
-import { Keyboard } from 'react-native'
-import { useContext } from 'react'
-import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 interface iRecuperarSenhaScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'recuperarSenha'> {}
 
@@ -31,6 +31,14 @@ const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
   const { recuperarSenha } = useContext(ContextoAutenticacao)
   const [email, setEmail] = useState('')
   const [dialogoVisivel, setDialogoVisivel] = useState(false)
+
+  const recuperarSenhaHandler = () => {
+    Keyboard.dismiss()
+    if(validadorDeEmail(email)){
+      recuperarSenha(email)
+      setDialogoVisivel(true)
+    }    
+  }
 
   return (
     <Conteiner>
@@ -53,13 +61,7 @@ const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
       <EnvolvedorBotoes>
         <Botao
           texto='Enviar'
-          aoPressionar={() => {
-            Keyboard.dismiss()
-            if(validadorDeEmail(email)){
-              recuperarSenha(email)
-              setDialogoVisivel(true)
-            }
-          }}
+          aoPressionar={recuperarSenhaHandler}
           tipo='preenchido'
         />
       </EnvolvedorBotoes>

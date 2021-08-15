@@ -42,20 +42,19 @@ const ListaAmbientes: React.FC<iListaAmbientes> = ({ navigation }) => {
     return unsubscribe
   }, [])
 
-  const fetchAmbientes = () => {
+  const fetchAmbientes = async () => {
     setCarregando(true)
 
-    getAllAmbientes()
-    .then((res) => {
+    try {
+      const res = await getAllAmbientes()
+
       setAmbientes(res)
       setAmbientesFiltrados(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
+
       setCarregando(false)
-    })
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   return (

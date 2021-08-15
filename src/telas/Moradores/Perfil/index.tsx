@@ -4,6 +4,7 @@ import { Keyboard, ScrollView } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 
 import { ContextoMorador } from '../../../contextos/ContextoMorador'
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
@@ -11,7 +12,7 @@ import { RotasMoradoresParamsList } from '../rotas'
 import { tema } from '../../../global/estilos/tema'
 import { validadorEntradaStringNumero } from '../../../utils/Validadores'
 import AnimacoesPerfil from './animacoes'
-import { showToast } from '../../../utils/Animacoes'
+import { iMorador } from '../../../models/Morador'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import Botao from '../../../componentes/Botao'
@@ -27,11 +28,11 @@ import {
 interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'administrarMorador'> {}
 
 const TelaPerfil: React.FC<iMoradorScreen> = () => {
-  const { getDadosMorador, setDadosMorador } = useContext(ContextoMorador)
+  const { user } = useContext(ContextoAutenticacao)
+  const { getMorador, alterarMorador } = useContext(ContextoMorador)
 
   const [carregando, setCarregando] = useState(true)
 
-  const [id, setId] = useState('')
   const [foto, setFoto] = useState('')
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
@@ -39,44 +40,35 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
   const [numero, setNumero] = useState('')
   const [senha, setSenha] = useState('')
   const [confirmarSenha, setConfirmarSenha] = useState('')
-  const [aprovado, setAprovado] = useState(false)
 
   useEffect(() => {
-    getDadosMorador()
+    getMorador(user.uid as string)
     .then((res) => {
       if(res) {
-        setId(res.id)
         setNome(res.nome)
         setEmail(res.email)
         setCPF(res.cpf)
         setNumero(res.numero ? res.numero : '')
         setFoto(res.foto ? res.foto : '')
-        setAprovado(res.aprovado)
       }
 
       setCarregando(false)
     })
   }, [])
  
-  const salvarMorador = () => {
+  const salvarMorador = async () => {
     Keyboard.dismiss()
 
-    setDadosMorador({
-      id,
+    const morador: iMorador = {
+      id: user.uid!,
       cpf,
       email,
       nome,
       foto,
       numero,
-      aprovado
-    }, senha === confirmarSenha ? senha : null)
-    .then((res) => {
-      showToast('Dados alterados com sucesso')
-    })
-    .catch((err) => {
-      console.log(err)
-      showToast('Algo deu errado. Contate o desenvolvedor.')
-    })
+    }
+
+    await alterarMorador(morador, senha === confirmarSenha ? senha : null)
   }
 
   return (carregando ? (

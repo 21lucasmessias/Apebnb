@@ -8,7 +8,6 @@ import { RotasMoradoresParamsList } from '../rotas'
 import { RouteProp } from '@react-navigation/native'
 
 import { validadorEntradaStringNumero } from '../../../utils/Validadores'
-import { showToast } from '../../../utils/Animacoes'
 import AnimacoesAdministrarMorador from './animacoes'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
@@ -26,7 +25,7 @@ interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'adm
 
 const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
   const { morador } = route.params
-  const { setDadosMorador } = useContext(ContextoMorador)
+  const { alterarMorador } = useContext(ContextoMorador)
 
   const [foto, setFoto] = useState<string>(morador.foto ? morador.foto : '')
   const [nome, setNome] = useState<string>(morador.nome)
@@ -36,25 +35,17 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
   const [senha, setSenha] = useState<string>('')
   const [confirmarSenha, setConfirmarSenha] = useState<string>('')
  
-  const salvarMorador = () => {
+  const salvarMorador = async () => {
     Keyboard.dismiss()
 
-    setDadosMorador({
+    await alterarMorador({
       id: morador.id,
       cpf,
       email,
       nome,
       foto,
       numero,
-      aprovado: morador.aprovado
     }, senha === confirmarSenha ? senha : null)
-    .then((res) => {
-      showToast('Dados alterados com sucesso')
-    })
-    .catch((err) => {
-      console.log(err)
-      showToast('Algo deu errado. Contate o desenvolvedor.')
-    }) 
   }
 
   return (

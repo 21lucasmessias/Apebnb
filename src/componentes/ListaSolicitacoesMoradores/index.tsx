@@ -19,6 +19,7 @@ import {
   Texto,
   Separador
 } from './estilos'
+import { showToast } from '../../utils/Animacoes';
 
 interface iListaSolicitacoesMoradores {
   navigation: StackNavigationProp<RotasMoradoresParamsList, 'solicitacoes'>
@@ -42,18 +43,19 @@ const ListaSolicitacoesMoradores: React.FC<iListaSolicitacoesMoradores> = ({ nav
     return unsubscribe
   }, [])
 
-  const fetchMoradoresReprovados = () => {
-    getAllMoradoresDesaprovados()
-    .then((res) => {
+  const fetchMoradoresReprovados = async () => {
+    setCarregando(true)
+
+    try {
+      const res = await getAllMoradoresDesaprovados()
+
       setMoradores(res)
       setMoradoresFiltrados(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    .finally(() => {
       setCarregando(false)
-    })
+    } catch(err) {
+      showToast("Erro interno. Contate o desenvolvedor.")
+      console.log(err)
+    }
   }
 
   return (

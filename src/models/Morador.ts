@@ -5,5 +5,6 @@ export interface iMorador {
   cpf: string,
   numero?: string,
   email: string,
-  aprovado: boolean
+  aprovado?: boolean,
+  isAdmin?: boolean
 }

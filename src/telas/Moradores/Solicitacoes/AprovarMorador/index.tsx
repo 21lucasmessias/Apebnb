@@ -32,10 +32,10 @@ interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'apr
 
 const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
   const { morador } = route.params
-  const { setAprovado } = useContext(ContextoMoradores)
+  const { aprovarMorador } = useContext(ContextoMoradores)
  
-  const aprovarMorador = () => {
-    setAprovado(morador)
+  const aprovarMoradorHandle = () => {
+    aprovarMorador(morador)
     navigation.goBack()
   }
 
@@ -90,7 +90,7 @@ const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
       </Envolvedor>
 
       <EnvolvedorBotoes>
-        <Botao tipo='preenchido' texto="Aprovar" aoPressionar={aprovarMorador}/>
+        <Botao tipo='preenchido' texto="Aprovar" aoPressionar={aprovarMoradorHandle}/>
       </EnvolvedorBotoes>
     </Conteiner>
   )

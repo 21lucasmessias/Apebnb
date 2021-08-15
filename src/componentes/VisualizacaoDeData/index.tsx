@@ -11,10 +11,8 @@ import {
   IconEnvolvedor
 } from './estilos'
 
-import moment from "moment"
-
 interface iVisualizacaoDeData {
-  dia: moment.Moment
+  dia: string
 }
 
 const VisualizacaoDeData: React.FC<iVisualizacaoDeData> = ({dia}) => {
@@ -22,7 +20,7 @@ const VisualizacaoDeData: React.FC<iVisualizacaoDeData> = ({dia}) => {
     <Envolvedor>
       <DiaEnvolvedor>
         <Dia>
-          {dia.format("DD-MM-YYYY")}
+          {dia}
         </Dia>
       </DiaEnvolvedor>
 

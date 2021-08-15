@@ -1,13 +1,16 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { TouchableOpacity } from 'react-native'
-import { StyleSheet, Text } from 'react-native'
+import React, { useEffect } from 'react'
+import { StyleSheet } from 'react-native'
 
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import Icon from 'react-native-vector-icons/Feather'
 
 import { tema } from '../../global/estilos/tema'
+
+import {
+  Pressionavel,
+  Texto
+} from './estilos'
 
 export interface iCabecalhoItem {
   item: {
@@ -48,10 +51,10 @@ const CabecalhoItem: React.FC<iCabecalhoItem> = ({ index, item, visivel, lenght 
         animacaoOpacidade,
         styles.conteinerItem,
       ]}>
-        <TouchableOpacity style={styles.touchable}>
+        <Pressionavel>
           <Icon name={item.nome} size={24} color={tema.color.ouro}/>
-          <Text style={styles.text}>{item.texto}</Text>
-        </TouchableOpacity>
+          <Texto>{item.texto}</Texto>
+        </Pressionavel>
     </Animated.View>
   )
 }
@@ -66,19 +69,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 8,
     marginVertical: 2
-  },
-  text: {
-    flex: 1,
-    fontFamily: tema.fontes.WorkSans,
-    fontSize: 18,
-    color: tema.color.ouro,
-    paddingLeft: 12,
-  },
-  touchable: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
   }
 })
 

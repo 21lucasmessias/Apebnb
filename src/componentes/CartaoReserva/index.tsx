@@ -19,15 +19,16 @@ interface iCartaoReserva {
   navigation: StackNavigationProp<RotasReservasParamsList, 'reservas'>
 }
 
-const CartaoReserva: React.FC<iCartaoReserva> = ({reserva, navigation}) => {
+const CartaoReserva: React.FC<iCartaoReserva> = ({ reserva, navigation }) => {
+
+  const pressHandler = () => {
+    navigation.push('visualizarReserva', { reserva })
+  }
+
   return (
     <Pressionavel
       activeOpacity={0.7}
-      onPress={() => {
-        navigation.navigate('visualizarReserva', {
-          idReserva: reserva.id,
-        })
-      }}
+      onPress={pressHandler}
     >
       <Envolvedor>
         {false ? (

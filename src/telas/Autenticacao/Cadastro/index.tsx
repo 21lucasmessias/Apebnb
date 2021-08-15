@@ -30,10 +30,9 @@ import {
 interface iCadastroScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'cadastro'> {}
 
 const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
-  const {
-    carregando,
-    criarConta
-  } = useContext(ContextoAutenticacao)
+  const { criarConta } = useContext(ContextoAutenticacao)
+
+  const [carregando, setCarregando] = useState(false)
 
   const [nome, setNome] = useState('')
   const [cpf, setCPF] = useState('')
@@ -50,11 +49,15 @@ const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
     return false;
   }
 
-  const realizarCadastro = () => {
+  const realizarCadastroHandler = async () => {
+    setCarregando(true)
+
     Keyboard.dismiss()
     if(verificarEntradas()){
-      criarConta(nome, cpf, email, senha)
+      await criarConta(nome, cpf, email, senha)
     }
+
+    setCarregando(false)
   }
 
   return (
@@ -108,7 +111,7 @@ const Cadastro: React.FC<iCadastroScreen> = ({navigation}) => {
       <EnvolvedorBotoes>
         <Botao
           texto='Realizar Cadastro'
-          aoPressionar={realizarCadastro}
+          aoPressionar={realizarCadastroHandler}
           tipo='preenchido'
         />
       </EnvolvedorBotoes>

@@ -2,7 +2,6 @@ import React from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
-import ContextoMoradoresProvider from '../../../contextos/ContextoMoradores'
 
 import ListaSolicitacoesMoradores from '../../../componentes/ListaSolicitacoesMoradores'
 
@@ -13,13 +12,11 @@ import {
 
 const Solicitacoes: React.FC<StackScreenProps<RotasMoradoresParamsList, 'solicitacoes'>> = (navigation) => {
   return (
-    <ContextoMoradoresProvider>
-      <Envolvedor>
-        <SubTitulo>Solicitações</SubTitulo>
+    <Envolvedor>
+      <SubTitulo>Solicitações</SubTitulo>
 
-        <ListaSolicitacoesMoradores navigation={navigation.navigation}/>
-      </Envolvedor>
-    </ContextoMoradoresProvider>
+      <ListaSolicitacoesMoradores navigation={navigation.navigation}/>
+    </Envolvedor>
   )
 }
 

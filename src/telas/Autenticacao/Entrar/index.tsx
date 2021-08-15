@@ -32,13 +32,21 @@ import {
 interface iEntrarScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'entrar'> {}
 
 const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
-  const {
-    autenticar,
-    carregando,
-  } = useContext(ContextoAutenticacao)
+  const { autenticar } = useContext(ContextoAutenticacao)
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+
+  const [carregando, setCarregando] = useState(false)
+
+  const entrarHandler = async () => {
+    Keyboard.dismiss()
+    setCarregando(true)
+
+    await autenticar(email, senha)
+
+    setCarregando(false)
+  }
 
   return (
     <Conteiner>
@@ -84,10 +92,7 @@ const Entrar: React.FC<iEntrarScreen> = ({navigation}) => {
       <EnvolvedorBotoes>
         <Botao
           texto='Entrar'
-          aoPressionar={() => {
-            Keyboard.dismiss()
-            autenticar(email, senha)
-          }}
+          aoPressionar={entrarHandler}
           tipo='preenchido'
         />
       </EnvolvedorBotoes>

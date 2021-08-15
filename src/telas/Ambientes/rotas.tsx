@@ -43,7 +43,6 @@ const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             headerTransparent: true,
             cardStyle: { marginTop: 60 },
           }}
-          
         >
           <Screen
             name="ambientes"

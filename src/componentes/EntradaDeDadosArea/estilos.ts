@@ -19,3 +19,24 @@ export const EntradaTexto = styled.TextInput<iEntradaTexto>`
   font-size: 22px;
   color: ${tema.color.azulEscuro};
 `
+
+type iEnvolvedorEntrada = {
+  focado: boolean,
+  erro: boolean
+}
+
+
+export const EnvolvedorEntrada = styled.View<iEnvolvedorEntrada>`
+  height: 140px;
+  width: 100%;
+
+  position: absolute;
+  bottom: 8px;
+
+  border-radius: 10px;  
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${props => props.focado ? tema.color.azulEscuro : props.erro ? tema.color.magenta : tema.color.verdeAzulado};
+
+  background-color: ${tema.color.branco};
+`

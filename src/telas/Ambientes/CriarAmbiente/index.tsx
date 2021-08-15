@@ -29,7 +29,7 @@ import {
 
 interface iCriarAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'criarAmbiente'> {}
 
-const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = () => {
+const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({ navigation }) => {
   const { criarAmbiente } = useContext(ContextoAmbientes)
 
   const diasSemanaRef = useRef<View>(null)
@@ -38,7 +38,7 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = () => {
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
 
-  const salvarAmbiente = () => {
+  const salvarAmbiente = async () => {
     Keyboard.dismiss()
 
     // @ts-ignore: Unreachable code error
@@ -62,7 +62,11 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = () => {
       },
     }
 
-    criarAmbiente(novoAmbiente)
+    const ambienteCriado = await criarAmbiente(novoAmbiente)
+    
+    if(ambienteCriado){
+      navigation.goBack()
+    }
   }
 
   return (

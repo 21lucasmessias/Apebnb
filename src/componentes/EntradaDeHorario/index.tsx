@@ -1,16 +1,18 @@
 import React from "react"
 
+import { Dialog } from "react-native-paper"
 import Icon from 'react-native-vector-icons/Feather'
+
+import { tema } from "../../global/estilos/tema"
+
+import ListaHorarios from "../ListaHorarios"
+import Botao from "../Botao"
 
 import {
   Envolvedor,
   Entrada,
   Pressionavel
 } from './estilos'
-import { tema } from "../../global/estilos/tema"
-import { Dialog } from "react-native-paper"
-import ListaHorarios from "../ListaHorarios"
-import Botao from "../Botao"
 
 interface iEntradaDeHorario {
   setRelogioVisivel: React.Dispatch<React.SetStateAction<boolean>>,

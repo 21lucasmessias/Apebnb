@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
 
 import { StackHeaderProps } from '@react-navigation/stack'
 
@@ -19,7 +18,6 @@ import {
   Filler,
   Imagem,
 } from './estilos'
-import { useEffect } from 'react'
 
 interface iCabecalho {
   stackCabecalhoProps?: StackHeaderProps,
