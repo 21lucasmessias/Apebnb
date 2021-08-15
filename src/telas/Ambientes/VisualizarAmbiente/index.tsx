@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import moment from 'moment'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAmbientesParamsList } from '../rotas'
+
+import { ContextoReserva } from '../../../contextos/ContextoReservas'
 
 import Icon from 'react-native-vector-icons/Feather'
 
@@ -24,23 +26,40 @@ import {
   DivisorVisivel,
   EnvolvedorData
 } from './estilos'
+import { iReserva } from '../../../models/Reserva'
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'visualizarAmbiente'> {}
 
-const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
-  const hoje = moment(new Date()).subtract(86400000)
+const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) => {
+  const { criarReserva } = useContext(ContextoReserva)
+  const { user } = useContext(ContextoAutenticacao)
+
   const { ambiente } = route.params
+
+  const hoje = moment(new Date()).subtract(86400000)
 
   const [dia, setDia] = useState<moment.Moment>(hoje)
   const [diaString, setDiaString] = useState(hoje.format('DD/MM/YYYY'))
   const [calendarioVisivel, setCalendarioVisivel] = useState(false)
   
   const [horarioVisivel, setHorarioVisivel] = useState(false)
-
   const [horarioEscolhido, setHorarioEscolhido] = useState('')
 
-  const realizarReserva = () => {
-    console.log(dia, horarioEscolhido)
+  const realizarReserva = async () => {
+    let reserva: iReserva = {
+      id: '',
+      idAmbiente: ambiente.id,
+      idUsuario: user.uid as string,
+      data: diaString,
+      horario: horarioEscolhido,
+    }
+
+    const foiCriado = await criarReserva(reserva)
+
+    if(foiCriado) {
+      navigation.goBack()
+    }
   }
 
   return (
