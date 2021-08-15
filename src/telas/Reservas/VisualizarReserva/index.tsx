@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import moment from 'moment'
+import Icon from 'react-native-vector-icons/Feather'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasReservasParamsList } from '../rotas'
 
-import Icon from 'react-native-vector-icons/Feather'
+
+import { ContextoReserva } from '../../../contextos/ContextoReservas'
+import { ContextoAmbientes } from '../../../contextos/ContextoAmbientes'
+
 
 import { tema } from '../../../global/estilos/tema'
 import { iReserva } from '../../../models/Reserva'
 import { iAmbiente } from '../../../models/Ambiente'
+import { showToast } from '../../../utils/Animacoes'
 
 import Botao from '../../../componentes/Botao'
 import VisualizacaoDeData from '../../../componentes/VisualizacaoDeData'
@@ -27,56 +32,40 @@ import {
   DivisorVisivel,
   EnvolvedorData
 } from './estilos'
+import { ActivityIndicator } from 'react-native-paper'
 
 interface iReservaScreen extends StackScreenProps<RotasReservasParamsList, 'visualizarReserva'> {}
 
 const VisualizarReserva: React.FC<iReservaScreen> = ({ route }) => {
-  const { 
-    idReserva
-  } = route.params
+  const { reserva } = route.params
+
+  const { cancelarReserva } = useContext(ContextoReserva)
+  const { getAmbiente } = useContext(ContextoAmbientes)
 
   const [carregando, setCarregando] = useState(true)
-
   const [ambiente, setAmbiente] = useState<iAmbiente>()
-  const [reserva, setReserva] = useState<iReserva>()
 
-  const cancelarReserva = () => {
-    console.log("Reserva cancelada")
+  const cancelarReservaHandler = async () => {
+    await cancelarReserva(reserva)
   }
 
   useEffect(() => {
-    setAmbiente({
-      descricao: 'teste',
-      foto: null,
-      id: '1',
-      nome: 'teste',
-      diasDisponiveis: {
-        domingo: true,
-        quarta: true,
-        quinta: true,
-        sabado: true,
-        segunda: true,
-        sexta: true,
-        terca: true,
+    getAmbiente(reserva.idAmbiente)
+    .then((res) => {
+      if(res) {
+        setAmbiente(res)
+        setCarregando(false)
+      } else {
+        showToast("Erro ao carregar ambiente.")
       }
     })
-
-    setReserva({
-      data: moment(1),
-      horario: '19:00-20:00',
-      id: idReserva,
-      idAmbiente: '1',
-      idUsuario: '1'
-    })
-
-    setCarregando(false)
   }, [])
 
   return (
     <Conteiner>
-      <Envolvedor showsVerticalScrollIndicator={false}>
-        {!carregando ? (
-          <>
+      {!carregando ? (
+        <>
+          <Envolvedor showsVerticalScrollIndicator={false}>
             {ambiente?.foto ? (
               <Foto source={{ uri: ambiente.foto }} />
             ) : (
@@ -100,21 +89,21 @@ const VisualizarReserva: React.FC<iReservaScreen> = ({ route }) => {
             <DivisorVisivel/>
 
             <EnvolvedorData>
-              <VisualizacaoDeData dia={moment(1)}/>
+              <VisualizacaoDeData dia={reserva.data}/>
 
               <Divisor/>
 
-              <VisualizacaoDeHorario horarioEscolhido={reserva?.horario}/>
+              <VisualizacaoDeHorario horarioEscolhido={reserva.horario}/>
             </EnvolvedorData>
-          </>
-        ) : (
-          <Titulo>Loading</Titulo>
-        )}
-      </Envolvedor>
+          </Envolvedor>
 
-      <EnvolvedorBotoes>
-        <Botao tipo='preenchido' texto="Cancelar Reserva" aoPressionar={cancelarReserva}/>
-      </EnvolvedorBotoes>
+          <EnvolvedorBotoes>
+            <Botao tipo='preenchido' texto="Cancelar Reserva" aoPressionar={cancelarReservaHandler}/>
+          </EnvolvedorBotoes>
+        </>
+      ) : (
+        <ActivityIndicator size='large' color={tema.color.azulEscuro} />
+      )}
     </Conteiner>
   )
 }

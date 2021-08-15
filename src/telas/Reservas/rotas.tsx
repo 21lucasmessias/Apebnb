@@ -12,11 +12,12 @@ import Cabecalho from '../../componentes/Cabecalho'
 
 import Reservas from '.'
 import VisualizarReserva from './VisualizarReserva'
+import ContextoReservaProvider from '../../contextos/ContextoReservas'
 
 export type RotasReservasParamsList = {
   reservas: undefined
   visualizarReserva: {
-    idReserva: iReserva['id']
+    reserva: iReserva
   }
 }
 

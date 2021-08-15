@@ -1,5 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { View } from 'react-native'
+
+import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao'
+import { ContextoReserva } from '../../contextos/ContextoReservas'
 
 import moment from 'moment'
 import { Agenda, AgendaItemsMap, LocaleConfig } from 'react-native-calendars'
@@ -8,7 +11,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { RotasReservasParamsList } from './rotas'
 
 import { iReserva } from '../../models/Reserva'
-import { traduzir } from '../../utils/Traduzir'
+import { configAgenda, traduzir } from '../../utils/Traduzir'
 
 import CartaoReserva from '../../componentes/CartaoReserva'
 
@@ -20,101 +23,41 @@ import {
   DiaConteiner
 } from './estilos'
 
-
 const Reservas: React.FC<StackScreenProps<RotasReservasParamsList, 'reservas'>> = ({ navigation }) => {
+  const { user } = useContext(ContextoAutenticacao)
+  const { listarReservasUsuario, listarTodasReservas, adicionarListenerReservas } = useContext(ContextoReserva)
+
   const hoje = new Date()
 
-  const [items, setItems] = useState<AgendaItemsMap<iReserva>>()
+  const [reservas, setReservas] = useState<AgendaItemsMap<iReserva>>()
 
   useEffect(() => {
-    LocaleConfig.locales['br'] = {
-      monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-      monthNamesShort: ['Jan.','Fev.','Mar.','Abr.','Mai.','Jun.','Jul.','Ago.','Set.','Out.','Nov.','Dec.'],
-      dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sabado'],
-      dayNamesShort: ['Dom.','Seg.','Ter.','Qua.','Qui.','Sex.','Sab.'],
-      today: 'Hoje'
-    };
+    
+    const unsubscribeAutoRefresh = adicionarListenerReservas(refreshReservas)
 
+    refreshReservas()
+
+    LocaleConfig.locales['br'] = configAgenda
     LocaleConfig.defaultLocale = 'br'
 
-    setItems({
-      '2021-07-26': [
-        {
-          id: '1',
-          idAmbiente: '1',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-        },
-        {
-          id: '2',
-          idAmbiente: '1',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-        },
-        {
-          id: '3',
-          idAmbiente: '1',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-        }
-      ],
-      '2021-07-27': [
-        {
-          id: '4',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-          idAmbiente: '2'
-        },
-        {
-          id: '5',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-          idAmbiente: '2'
-        },
-        {
-          id: '6',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-          idAmbiente: '2'
-        }
-      ],
-      '2021-07-28': [
-        {
-          id: '7',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-          idAmbiente: '2'
-        },
-        {
-          id: '8',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-          idAmbiente: '2'
-        },
-        {
-          id: '9',
-          idUsuario: 'safasfas',
-          data: moment('2021-07-26'),
-          horario: '19:00-20:00',
-          idAmbiente: '2'
-        }
-      ],
-    })
+    return unsubscribeAutoRefresh
   }, [])
+
+  const refreshReservas = async () => {
+    const reservas = user.isAdmin ? (
+      await listarTodasReservas()
+    ) : (
+      await listarReservasUsuario(user.uid as string)
+    )
+
+    console.log(reservas)
+  }
 
   return (
     <Container>
       <Texto>Reservas</Texto>
       <Agenda
-        items={items}
+        items={reservas}
         selected={hoje}
         renderItem={(item) => 
           <CartaoReserva
@@ -124,7 +67,6 @@ const Reservas: React.FC<StackScreenProps<RotasReservasParamsList, 'reservas'>> 
         }
         renderDay={(date) => {
           if(date){
-
             return(
               <DiaConteiner>
                 <DivisorDia></DivisorDia>
