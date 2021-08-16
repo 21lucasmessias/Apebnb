@@ -1,6 +1,5 @@
 import styled from 'styled-components/native'
 import { tema } from '../../global/estilos/tema';
-import { width } from '../../utils/Utils';
 
 type iEntradaTexto = {
   focado: boolean;
@@ -31,7 +30,6 @@ export const EnvolvedorEntrada = styled.View<iEnvolvedorEntrada>`
   width: 100%;
 
   position: absolute;
-  bottom: 8px;
 
   border-radius: 10px;  
   border-width: 1px;

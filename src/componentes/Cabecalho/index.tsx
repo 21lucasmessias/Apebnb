@@ -33,7 +33,9 @@ const Cabecalho: React.FC<iCabecalho> = ({stackCabecalhoProps, menusAdicionais =
     {
       nome: 'log-out',
       texto: 'Sair',
-      acao: () => logout()
+      acao: async () => {
+        await logout()
+      }
     },
   ]
 

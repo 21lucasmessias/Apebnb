@@ -41,7 +41,7 @@ const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             header: (props) => <Cabecalho stackCabecalhoProps={props}/>,
             cardStyleInterpolator: (props) => forFade(props),
             headerTransparent: true,
-            cardStyle: { marginTop: 60 },
+            cardStyle: { marginTop: 55 },
           }}
         >
           <Screen

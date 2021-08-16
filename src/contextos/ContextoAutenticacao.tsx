@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import firebase from 'firebase'
+import moment from 'moment';
+
 import { auth, db } from '../configs/firebase'
 
 import { converterMoradorFirebase } from './ContextoMorador';
 import { showToast } from '../utils/Animacoes';
-import { iMorador } from '../models/Morador';
+import { converterReservaFirebase } from './ContextoReservas';
 
 type iUser = {
   isAdmin: boolean | undefined,
@@ -26,11 +27,6 @@ type iContextoAutenticacaoProvider = {
   children: React.ReactNode
 }
 
-export const converterUsuarioFirebase = {
-  toFirestore: (data: iMorador) => data,
-  fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => snap.data() as iMorador
-}
-
 const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({ children }) => {
   const [user, setUser] = useState<iUser>({
     isAdmin: undefined,
@@ -38,22 +34,24 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
   })
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
+    const unsubscribe = auth.onAuthStateChanged(async (newUser) => {
+      if (newUser) {
         try {
-          const doc = await db.collection('users')
-            .withConverter(converterUsuarioFirebase)
-            .doc(user.uid)
+          const doc = await db.collection('moradores')
+            .withConverter(converterMoradorFirebase)
+            .doc(newUser.uid)
             .get()
-    
+
           if (doc.exists) {
+            await atualizarReservas(newUser.uid)
+
             setUser({
               isAdmin: doc.data()!.isAdmin,
-              uid: user.uid
+              uid: newUser.uid
             })
           } else {
-            showToast('Usuário excluído.')
-            user.delete()
+            showToast('Usuário excluído pelo administrador.', true)
+            newUser.delete()
           }
         } catch(err) {
           console.log(err)
@@ -73,6 +71,28 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     
     return unsubscribe
   }, [])
+
+
+  const atualizarReservas = async(id: string) => {
+    let hoje = moment(new Date())
+
+    const reservas = await db.collection('reservas')
+      .withConverter(converterReservaFirebase)
+      .where('morador.id', '==', id)
+      .get()
+
+    const batch = db.batch()
+
+    reservas.docs
+      .filter((reserva) => {
+        return reserva.data().data.ano < hoje.year() || reserva.data().data.mes < hoje.month()+1 || reserva.data().data.dia < hoje.date()
+      })
+      .map((reserva) => {
+        batch.delete(reserva.ref)
+      })
+
+    await batch.commit()
+  }
 
   const autenticar = async (email: string, senha: string) => {
     try {
@@ -98,7 +118,7 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
               cpf: cpf,
               email: email,
               aprovado: false,
-              isAdmin: false
+              isAdmin: false,
             })
         } catch(err) {
           console.log(err)

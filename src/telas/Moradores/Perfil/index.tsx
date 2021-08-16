@@ -42,18 +42,20 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
   const [confirmarSenha, setConfirmarSenha] = useState('')
 
   useEffect(() => {
-    getMorador(user.uid as string)
-    .then((res) => {
-      if(res) {
-        setNome(res.nome)
-        setEmail(res.email)
-        setCPF(res.cpf)
-        setNumero(res.numero ? res.numero : '')
-        setFoto(res.foto ? res.foto : '')
-      }
-
-      setCarregando(false)
-    })
+    if(user.uid){
+      getMorador(user.uid as string)
+      .then((res) => {
+        if(res) {
+          setNome(res.nome)
+          setEmail(res.email)
+          setCPF(res.cpf)
+          setNumero(res.numero ? res.numero : '')
+          setFoto(res.foto ? res.foto : '')
+        }
+  
+        setCarregando(false)
+      })
+    }
   }, [])
  
   const salvarMorador = async () => {

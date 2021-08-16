@@ -43,6 +43,7 @@ const EntradaDeDadosArea: React.FC<iEntradaDeDadosArea> = (({ valor, setValor, v
           multiline
           scrollEnabled
           textAlignVertical='top'
+          autoCorrect={false}
           
           ref={entradaTextoRef}
 

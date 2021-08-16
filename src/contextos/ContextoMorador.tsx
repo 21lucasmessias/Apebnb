@@ -5,9 +5,10 @@ import { auth, db } from '../configs/firebase'
 
 import { iMorador } from '../models/Morador';
 import { showToast } from '../utils/Animacoes';
+import { converterReservaFirebase } from './ContextoReservas';
 
 interface iContextoMorador {
-  getMorador: (id: string) => Promise<iMorador | undefined>,
+  getMorador: (id: string) => Promise<iMorador>,
   alterarMorador: (morador: iMorador, senha: string | null) => Promise<void>
   adicionarListenerNomeMorador: (id: string, refreshUserNome: (nome: string) => void) => () => void,
   removerMorador: (morador: iMorador) => Promise<void>
@@ -38,7 +39,7 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
   }
 
   const getMorador = async (id: string) => {
-    let dados: iMorador | undefined
+    let dados: iMorador
 
     try {
       const doc = await db.collection('moradores')
@@ -47,16 +48,16 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
         .get()
       
       if (doc.exists) {
-        dados = doc.data()
+        dados = doc.data()!
       }
 
-      return dados
+      return dados!
     } catch(err) {
       console.log(err)
       showToast('Algo deu errado. Contate o desenvolvedor.')
-
-      return dados
     }
+
+    return dados!
   }
 
   const alterarMorador = async (morador: iMorador, senha: string | null) => {  
@@ -80,15 +81,20 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
   const removerMorador = async (morador: iMorador) => {
     const batch = db.batch()
     const moradorRef = db.collection('moradores').doc(morador.id)
-    const userRef = db.collection('users').doc(morador.id)
+    const reservasRef = await db.collection('reservas')
+      .withConverter(converterReservaFirebase)
+      .where('idUsuario', '==', morador.id)
+      .get()
 
     try {
       batch.delete(moradorRef)
-      batch.delete(userRef)
+      reservasRef.forEach(r => {
+        batch.delete(r.ref)
+      })
       
       await batch.commit()
       
-      showToast('Morador removido com sucesso.')
+      showToast('Morador e reservas removidas com sucesso.')
     } catch(err) {
       console.log(err)
       showToast('Erro ao remover morador.')

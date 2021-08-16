@@ -11,7 +11,7 @@ export const Pressionavel = styled.TouchableOpacity`
 export const Texto = styled.Text`
   flex: 1%;
   font-family: ${tema.fontes.WorkSans};
-  font-size: 18;
+  font-size: 18px;
   color: ${tema.color.ouro};
-  padding-left: 12;
+  padding-left: 12px;
 `

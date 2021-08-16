@@ -12,7 +12,6 @@ import Cabecalho from '../../componentes/Cabecalho'
 
 import Reservas from '.'
 import VisualizarReserva from './VisualizarReserva'
-import ContextoReservaProvider from '../../contextos/ContextoReservas'
 
 export type RotasReservasParamsList = {
   reservas: undefined
@@ -37,7 +36,7 @@ const RotasReservas: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLis
           cardStyleInterpolator: (props) => forFade(props),
           headerTransparent: true,
           cardStyle: {
-            marginTop: 60
+            marginTop: 55
           },
         }}>
         <Screen

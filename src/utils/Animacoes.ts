@@ -17,9 +17,9 @@ export const forFade = ({ current }: StackCardInterpolationProps) => ({
   },
 });
 
-export const showToast = (msg: string) => ToastAndroid.showWithGravityAndOffset(
+export const showToast = (msg: string, long?: boolean) => ToastAndroid.showWithGravityAndOffset(
   msg,
-  ToastAndroid.SHORT,
+  long ? ToastAndroid.LONG : ToastAndroid.SHORT,
   ToastAndroid.BOTTOM,
   0,
   120

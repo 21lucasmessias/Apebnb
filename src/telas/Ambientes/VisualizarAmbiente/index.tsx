@@ -1,14 +1,21 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import moment from 'moment'
+
+import { ActivityIndicator } from 'react-native-paper'
 
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasAmbientesParamsList } from '../rotas'
 
 import { ContextoReserva } from '../../../contextos/ContextoReservas'
+import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
+import { ContextoMorador } from '../../../contextos/ContextoMorador';
 
 import Icon from 'react-native-vector-icons/Feather'
 
 import { tema } from '../../../global/estilos/tema'
+import { iHorario, iReserva } from '../../../models/Reserva'
+import { iMorador } from '../../../models/Morador';
+import { showToast } from '../../../utils/Animacoes';
 
 import Botao from '../../../componentes/Botao'
 import EntradaDeData, { DialogData } from '../../../componentes/EntradaDeData'
@@ -26,40 +33,85 @@ import {
   DivisorVisivel,
   EnvolvedorData
 } from './estilos'
-import { iReserva } from '../../../models/Reserva'
-import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
 
 interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'visualizarAmbiente'> {}
 
 const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) => {
-  const { criarReserva } = useContext(ContextoReserva)
+  const { criarReserva, listarHorariosDisponiveis } = useContext(ContextoReserva)
+  const { getMorador } = useContext(ContextoMorador)
   const { user } = useContext(ContextoAutenticacao)
 
   const { ambiente } = route.params
 
-  const hoje = moment(new Date()).subtract(86400000)
+  const hoje = moment(new Date())
+
+  const [morador, setMorador] = useState<iMorador>()
 
   const [dia, setDia] = useState<moment.Moment>(hoje)
-  const [diaString, setDiaString] = useState(hoje.format('DD/MM/YYYY'))
+  const [data, setData] = useState<iReserva['data']>({
+    ano: hoje.year(),
+    dia: hoje.date(),
+    mes: hoje.month()+1
+  })
   const [calendarioVisivel, setCalendarioVisivel] = useState(false)
   
   const [horarioVisivel, setHorarioVisivel] = useState(false)
-  const [horarioEscolhido, setHorarioEscolhido] = useState('')
+  const [horarioEscolhido, setHorarioEscolhido] = useState<iHorario>()
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState<iHorario[]>([])
+  const [erroHorario, setErroHorario] = useState(false)
+
+  const [carregando, setCarregando] = useState(false)
+
+  useEffect(() => {
+    if(user.uid){
+      getMorador(user.uid!)
+      .then((res) => {
+        setMorador(res)
+      })
+      .catch((err) => {
+        console.log(err)
+        showToast('Erro ao sincronizar morador.')
+        navigation.goBack()
+      })
+
+      listarHorariosDisponiveis(ambiente.id, data)
+      .then(res => {
+        setHorariosDisponiveis(res)
+      }) 
+    }
+  }, [])
+
+  const verificarDados = () => {
+    if(horarioEscolhido === undefined){
+      setErroHorario(true)
+      showToast("Preencha os dados corretamente.")
+      return false
+    }
+    return true
+  }
 
   const realizarReserva = async () => {
-    let reserva: iReserva = {
-      id: '',
-      idAmbiente: ambiente.id,
-      idUsuario: user.uid as string,
-      data: diaString,
-      horario: horarioEscolhido,
+    setCarregando(true)
+
+    if(verificarDados()) {
+      if(user.uid) {
+        let reserva: iReserva = {
+          id: '',
+          ambiente: ambiente,
+          morador: morador!,
+          data: data,
+          horario: horarioEscolhido!
+        }
+  
+        const foiCriado = await criarReserva(reserva)
+    
+        if(foiCriado) {
+          navigation.goBack()
+        }
+      }
     }
 
-    const foiCriado = await criarReserva(reserva)
-
-    if(foiCriado) {
-      navigation.goBack()
-    }
+    setCarregando(false)
   }
 
   return (
@@ -90,8 +142,7 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) =>
         <EnvolvedorData>
           <EntradaDeData
             setCalendarioVisivel={setCalendarioVisivel}
-            diaString={diaString}
-            setDiaString={setDiaString}
+            data={data}
           />
 
           <Divisor/>
@@ -99,9 +150,17 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) =>
           <EntradaDeHorario
             setRelogioVisivel={setHorarioVisivel}
             horarioEscolhido={horarioEscolhido}
+            erro={erroHorario}
+            setErroHorario={setErroHorario}
           />
         </EnvolvedorData>
       </Envolvedor>
+
+      {
+        carregando && (
+          <ActivityIndicator size='large' color={tema.color.azulEscuro} />
+        )
+      }
 
       <EnvolvedorBotoes>
         <Botao tipo='preenchido' texto="Realizar Reserva" aoPressionar={realizarReserva}/>
@@ -111,7 +170,7 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) =>
         calendarioVisivel={calendarioVisivel}
         setCalendarioVisivel={setCalendarioVisivel}
         setDia={setDia}
-        setDiaString={setDiaString}
+        setData={setData}
       />
 
       <DialogHorario
@@ -119,6 +178,7 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) =>
         setHorarioVisivel={setHorarioVisivel}
         horarioEscolhido={horarioEscolhido}
         setHorarioEscolhido={setHorarioEscolhido}
+        horariosDisponiveis={horariosDisponiveis}
       />
     </Conteiner>
   )
