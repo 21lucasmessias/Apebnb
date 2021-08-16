@@ -20,7 +20,6 @@ export const Entrada = styled.TextInput<iEntrada>`
   text-decoration-line: none;
 
   padding-left: 19px;
-  padding-right: ${(props) => props.autoCompleteType == 'password' ? '60px' : '19px'};
 
   border: 1px solid ${(props) => props.focado ? tema.color.azulEscuro : props.erro ? tema.color.magenta : tema.color.verdeAzulado};
   border-right-width: 0px;
@@ -30,7 +29,7 @@ export const Entrada = styled.TextInput<iEntrada>`
   background-color: ${tema.color.branco};
 
   font-family: ${tema.fontes.WorkSans};
-  font-size: 20px;
+  font-size: 18px;
   color: ${tema.color.azulEscuro};
 `
 

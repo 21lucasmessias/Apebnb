@@ -4,6 +4,9 @@ import { tema } from "../../global/estilos/tema"
 
 import Icon from 'react-native-vector-icons/Feather'
 
+import { iReserva } from "../../models/Reserva"
+import { padNumero } from "../../utils/Utils"
+
 import {
   Envolvedor,
   DiaEnvolvedor,
@@ -12,15 +15,15 @@ import {
 } from './estilos'
 
 interface iVisualizacaoDeData {
-  dia: string
+  data: iReserva['data']
 }
 
-const VisualizacaoDeData: React.FC<iVisualizacaoDeData> = ({dia}) => {
+const VisualizacaoDeData: React.FC<iVisualizacaoDeData> = ({data}) => {
   return(
     <Envolvedor>
       <DiaEnvolvedor>
         <Dia>
-          {dia}
+          {`${padNumero(data.dia)}/${padNumero(data.mes)}/${data.ano}`}
         </Dia>
       </DiaEnvolvedor>
 

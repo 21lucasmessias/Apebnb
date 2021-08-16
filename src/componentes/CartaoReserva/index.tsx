@@ -1,8 +1,15 @@
-import { StackNavigationProp } from '@react-navigation/stack'
-import React from 'react'
-import { iReserva } from '../../models/Reserva'
-import { RotasReservasParamsList } from '../../telas/Reservas/rotas'
+import React, { useContext } from 'react'
+
+import moment from 'moment'
 import Icon from 'react-native-vector-icons/Feather'
+
+import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao'
+
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RotasReservasParamsList } from '../../telas/Reservas/rotas'
+
+import { iHorario, iReserva } from '../../models/Reserva'
+import { tema } from '../../global/estilos/tema'
 
 import {
   DetalhesEnvolvedor,
@@ -12,7 +19,6 @@ import {
   Pressionavel,
   Texto
 } from './estilos'
-import { tema } from '../../global/estilos/tema'
 
 interface iCartaoReserva {
   reserva: iReserva,
@@ -20,9 +26,10 @@ interface iCartaoReserva {
 }
 
 const CartaoReserva: React.FC<iCartaoReserva> = ({ reserva, navigation }) => {
+  const { user } = useContext(ContextoAutenticacao)
 
   const pressHandler = () => {
-    navigation.push('visualizarReserva', { reserva })
+    navigation.navigate('visualizarReserva', { reserva })
   }
 
   return (
@@ -40,11 +47,16 @@ const CartaoReserva: React.FC<iCartaoReserva> = ({ reserva, navigation }) => {
         )}
 
         <DetalhesEnvolvedor>
+          { user.isAdmin && (
+            <Texto>
+              {reserva.morador.nome}
+            </Texto>
+          )}
           <Texto>
-            {reserva.horario}
+            {iHorario[reserva.horario]}
           </Texto>
           <Texto>
-            {reserva.idAmbiente}
+            {reserva.ambiente.nome}
           </Texto>
         </DetalhesEnvolvedor>
       </Envolvedor>

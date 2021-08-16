@@ -16,7 +16,6 @@ import AnimacoesEntradaDeDados from './animacoes'
 
 import {
   EntradaTexto,
-  Texto,
   EnvolvedorEntrada
 } from './estilos'
 
@@ -62,6 +61,7 @@ const EntradaDeDados: React.FC<iEntradaDeDados> = (({ valor, setValor, tipoTecla
 
           multiline={false}
           scrollEnabled={false}
+          autoCorrect={false}
           
           ref={entradaTextoRef}
 

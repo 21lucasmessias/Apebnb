@@ -2,13 +2,14 @@ import React, { useState } from "react"
 import moment from "moment"
 
 import { tema } from "../../global/estilos/tema"
-import { height, width } from "../../utils/Utils"
-
-import { validadorData } from "../../utils/Validadores"
+import { height, padNumero, width } from "../../utils/Utils"
+import { iReserva } from "../../models/Reserva"
 
 import Icon from 'react-native-vector-icons/Feather'
 import { Dialog } from "react-native-paper"
 import CalendarPicker from 'react-native-calendar-picker'
+
+import Botao from "../Botao"
 
 import {
   Envolvedor,
@@ -16,15 +17,12 @@ import {
   Pressionavel
 } from './estilos'
 
-import Botao from "../Botao"
-
 interface iEntradaDeData {
   setCalendarioVisivel: React.Dispatch<React.SetStateAction<boolean>>,
-  diaString: string,
-  setDiaString: React.Dispatch<React.SetStateAction<string>>,
+  data: iReserva['data'],
 }
 
-const EntradaDeData: React.FC<iEntradaDeData> = ({setCalendarioVisivel, diaString, setDiaString}) => {
+const EntradaDeData: React.FC<iEntradaDeData> = ({setCalendarioVisivel, data}) => {
 
   const [focado, setFocado] = useState(false);
   const [erro, setErro] = useState(false);
@@ -32,20 +30,11 @@ const EntradaDeData: React.FC<iEntradaDeData> = ({setCalendarioVisivel, diaStrin
   return(
     <Envolvedor>
       <Entrada
-        value={diaString}
-        onChangeText={setDiaString}
-
-        onFocus={() => {
-          setFocado(true)
-        }}
-
-        onEndEditing={() => {
-          setFocado(false)
-          setErro(!validadorData(diaString))
-        }}
+        value={`${padNumero(data.dia)}/${padNumero(data.mes)}/${data.ano}`}
 
         focado={focado}
         erro={erro}
+        editable={false}
 
         placeholder="DD/MM/YY"
       >
@@ -71,11 +60,11 @@ interface iDialogData {
   calendarioVisivel: boolean,
   setCalendarioVisivel: React.Dispatch<React.SetStateAction<boolean>>,
   setDia: React.Dispatch<React.SetStateAction<moment.Moment>>,
-  setDiaString: React.Dispatch<React.SetStateAction<string>>,
+  setData: React.Dispatch<React.SetStateAction<iReserva['data']>>,
 }
 
-export const DialogData: React.FC<iDialogData> = ({calendarioVisivel, setCalendarioVisivel, setDia, setDiaString}) => {
-  const hoje = moment(new Date()).subtract(86400000)
+export const DialogData: React.FC<iDialogData> = ({calendarioVisivel, setCalendarioVisivel, setDia, setData}) => {
+  const hoje = moment(new Date()).subtract({days: 1})
 
   const diasDesabilitados = (date: moment.Moment) => {
     return date.diff(hoje) < 0
@@ -83,7 +72,11 @@ export const DialogData: React.FC<iDialogData> = ({calendarioVisivel, setCalenda
 
   const aoMudarDiaPeloCalendario = (date: moment.Moment) => {
     setDia(date)
-    setDiaString(date.format('DD/MM/YYYY'))
+    setData({
+      ano: date.year(),
+      dia: date.date(),
+      mes: date.month()+1
+    })
   }
   
   return(

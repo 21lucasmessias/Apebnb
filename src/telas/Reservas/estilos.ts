@@ -18,7 +18,7 @@ export const Texto = styled.Text`
 
 export const DiaConteiner = styled.View`
   width: 60px;
-  padding-top: 8px;
+  padding-top: 16px;
   align-items: center;
 `
 
@@ -27,7 +27,7 @@ export const DivisorDia = styled.View`
   height: 1px;
   background-color: ${tema.color.verdeAzulado};
   position: absolute;
-  top: 0px;
+  top : 0px;
   left: 8px;
 `
 
@@ -36,4 +36,5 @@ export const TextoDia = styled.Text`
   color: ${tema.color.azulEscuro};
   font-size: 22px;
   text-align: center;
+  padding-left: 8px;
 `

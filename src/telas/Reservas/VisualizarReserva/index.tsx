@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext, useState } from 'react'
 
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/Feather'
@@ -6,15 +6,10 @@ import Icon from 'react-native-vector-icons/Feather'
 import { StackScreenProps } from '@react-navigation/stack'
 import { RotasReservasParamsList } from '../rotas'
 
-
 import { ContextoReserva } from '../../../contextos/ContextoReservas'
-import { ContextoAmbientes } from '../../../contextos/ContextoAmbientes'
-
 
 import { tema } from '../../../global/estilos/tema'
-import { iReserva } from '../../../models/Reserva'
-import { iAmbiente } from '../../../models/Ambiente'
-import { showToast } from '../../../utils/Animacoes'
+import { iHorario } from '../../../models/Reserva'
 
 import Botao from '../../../componentes/Botao'
 import VisualizacaoDeData from '../../../componentes/VisualizacaoDeData'
@@ -36,74 +31,63 @@ import { ActivityIndicator } from 'react-native-paper'
 
 interface iReservaScreen extends StackScreenProps<RotasReservasParamsList, 'visualizarReserva'> {}
 
-const VisualizarReserva: React.FC<iReservaScreen> = ({ route }) => {
+const VisualizarReserva: React.FC<iReservaScreen> = ({ route, navigation }) => {
   const { reserva } = route.params
 
-  const { cancelarReserva } = useContext(ContextoReserva)
-  const { getAmbiente } = useContext(ContextoAmbientes)
+  const [carregando, setCarregando] = useState(false)
 
-  const [carregando, setCarregando] = useState(true)
-  const [ambiente, setAmbiente] = useState<iAmbiente>()
+  const { cancelarReserva } = useContext(ContextoReserva)
 
   const cancelarReservaHandler = async () => {
-    await cancelarReserva(reserva)
+    setCarregando(true)
+    if(await cancelarReserva(reserva)){
+      navigation.goBack()
+    }
+    setCarregando(false)
   }
-
-  useEffect(() => {
-    getAmbiente(reserva.idAmbiente)
-    .then((res) => {
-      if(res) {
-        setAmbiente(res)
-        setCarregando(false)
-      } else {
-        showToast("Erro ao carregar ambiente.")
-      }
-    })
-  }, [])
 
   return (
     <Conteiner>
-      {!carregando ? (
-        <>
-          <Envolvedor showsVerticalScrollIndicator={false}>
-            {ambiente?.foto ? (
-              <Foto source={{ uri: ambiente.foto }} />
-            ) : (
-              <FotoVaziaEnvolvedor>
-                <Icon name='camera' size={24} color={tema.color.azulEscuro} />
-              </FotoVaziaEnvolvedor>
-            )}
+      <Envolvedor showsVerticalScrollIndicator={false}>
+        {reserva.ambiente.foto ? (
+          <Foto source={{ uri: reserva.ambiente.foto }} />
+        ) : (
+          <FotoVaziaEnvolvedor>
+            <Icon name='camera' size={24} color={tema.color.azulEscuro} />
+          </FotoVaziaEnvolvedor>
+        )}
 
-            <Divisor />
+        <Divisor />
 
-            <Titulo>
-              {ambiente?.nome}
-            </Titulo>
+        <Titulo>
+          {reserva.ambiente.nome}
+        </Titulo>
 
-            <Divisor />
+        <Divisor />
 
-            <Descricao>
-              {ambiente?.descricao}
-            </Descricao>
+        <Descricao>
+          {reserva.ambiente.descricao}
+        </Descricao>
 
-            <DivisorVisivel/>
+        <DivisorVisivel/>
 
-            <EnvolvedorData>
-              <VisualizacaoDeData dia={reserva.data}/>
+        <EnvolvedorData>
+          <VisualizacaoDeData data={reserva.data}/>
 
-              <Divisor/>
+          <Divisor/>
 
-              <VisualizacaoDeHorario horarioEscolhido={reserva.horario}/>
-            </EnvolvedorData>
-          </Envolvedor>
+          <VisualizacaoDeHorario horarioEscolhido={iHorario[reserva.horario]}/>
+        </EnvolvedorData>
+      </Envolvedor>
 
-          <EnvolvedorBotoes>
-            <Botao tipo='preenchido' texto="Cancelar Reserva" aoPressionar={cancelarReservaHandler}/>
-          </EnvolvedorBotoes>
-        </>
-      ) : (
+      {carregando && (
         <ActivityIndicator size='large' color={tema.color.azulEscuro} />
       )}
+
+      <EnvolvedorBotoes>
+        <Botao tipo='preenchido' texto="Cancelar Reserva" aoPressionar={cancelarReservaHandler}/>
+      </EnvolvedorBotoes>
+        
     </Conteiner>
   )
 }

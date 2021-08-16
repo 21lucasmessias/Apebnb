@@ -45,7 +45,7 @@ const RotasMoradores: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             screenOptions={{
               cardStyleInterpolator: (props) => forFade(props),
               headerTransparent: true,
-              cardStyle: { marginTop: 60 },
+              cardStyle: { marginTop: 55 },
               header: props => <Cabecalho stackCabecalhoProps={props}/>,
             }}
           >
@@ -104,7 +104,7 @@ const RotasMoradores: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             cardStyleInterpolator: (props) => forFade(props),
             headerTransparent: true,
             cardStyle: {
-              marginTop: 60
+              marginTop: 55
             },
           }}
         >
