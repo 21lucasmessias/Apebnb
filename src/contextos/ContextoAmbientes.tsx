@@ -5,6 +5,7 @@ import { db } from '../configs/firebase'
 
 import { iAmbiente } from '../models/Ambiente'
 import { showToast } from '../utils/Animacoes'
+import { converterReservaFirebase } from './ContextoReservas'
 
 interface iContextoAmbientes {
   criarAmbiente: (ambiente: iAmbiente) => Promise<boolean>,
@@ -102,12 +103,25 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({ child
 
   const removerAmbiente = async (ambiente: iAmbiente) => {
     try {
-      await db.collection('ambientes')
+      const batch = db.batch()
+
+      const ambienteRef = db.collection('ambientes')
         .withConverter(converterAmbienteFirebase)
         .doc(ambiente.id)
-        .delete()
-      
-      showToast('Ambiente removido com sucesso.')
+
+      const reservas = await db.collection('reservas')
+        .withConverter(converterReservaFirebase)
+        .where('ambiente.id', '==', ambiente.id)
+        .get()
+
+      batch.delete(ambienteRef)
+      reservas.docs.forEach((reserva) => {
+        batch.delete(reserva.ref)
+      })
+
+      await batch.commit()
+
+      showToast('Ambiente e reservas removidas com sucesso.')
     } catch(err) {
       console.log(err)
       showToast('Erro ao remover ambiente.')

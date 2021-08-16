@@ -83,7 +83,7 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children 
     const moradorRef = db.collection('moradores').doc(morador.id)
     const reservasRef = await db.collection('reservas')
       .withConverter(converterReservaFirebase)
-      .where('idUsuario', '==', morador.id)
+      .where('morador.id', '==', morador.id)
       .get()
 
     try {
