@@ -7,7 +7,7 @@ import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
 import { RouteProp } from '@react-navigation/native'
 
-import { validadorEntradaStringNumero } from '../../../utils/Validadores'
+import { validadorCPF, validadorDeEmail, validadorDeNumero, validadorEntradaStringNumero } from '../../../utils/Validadores'
 import AnimacoesAdministrarMorador from './animacoes'
 import { gerarAlerta } from '../../../utils/Utils'
 
@@ -73,7 +73,7 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
           nome='Email'
           valor={email}
           setValor={setEmail}
-          validador={validadorEntradaStringNumero}
+          validador={validadorDeEmail}
           tipoTeclado='email-address'
         />
 
@@ -83,7 +83,7 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
           nome='CPF'
           valor={cpf}
           setValor={setCPF}
-          validador={validadorEntradaStringNumero}
+          validador={validadorCPF}
           tipoTeclado='numeric'
         />
 
@@ -93,7 +93,7 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({ route }) => {
           nome='Celular'
           valor={numero}
           setValor={setNumero}
-          validador={validadorEntradaStringNumero}
+          validador={validadorDeNumero}
           tipoTeclado='numeric'
         />
 

@@ -10,7 +10,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { RotasMoradoresParamsList } from '../rotas'
 
 import { tema } from '../../../global/estilos/tema'
-import { validadorEntradaStringNumero } from '../../../utils/Validadores'
+import { validadorCPF, validadorDeEmail, validadorDeNumero, validadorEntradaStringNumero, validadorString } from '../../../utils/Validadores'
 import AnimacoesPerfil from './animacoes'
 import { iMorador } from '../../../models/Morador'
 
@@ -92,7 +92,7 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
             nome='Nome completo'
             valor={nome}
             setValor={setNome}
-            validador={validadorEntradaStringNumero}
+            validador={validadorString}
           />
 
           <Divisor/>
@@ -101,7 +101,7 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
             nome='Email'
             valor={email}
             setValor={setEmail}
-            validador={validadorEntradaStringNumero}
+            validador={validadorDeEmail}
             tipoTeclado='email-address'
           />
 
@@ -111,7 +111,7 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
             nome='CPF'
             valor={cpf}
             setValor={setCPF}
-            validador={validadorEntradaStringNumero}
+            validador={validadorCPF}
             tipoTeclado='numeric'
           />
 
@@ -121,7 +121,7 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
             nome='Celular'
             valor={numero}
             setValor={setNumero}
-            validador={validadorEntradaStringNumero}
+            validador={validadorDeNumero}
             tipoTeclado='numeric'
           />
 

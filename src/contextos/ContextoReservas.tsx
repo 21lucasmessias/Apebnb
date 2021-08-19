@@ -8,7 +8,7 @@ import { showToast } from '../utils/Animacoes';
 import moment from 'moment';
 
 interface iContextoReserva {
-  criarReserva: (reserva: iReserva) => Promise<boolean>,
+  criarReserva: (reserva: iReserva, aprovado: boolean) => Promise<boolean>,
   listarReservasUsuario: (userId: string) => Promise<iReserva[]>
   atualizarReserva: (reserva: iReserva) => Promise<void>,
   cancelarReserva: (reserva: iReserva) => Promise<boolean>,
@@ -29,22 +29,26 @@ export const converterReservaFirebase = {
 }
 
 const ContextoReservaProvider: React.FC<iContextoReservaProvider> = ({ children }) => {
-  const criarReserva = async (reserva: iReserva) => {
-    try {
-      let reservaCriada = await db.collection('reservas')
-        .withConverter(converterReservaFirebase)
-        .add(reserva)
-
-      await reservaCriada.update({
-        id: reservaCriada.id
-      })
-
-      showToast('Reserva criada com sucesso.')
-
-      return true
-    } catch (err) {
-      console.log(err)
-      showToast('Um erro ocorreu. Contate o desenvolvedor.')
+  const criarReserva = async (reserva: iReserva, aprovado: boolean) => {
+    if(aprovado){
+      try {
+        let reservaCriada = await db.collection('reservas')
+          .withConverter(converterReservaFirebase)
+          .add(reserva)
+  
+        await reservaCriada.update({
+          id: reservaCriada.id
+        })
+  
+        showToast('Reserva criada com sucesso.')
+  
+        return true
+      } catch (err) {
+        console.log(err)
+        showToast('Um erro ocorreu. Contate o desenvolvedor.')
+      }
+    } else {
+      showToast('Usuário aguardando aprovação.')
     }
 
     return false

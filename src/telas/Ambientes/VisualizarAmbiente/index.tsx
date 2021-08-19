@@ -103,7 +103,7 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) =>
           horario: horarioEscolhido!
         }
   
-        const foiCriado = await criarReserva(reserva)
+        const foiCriado = await criarReserva(reserva, morador!.aprovado!)
     
         if(foiCriado) {
           navigation.goBack()
