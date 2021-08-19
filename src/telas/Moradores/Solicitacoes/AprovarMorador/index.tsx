@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Feather'
 
 import { validadorEntradaStringNumero } from '../../../../utils/Validadores'
 import { tema } from '../../../../global/estilos/tema'
+import { gerarAlerta } from '../../../../utils/Utils'
 
 import Botao from '../../../../componentes/Botao'
 import EntradaDeDados from '../../../../componentes/EntradaDeDados'
@@ -103,16 +104,20 @@ interface iCabecalhoAprovarMorador {
 export const CabecalhoAprovarMorador: React.FC<iCabecalhoAprovarMorador> = ({props}) => {
   const { removerMorador } = useContext(ContextoMorador)
 
+  const removerMoradorConfirm = () => {
+    removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "aprovarMorador">).params.morador)
+      .then(() => {
+        props.navigation.goBack()
+      })
+  }
+  
   return (
     <Cabecalho
       stackCabecalhoProps={props}
       menusAdicionais={[
         {
           acao: () => {
-            removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "aprovarMorador">).params.morador)
-            .then(() => {
-              props.navigation.goBack()
-            })
+            gerarAlerta('Deseja realmente excluir o morador?', removerMoradorConfirm)
           },
           nome: 'trash',
           texto: 'Excluir'

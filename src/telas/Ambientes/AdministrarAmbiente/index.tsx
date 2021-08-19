@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Feather'
 import { iAmbiente } from '../../../models/Ambiente'
 import { validadorTituloAmbiente, validadorDescricaoAmbiente } from '../../../utils/Validadores'
 import { tema } from '../../../global/estilos/tema'
+import { gerarAlerta } from '../../../utils/Utils'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import EntradaDeDadosArea from '../../../componentes/EntradaDeDadosArea'
@@ -29,7 +30,6 @@ import {
   Divisor,
   EnvolvedorBotoes
 } from './estilos'
-
 interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'administrarAmbiente'> {}
 
 const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({ route }) => {
@@ -118,16 +118,20 @@ interface iCabecalhoAdministrarAmbiente {
 export const CabecalhoAdministrarAmbiente: React.FC<iCabecalhoAdministrarAmbiente> = ({props}) => {
   const { removerAmbiente } = useContext(ContextoAmbientes)
 
+  const removerAmbienteConfirm = () => {
+    removerAmbiente((props.scene.route as RouteProp<RotasAmbientesParamsList, "administrarAmbiente">).params.ambiente)
+      .then(() => {
+        props.navigation.goBack()
+      })
+  }
+
   return (
     <Cabecalho
       stackCabecalhoProps={props}
       menusAdicionais={[
         {
           acao: () => {
-            removerAmbiente((props.scene.route as RouteProp<RotasAmbientesParamsList, "administrarAmbiente">).params.ambiente)
-            .then(() => {
-              props.navigation.goBack()
-            })
+            gerarAlerta('Deseja realmente excluir o ambiente?', removerAmbienteConfirm)
           },
           nome: 'trash-2',
           texto: 'Excluir'
