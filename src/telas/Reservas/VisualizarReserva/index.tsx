@@ -28,6 +28,7 @@ import {
   EnvolvedorData
 } from './estilos'
 import { ActivityIndicator } from 'react-native-paper'
+import { gerarAlerta } from '../../../utils/Utils'
 
 interface iReservaScreen extends StackScreenProps<RotasReservasParamsList, 'visualizarReserva'> {}
 
@@ -85,7 +86,13 @@ const VisualizarReserva: React.FC<iReservaScreen> = ({ route, navigation }) => {
       )}
 
       <EnvolvedorBotoes>
-        <Botao tipo='preenchido' texto="Cancelar Reserva" aoPressionar={cancelarReservaHandler}/>
+        <Botao
+          tipo='preenchido'
+          texto="Cancelar Reserva" 
+          aoPressionar={() => {
+            gerarAlerta('Deseja realmente cancelar a reserva?', cancelarReservaHandler)
+          }}
+        />
       </EnvolvedorBotoes>
         
     </Conteiner>

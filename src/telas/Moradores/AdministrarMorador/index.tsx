@@ -9,6 +9,7 @@ import { RouteProp } from '@react-navigation/native'
 
 import { validadorEntradaStringNumero } from '../../../utils/Validadores'
 import AnimacoesAdministrarMorador from './animacoes'
+import { gerarAlerta } from '../../../utils/Utils'
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados'
 import Botao from '../../../componentes/Botao'
@@ -133,16 +134,20 @@ interface iCabecalhoAdministrarMorador {
 export const CabecalhoAdministrarMorador: React.FC<iCabecalhoAdministrarMorador> = ({props}) => {
   const { removerMorador } = useContext(ContextoMorador)
 
+  const removerMoradorConfirm = () => {
+    removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "administrarMorador">).params.morador)
+      .then(() => {
+        props.navigation.goBack()
+      })
+  }
+
   return (
     <Cabecalho
       stackCabecalhoProps={props}
       menusAdicionais={[
         {
           acao: () => {
-            removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "administrarMorador">).params.morador)
-            .then(() => {
-              props.navigation.goBack()
-            })
+            gerarAlerta('Deseja realmente excluir o morador?', removerMoradorConfirm)
           },
           nome: 'trash',
           texto: 'Excluir'
