@@ -16,10 +16,11 @@ import {
   Entrada,
   Pressionavel
 } from './estilos'
+import { iAmbiente } from "../../models/Ambiente"
 
 interface iEntradaDeData {
   setCalendarioVisivel: React.Dispatch<React.SetStateAction<boolean>>,
-  data: iReserva['data'],
+  data: iReserva['data']
 }
 
 const EntradaDeData: React.FC<iEntradaDeData> = ({setCalendarioVisivel, data}) => {
@@ -61,13 +62,14 @@ interface iDialogData {
   setCalendarioVisivel: React.Dispatch<React.SetStateAction<boolean>>,
   setDia: React.Dispatch<React.SetStateAction<moment.Moment>>,
   setData: React.Dispatch<React.SetStateAction<iReserva['data']>>,
+  diasDisponiveis: iAmbiente['diasDisponiveis']
 }
 
-export const DialogData: React.FC<iDialogData> = ({calendarioVisivel, setCalendarioVisivel, setDia, setData}) => {
+export const DialogData: React.FC<iDialogData> = ({calendarioVisivel, setCalendarioVisivel, setDia, setData, diasDisponiveis}) => {
   const hoje = moment(new Date()).subtract({days: 1})
 
   const diasDesabilitados = (date: moment.Moment) => {
-    return date.diff(hoje) < 0
+    return date.diff(hoje) < 0 || !diasDisponiveis[date.day()]
   }
 
   const aoMudarDiaPeloCalendario = (date: moment.Moment) => {

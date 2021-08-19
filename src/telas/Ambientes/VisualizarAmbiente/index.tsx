@@ -37,7 +37,7 @@ import {
 interface iAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'visualizarAmbiente'> {}
 
 const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) => {
-  const { criarReserva, listarHorariosDisponiveis } = useContext(ContextoReserva)
+  const { criarReserva, listarHorariosDisponiveis,  } = useContext(ContextoReserva)
   const { getMorador } = useContext(ContextoMorador)
   const { user } = useContext(ContextoAutenticacao)
 
@@ -171,6 +171,7 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({ route, navigation }) =>
         setCalendarioVisivel={setCalendarioVisivel}
         setDia={setDia}
         setData={setData}
+        diasDisponiveis={ambiente.diasDisponiveis}
       />
 
       <DialogHorario
