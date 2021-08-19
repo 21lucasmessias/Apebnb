@@ -14,13 +14,13 @@ interface iSeletorDiasSemana {
 }
 
 const SeletorDiasSemana = forwardRef<View, iSeletorDiasSemana>(({diasDisponiveis}, ref) => {
-  const [segunda, setSegunda] = useState(diasDisponiveis ? diasDisponiveis.segunda : true)
-  const [terca, setTerca] = useState(diasDisponiveis ? diasDisponiveis.terca : true)
-  const [quarta, setQuarta] = useState(diasDisponiveis ? diasDisponiveis.quarta : true)
-  const [quinta, setQuinta] = useState(diasDisponiveis ? diasDisponiveis.quinta : true)
-  const [sexta, setSexta] = useState(diasDisponiveis ? diasDisponiveis.sexta : true)
-  const [sabado, setSabado] = useState(diasDisponiveis ? diasDisponiveis.sabado : true)
-  const [domingo, setDomingo] = useState(diasDisponiveis ? diasDisponiveis.domingo : true)
+  const [domingo, setDomingo] = useState(diasDisponiveis ? diasDisponiveis[0] : true)
+  const [segunda, setSegunda] = useState(diasDisponiveis ? diasDisponiveis[1] : true)
+  const [terca, setTerca] = useState(diasDisponiveis ? diasDisponiveis[2] : true)
+  const [quarta, setQuarta] = useState(diasDisponiveis ? diasDisponiveis[3] : true)
+  const [quinta, setQuinta] = useState(diasDisponiveis ? diasDisponiveis[4] : true)
+  const [sexta, setSexta] = useState(diasDisponiveis ? diasDisponiveis[5] : true)
+  const [sabado, setSabado] = useState(diasDisponiveis ? diasDisponiveis[6] : true)
 
   interface iDiaSemana {
     nome: string,
@@ -37,13 +37,13 @@ const SeletorDiasSemana = forwardRef<View, iSeletorDiasSemana>(({diasDisponiveis
 
   return(
     <Envolvedor ref={ref}>
+      <DiaSemana nome={'DOM'} dia={domingo} setDia={setDomingo} />
       <DiaSemana nome={'SEG'} dia={segunda} setDia={setSegunda} />
       <DiaSemana nome={'TER'} dia={terca} setDia={setTerca} />
       <DiaSemana nome={'QUA'} dia={quarta} setDia={setQuarta} />
       <DiaSemana nome={'QUI'} dia={quinta} setDia={setQuinta} />
       <DiaSemana nome={'SEX'} dia={sexta} setDia={setSexta} />
       <DiaSemana nome={'SAB'} dia={sabado} setDia={setSabado} />
-      <DiaSemana nome={'DOM'} dia={domingo} setDia={setDomingo} />
     </Envolvedor>
   )
 })

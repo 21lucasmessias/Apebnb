@@ -51,15 +51,15 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({ navigation }) => 
       descricao: descricao,
       nome: nome,
       foto: foto,
-      diasDisponiveis: {
-        segunda: diasSemana[0],
-        terca: diasSemana[1],
-        quarta: diasSemana[2],
-        quinta: diasSemana[3],
-        sexta: diasSemana[4],
-        sabado: diasSemana[5],
-        domingo: diasSemana[6]
-      },
+      diasDisponiveis: [
+        diasSemana[0],
+        diasSemana[1],
+        diasSemana[2],
+        diasSemana[3],
+        diasSemana[4],
+        diasSemana[5],
+        diasSemana[6]
+      ],
     }
 
     const ambienteCriado = await criarAmbiente(novoAmbiente)
