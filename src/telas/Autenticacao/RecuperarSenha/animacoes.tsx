@@ -1,98 +1,109 @@
-import React, { useContext, useEffect } from 'react'
+import React, {useContext, useEffect} from 'react';
 
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
-import Background from '../../../assets/Background.png'
-import LogoWhite from '../../../assets/LogoWhite.png'
+import Background from '../../../assets/Background.png';
+import LogoWhite from '../../../assets/LogoWhite.png';
 
-import { ContextoTeclado } from '../../../contextos/ContextoTeclado'
-import { semBouncing } from '../../../utils/Animacoes'
-import { height, width } from '../../../utils/Utils'
+import {ContextoTeclado} from '../../../contextos/ContextoTeclado';
+import {semBalanco} from '../../../utils/Animacoes';
+import {height, width} from '../../../utils/Utils';
 
 export const HeaderAnimacoes: React.FC = () => {
-  const { tecladoVisivel } = useContext(ContextoTeclado)
+  const {tecladoVisivel} = useContext(ContextoTeclado);
 
-  const backgroundEnvolvedorHeight = useSharedValue(height/4)
-  const backgroundEnvolvedorAnimacao = useAnimatedStyle(() => {
+  const fundoEnvolvedorAltura = useSharedValue(height / 4);
+  const fundoEnvolvedorAnimacao = useAnimatedStyle(() => {
     return {
-      height: backgroundEnvolvedorHeight.value
-    }
-  })
+      height: fundoEnvolvedorAltura.value,
+    };
+  });
 
-  const backgroundTop = useSharedValue(0)
-  const backgroundAnimacao = useAnimatedStyle(() => {
+  const fundoTopo = useSharedValue(0);
+  const fundoAnimacao = useAnimatedStyle(() => {
     return {
-      top: backgroundTop.value
-    }
-  })
+      top: fundoTopo.value,
+    };
+  });
 
-  const logoHeight = useSharedValue(71)
-  const logoWidth = useSharedValue(220)
-  const logoRight = useSharedValue(width/4)
-  const logoTop = useSharedValue(height/16)
+  const logoAltura = useSharedValue(71);
+  const logoLargura = useSharedValue(220);
+  const logoEsquerda = useSharedValue(width / 4);
+  const logoTopo = useSharedValue(height / 16);
   const logoAnimacao = useAnimatedStyle(() => {
     return {
-      height: logoHeight.value,
-      width: logoWidth.value,
-      right: logoRight.value,
-      top: logoTop.value
-    }
-  })
+      height: logoAltura.value,
+      width: logoLargura.value,
+      right: logoEsquerda.value,
+      top: logoTopo.value,
+    };
+  });
 
-  const mostrarBackground = () => {
-    backgroundEnvolvedorHeight.value = withSpring(height/4, semBouncing)
+  const mostrarFundo = () => {
+    fundoEnvolvedorAltura.value = withSpring(height / 4, semBalanco);
 
-    backgroundTop.value = withSpring(0, semBouncing)
+    fundoTopo.value = withSpring(0, semBalanco);
 
-    logoHeight.value = withSpring(71, semBouncing)
-    logoWidth.value = withSpring(220, semBouncing)
-    logoRight.value = withSpring(width/4, semBouncing)
-    logoTop.value = withSpring(height/16, semBouncing)
-  }
+    logoAltura.value = withSpring(71, semBalanco);
+    logoLargura.value = withSpring(220, semBalanco);
+    logoEsquerda.value = withSpring(width / 4, semBalanco);
+    logoTopo.value = withSpring(height / 16, semBalanco);
+  };
 
-  const esconderBackground = () => {
-    backgroundEnvolvedorHeight.value = withSpring(80, semBouncing)
+  const esconderFundo = () => {
+    fundoEnvolvedorAltura.value = withSpring(80, semBalanco);
 
-    backgroundTop.value = withSpring(-50, semBouncing)
+    fundoTopo.value = withSpring(-50, semBalanco);
 
-    logoHeight.value = withSpring(30, semBouncing)
-    logoWidth.value = withSpring(100, semBouncing)
-    logoRight.value = withSpring(width/4, semBouncing)
-    logoTop.value = withSpring(8, semBouncing)
-  }
-
+    logoAltura.value = withSpring(30, semBalanco);
+    logoLargura.value = withSpring(100, semBalanco);
+    logoEsquerda.value = withSpring(width / 4, semBalanco);
+    logoTopo.value = withSpring(8, semBalanco);
+  };
 
   useEffect(() => {
-    if(!tecladoVisivel){
-      esconderBackground()
+    if (!tecladoVisivel) {
+      esconderFundo();
     } else {
-      mostrarBackground()
+      mostrarFundo();
     }
-  }, [tecladoVisivel])
-  
+  }, [tecladoVisivel]);
+
   return (
-    <Animated.View 
-      style={[{
-        justifyContent: 'center'
-      }, backgroundEnvolvedorAnimacao]}
-    >
+    <Animated.View
+      style={[
+        {
+          justifyContent: 'center',
+        },
+        fundoEnvolvedorAnimacao,
+      ]}>
       <Animated.Image
-        resizeMethod='resize'
-        resizeMode='stretch'
+        resizeMethod="resize"
+        resizeMode="stretch"
         source={Background}
-        style={[{
-          width: width,
-          height: height/4
-        }, backgroundAnimacao]}
+        style={[
+          {
+            width: width,
+            height: height / 4,
+          },
+          fundoAnimacao,
+        ]}
       />
       <Animated.Image
         source={LogoWhite}
-        resizeMethod='resize'
-        style={[{
-          position: 'absolute',
-          alignSelf: 'center',
-        }, logoAnimacao]}
+        resizeMethod="resize"
+        style={[
+          {
+            position: 'absolute',
+            alignSelf: 'center',
+          },
+          logoAnimacao,
+        ]}
       />
     </Animated.View>
-  )
-}
+  );
+};

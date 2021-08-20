@@ -1,5 +1,5 @@
-import firebase from "firebase";
-import "firebase/firestore"
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 import {
   API_KEY,
@@ -8,8 +8,8 @@ import {
   MEASUREMENT_ID,
   MESSAGING_SENDER_ID,
   PROJECT_ID,
-  STORAGE_BUCKET
-} from 'react-native-dotenv'
+  STORAGE_BUCKET,
+} from 'react-native-dotenv';
 
 var firebaseConfig = {
   apiKey: API_KEY,
@@ -21,11 +21,13 @@ var firebaseConfig = {
   measurementId: MEASUREMENT_ID,
 };
 
-export const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app()
-export const auth = firebase.auth(app)
+export const app = !firebase.apps.length
+  ? firebase.initializeApp(firebaseConfig)
+  : firebase.app();
+export const auth = firebase.auth(app);
 
-const db = firebase.firestore(app)
-db.settings({experimentalForceLongPolling: true, merge: true})
-export { db }
+const db = firebase.firestore(app);
+db.settings({experimentalForceLongPolling: true, merge: true});
+export {db};
 
-export default { firebase }
+export default {firebase};

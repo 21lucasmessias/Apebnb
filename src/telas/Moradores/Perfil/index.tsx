@@ -1,157 +1,169 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Keyboard, ScrollView } from 'react-native'
+import React, {useState, useEffect, useContext} from 'react';
+import {Keyboard, ScrollView} from 'react-native';
 
-import { ActivityIndicator } from 'react-native-paper'
+import {ActivityIndicator} from 'react-native-paper';
 
-import { ContextoMorador } from '../../../contextos/ContextoMorador'
-import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
+import {ContextoMorador} from '../../../contextos/ContextoMorador';
+import {ContextoAutenticacao} from '../../../contextos/ContextoAutenticacao';
 
-import { StackScreenProps } from '@react-navigation/stack'
-import { RotasMoradoresParamsList } from '../rotas'
+import {StackScreenProps} from '@react-navigation/stack';
+import {RotasMoradoresParametrosLista} from '../rotas';
 
-import { tema } from '../../../global/estilos/tema'
-import { validadorCPF, validadorDeEmail, validadorDeNumero, validadorEntradaStringNumero, validadorString } from '../../../utils/Validadores'
-import AnimacoesPerfil from './animacoes'
-import { iMorador } from '../../../models/Morador'
+import {tema} from '../../../global/estilos/tema';
+import {
+  validadorCPF,
+  validadorDeEmail,
+  validadorDeNumero,
+  validadorEntradaStringNumero,
+  validadorString,
+} from '../../../utils/Validadores';
+import AnimacoesPerfil from './animacoes';
+import {iMorador} from '../../../models/Morador';
 
-import EntradaDeDados from '../../../componentes/EntradaDeDados'
-import Botao from '../../../componentes/Botao'
+import EntradaDeDados from '../../../componentes/EntradaDeDados';
+import Botao from '../../../componentes/Botao';
 
 import {
   Envolvedor,
   Foto,
   Divisor,
-  BotaoConteiner,
-  CarregandoView
-} from './estilos'
+  BotaoEnvolvedor,
+  CarregandoEnvolvedor,
+} from './estilos';
 
-interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'administrarMorador'> {}
+interface iMoradorScreen
+  extends StackScreenProps<
+    RotasMoradoresParametrosLista,
+    'administrarMorador'
+  > {}
 
 const TelaPerfil: React.FC<iMoradorScreen> = () => {
-  const { user } = useContext(ContextoAutenticacao)
-  const { getMorador, alterarMorador } = useContext(ContextoMorador)
+  const {usuario} = useContext(ContextoAutenticacao);
+  const {procurarMoradorPorId, alterarMorador} = useContext(ContextoMorador);
 
-  const [carregando, setCarregando] = useState(true)
+  const [carregando, setCarregando] = useState(true);
 
-  const [foto, setFoto] = useState('')
-  const [nome, setNome] = useState('')
-  const [email, setEmail] = useState('')
-  const [cpf, setCPF] = useState('')
-  const [numero, setNumero] = useState('')
-  const [senha, setSenha] = useState('')
-  const [confirmarSenha, setConfirmarSenha] = useState('')
+  const [foto, setFoto] = useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [cpf, setCPF] = useState('');
+  const [numero, setNumero] = useState('');
+  const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
 
   useEffect(() => {
-    if(user.uid){
-      getMorador(user.uid as string)
-      .then((res) => {
-        if(res) {
-          setNome(res.nome)
-          setEmail(res.email)
-          setCPF(res.cpf)
-          setNumero(res.numero ? res.numero : '')
-          setFoto(res.foto ? res.foto : '')
+    if (usuario.uid) {
+      procurarMoradorPorId(usuario.uid as string).then(morador => {
+        if (morador) {
+          setNome(morador.nome);
+          setEmail(morador.email);
+          setCPF(morador.cpf);
+          setNumero(morador.numero ? morador.numero : '');
+          setFoto(morador.foto ? morador.foto : '');
         }
-  
-        setCarregando(false)
-      })
+
+        setCarregando(false);
+      });
     }
-  }, [])
- 
+  }, []);
+
   const salvarMorador = async () => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
 
     const morador: iMorador = {
-      id: user.uid!,
+      id: usuario.uid!,
       cpf,
       email,
       nome,
       foto,
       numero,
-    }
+    };
 
-    await alterarMorador(morador, senha === confirmarSenha ? senha : null)
-  }
+    await alterarMorador(morador, senha === confirmarSenha ? senha : null);
+  };
 
-  return (carregando ? (
-    <CarregandoView>
-      <ActivityIndicator color={tema.color.azulEscuro} size='large'/>
-    </CarregandoView>
-    ) : (
-      <Envolvedor>
-        {foto ? (
-          <Foto source={{ uri: foto }} />
-        ) : (
-          <AnimacoesPerfil />
-        )}
+  return carregando ? (
+    <CarregandoEnvolvedor>
+      <ActivityIndicator color={tema.color.azulEscuro} size="large" />
+    </CarregandoEnvolvedor>
+  ) : (
+    <Envolvedor>
+      {foto ? <Foto source={{uri: foto}} /> : <AnimacoesPerfil />}
 
-        <Divisor/>
+      <Divisor />
 
-        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} focusable keyboardDismissMode='interactive'>
-          <EntradaDeDados
-            nome='Nome completo'
-            valor={nome}
-            setValor={setNome}
-            validador={validadorString}
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        showsVerticalScrollIndicator={false}
+        focusable
+        keyboardDismissMode="interactive">
+        <EntradaDeDados
+          nome="Nome completo"
+          valor={nome}
+          setValor={setNome}
+          validador={validadorString}
+        />
+
+        <Divisor />
+
+        <EntradaDeDados
+          nome="Email"
+          valor={email}
+          setValor={setEmail}
+          validador={validadorDeEmail}
+          tipoTeclado="email-address"
+        />
+
+        <Divisor />
+
+        <EntradaDeDados
+          nome="CPF"
+          valor={cpf}
+          setValor={setCPF}
+          validador={validadorCPF}
+          tipoTeclado="numeric"
+        />
+
+        <Divisor />
+
+        <EntradaDeDados
+          nome="Celular"
+          valor={numero}
+          setValor={setNumero}
+          validador={validadorDeNumero}
+          tipoTeclado="numeric"
+        />
+
+        <Divisor />
+
+        <EntradaDeDados
+          nome="Senha"
+          valor={senha}
+          setValor={setSenha}
+          validador={validadorEntradaStringNumero}
+          tipoAutoCompletar="password"
+        />
+
+        <Divisor />
+
+        <EntradaDeDados
+          nome="Confirmar Senha"
+          valor={confirmarSenha}
+          setValor={setConfirmarSenha}
+          validador={validadorEntradaStringNumero}
+          tipoAutoCompletar="password"
+        />
+        <Divisor />
+        <BotaoEnvolvedor>
+          <Botao
+            tipo="preenchido"
+            texto="Salvar"
+            aoPressionar={salvarMorador}
           />
+        </BotaoEnvolvedor>
+      </ScrollView>
+    </Envolvedor>
+  );
+};
 
-          <Divisor/>
-
-          <EntradaDeDados
-            nome='Email'
-            valor={email}
-            setValor={setEmail}
-            validador={validadorDeEmail}
-            tipoTeclado='email-address'
-          />
-
-          <Divisor/>
-          
-          <EntradaDeDados
-            nome='CPF'
-            valor={cpf}
-            setValor={setCPF}
-            validador={validadorCPF}
-            tipoTeclado='numeric'
-          />
-
-          <Divisor/>
-
-          <EntradaDeDados
-            nome='Celular'
-            valor={numero}
-            setValor={setNumero}
-            validador={validadorDeNumero}
-            tipoTeclado='numeric'
-          />
-
-          <Divisor/>
-
-          <EntradaDeDados
-            nome='Senha'
-            valor={senha}
-            setValor={setSenha}
-            validador={validadorEntradaStringNumero}
-            tipoAutoCompletar='password'
-          />
-
-          <Divisor/>
-
-          <EntradaDeDados
-            nome='Confirmar Senha'
-            valor={confirmarSenha}
-            setValor={setConfirmarSenha}
-            validador={validadorEntradaStringNumero}
-            tipoAutoCompletar='password'
-          />
-          <Divisor/>
-          <BotaoConteiner>
-            <Botao tipo='preenchido' texto="Salvar" aoPressionar={salvarMorador}/>
-          </BotaoConteiner>
-        </ScrollView>
-      </Envolvedor>
-    )
-  )
-}
-
-export default TelaPerfil
+export default TelaPerfil;

@@ -1,56 +1,60 @@
 import React from 'react';
 
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 
-import { forFade } from '../../utils/Animacoes';
+import {animacaoDesaparecer} from '../../utils/Animacoes';
 
 import Ambientes from '.';
-import AdministrarAmbiente, { CabecalhoAdministrarAmbiente } from './AdministrarAmbiente';
+import AdministrarAmbiente, {
+  CabecalhoAdministrarAmbiente,
+} from './AdministrarAmbiente';
 import VisualizarAmbiente from './VisualizarAmbiente';
 
-import { iAmbiente } from '../../models/Ambiente';
-import { RotasFuncionalidadesParamsList } from '../../rotasFuncionalidades';
+import {iAmbiente} from '../../models/Ambiente';
+import {RotasFuncionalidadesParametrosLista} from '../../rotasFuncionalidades';
 
 import Cabecalho from '../../componentes/Cabecalho';
 import ContextoAmbientesProvider from '../../contextos/ContextoAmbientes';
 import CriarAmbienteScreen from './CriarAmbiente';
 
 export type RotasAmbientesParamsList = {
-  ambientes: undefined,
+  ambientes: undefined;
   visualizarAmbiente: {
-    ambiente: iAmbiente
-  },
+    ambiente: iAmbiente;
+  };
   administrarAmbiente: {
-    ambiente: iAmbiente
-  },
-  criarAmbiente: undefined
+    ambiente: iAmbiente;
+  };
+  criarAmbiente: undefined;
 };
 
-const { Navigator, Screen } = createStackNavigator<RotasAmbientesParamsList>();
+const {Navigator, Screen} = createStackNavigator<RotasAmbientesParamsList>();
 
-const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsList, 'ambientes'>> = ({navigation}) => {
+const RotasAmbientes: React.FC<
+  BottomTabScreenProps<RotasFuncionalidadesParametrosLista, 'ambientes'>
+> = ({navigation}) => {
   return (
     <ContextoAmbientesProvider>
       <NavigationContainer independent>
         <Navigator
-          headerMode='float'
+          headerMode="float"
           screenOptions={{
-            header: (props) => <Cabecalho stackCabecalhoProps={props}/>,
-            cardStyleInterpolator: (props) => forFade(props),
+            header: props => <Cabecalho stackCabecalhoProps={props} />,
+            cardStyleInterpolator: props => animacaoDesaparecer(props),
             headerTransparent: true,
-            cardStyle: { marginTop: 55 },
-          }}
-        >
+            cardStyle: {marginTop: 55},
+          }}>
           <Screen
             name="ambientes"
             component={Ambientes}
             listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: true
-              }),
+              focus: () =>
+                navigation.setOptions({
+                  tabBarVisible: true,
+                }),
             }}
           />
 
@@ -58,9 +62,10 @@ const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             name="visualizarAmbiente"
             component={VisualizarAmbiente}
             listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
+              focus: () =>
+                navigation.setOptions({
+                  tabBarVisible: false,
+                }),
             }}
           />
 
@@ -68,12 +73,13 @@ const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             name="administrarAmbiente"
             component={AdministrarAmbiente}
             listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
+              focus: () =>
+                navigation.setOptions({
+                  tabBarVisible: false,
+                }),
             }}
             options={{
-              header: (props) => <CabecalhoAdministrarAmbiente props={props}/>
+              header: props => <CabecalhoAdministrarAmbiente props={props} />,
             }}
           />
 
@@ -81,12 +87,12 @@ const RotasAmbientes: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsLi
             name="criarAmbiente"
             component={CriarAmbienteScreen}
             listeners={{
-              focus: () => navigation.setOptions({
-                tabBarVisible: false
-              }),
+              focus: () =>
+                navigation.setOptions({
+                  tabBarVisible: false,
+                }),
             }}
           />
-
         </Navigator>
       </NavigationContainer>
     </ContextoAmbientesProvider>

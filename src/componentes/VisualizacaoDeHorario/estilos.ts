@@ -1,6 +1,6 @@
-import styled from 'styled-components/native'
-import { tema } from '../../global/estilos/tema'
-import { width } from '../../utils/Utils';
+import styled from 'styled-components/native';
+import {tema} from '../../global/estilos/tema';
+import {width} from '../../utils/Utils';
 
 export const Envolvedor = styled.View`
   flex: 1;
@@ -21,9 +21,9 @@ export const HorarioEnvolvedor = styled.View`
   border-bottom-left-radius: 10px;
 
   background-color: ${tema.color.branco};
-  
+
   justify-content: center;
-`
+`;
 
 export const Horario = styled.Text`
   text-decoration-line: none;
@@ -31,7 +31,7 @@ export const Horario = styled.Text`
   font-family: ${tema.fontes.WorkSans};
   font-size: ${width * 0.04}px;
   color: ${tema.color.azulEscuro};
-`
+`;
 
 export const IconEnvolvedor = styled.View`
   padding-right: 12px;
@@ -43,4 +43,4 @@ export const IconEnvolvedor = styled.View`
   border-left-width: 0px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-`
+`;

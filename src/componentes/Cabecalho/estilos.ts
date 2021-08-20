@@ -1,10 +1,9 @@
-import styled from 'styled-components/native'
-import { tema } from '../../global/estilos/tema';
-import { height } from '../../utils/Utils';
+import styled from 'styled-components/native';
+import {tema} from '../../global/estilos/tema';
 
 export const Conteiner = styled.View`
   flex: 1;
-`
+`;
 
 export const Envolvedor = styled.View`
   flex-direction: row;
@@ -17,11 +16,11 @@ export const Envolvedor = styled.View`
   padding: 10px;
 
   background-color: ${tema.color.azulEscuro};
-`
+`;
 
-export const Filler = styled.View`
+export const Preenchimento = styled.View`
   width: 36px;
-`
+`;
 
 export const Pressionavel = styled.TouchableOpacity`
   flex-direction: row;
@@ -32,7 +31,6 @@ export const Pressionavel = styled.TouchableOpacity`
   width: 36px;
   height: 36px;
   border-radius: 10px;
-`
+`;
 
-export const Imagem = styled.Image`
-`
+export const Imagem = styled.Image``;

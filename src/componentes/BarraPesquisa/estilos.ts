@@ -1,5 +1,5 @@
-import styled from 'styled-components/native'
-import { tema } from '../../global/estilos/tema';
+import styled from 'styled-components/native';
+import {tema} from '../../global/estilos/tema';
 
 export const Envolvedor = styled.View`
   width: 100%;
@@ -25,4 +25,4 @@ export const EntradaTexto = styled.TextInput`
   color: ${tema.color.azulEscuro};
 
   background-color: ${tema.color.branco};
-`
+`;

@@ -1,55 +1,60 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import React from 'react'
+import {StackScreenProps} from '@react-navigation/stack';
+import React from 'react';
 
-import Background from '../../../assets/Background.png'
-import LogoWhite from '../../../assets/LogoWhite.png'
-import Botao from '../../../componentes/Botao'
-import { RotasAutenticacaoParamsList } from '../rotas'
+import Background from '../../../assets/Background.png';
+import LogoWhite from '../../../assets/LogoWhite.png';
+import Botao from '../../../componentes/Botao';
+import {RotasAutenticacaoParametrosLista} from '../rotas';
 
 import {
-  Conteiner,
-  TopoBackground,
+  Envolvedor,
+  TopoFundo,
   ImagemLogo,
-  ImagemBackground,
-  TextoConteiner,
+  ImagemFundo,
+  TextoFundo,
   Titulo,
   Descricao,
   EnvolvedorBotoes,
-  Divisor
-} from './estilos'
+  Divisor,
+} from './estilos';
 
-interface iInicioScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'inicio'> {}
+interface iInicio
+  extends StackScreenProps<RotasAutenticacaoParametrosLista, 'inicio'> {}
 
-const Inicio: React.FC<iInicioScreen> = ({navigation}) => {
+const Inicio: React.FC<iInicio> = ({navigation}) => {
   return (
-    <Conteiner>
-      <TopoBackground>
-        <ImagemBackground resizeMethod='resize' resizeMode='stretch' source={Background}/>
-        <ImagemLogo source={LogoWhite}/>
-      </TopoBackground>
-      <TextoConteiner>
-        <Titulo>
-          Junte-se a nós
-        </Titulo>
-        <Descricao>
-          A melhor forma de interagir com seu condomínio
-        </Descricao>
-      </TextoConteiner>
+    <Envolvedor>
+      <TopoFundo>
+        <ImagemFundo
+          resizeMethod="resize"
+          resizeMode="stretch"
+          source={Background}
+        />
+        <ImagemLogo source={LogoWhite} />
+      </TopoFundo>
+      <TextoFundo>
+        <Titulo>Junte-se a nós</Titulo>
+        <Descricao>A melhor forma de interagir com seu condomínio</Descricao>
+      </TextoFundo>
       <EnvolvedorBotoes>
         <Botao
-          texto='Entrar'
-          aoPressionar={() => {navigation.navigate('entrar')}}
-          tipo='preenchido'
+          texto="Entrar"
+          aoPressionar={() => {
+            navigation.navigate('entrar');
+          }}
+          tipo="preenchido"
         />
         <Divisor />
         <Botao
-          texto='Cadastre-se'
-          aoPressionar={() => {navigation.navigate('cadastro')}}
-          tipo='preenchido'
+          texto="Cadastre-se"
+          aoPressionar={() => {
+            navigation.navigate('cadastro');
+          }}
+          tipo="preenchido"
         />
       </EnvolvedorBotoes>
-    </Conteiner>
-  )
-}
+    </Envolvedor>
+  );
+};
 
-export default Inicio
+export default Inicio;

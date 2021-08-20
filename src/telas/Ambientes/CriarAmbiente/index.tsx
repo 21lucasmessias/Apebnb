@@ -1,22 +1,25 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, {useRef, useState, useContext} from 'react';
 
-import { Keyboard, View } from 'react-native'
+import {Keyboard, View} from 'react-native';
 
-import { ContextoAmbientes } from '../../../contextos/ContextoAmbientes'
+import {ContextoAmbientes} from '../../../contextos/ContextoAmbientes';
 
-import { StackScreenProps } from '@react-navigation/stack'
-import { RotasAmbientesParamsList } from '../rotas'
+import {StackScreenProps} from '@react-navigation/stack';
+import {RotasAmbientesParamsList} from '../rotas';
 
-import Icon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/Feather';
 
-import { iAmbiente } from '../../../models/Ambiente'
-import { validadorTituloAmbiente, validadorDescricaoAmbiente } from '../../../utils/Validadores'
-import { tema } from '../../../global/estilos/tema'
+import {iAmbiente} from '../../../models/Ambiente';
+import {
+  validadorTituloAmbiente,
+  validadorDescricaoAmbiente,
+} from '../../../utils/Validadores';
+import {tema} from '../../../global/estilos/tema';
 
-import EntradaDeDados from '../../../componentes/EntradaDeDados'
-import EntradaDeDadosArea from '../../../componentes/EntradaDeDadosArea'
-import SeletorDiasSemana from '../../../componentes/SeletorDiasSemana'
-import Botao from '../../../componentes/Botao'
+import EntradaDeDados from '../../../componentes/EntradaDeDados';
+import EntradaDeDadosArea from '../../../componentes/EntradaDeDadosArea';
+import SeletorDiasSemana from '../../../componentes/SeletorDiasSemana';
+import Botao from '../../../componentes/Botao';
 
 import {
   Conteiner,
@@ -24,27 +27,29 @@ import {
   Foto,
   FotoVaziaEnvolvedor,
   Divisor,
-  EnvolvedorBotoes
-} from './estilos'
+  EnvolvedorBotoes,
+} from './estilos';
 
-interface iCriarAmbienteScreen extends StackScreenProps<RotasAmbientesParamsList, 'criarAmbiente'> {}
+interface iCriarAmbienteScreen
+  extends StackScreenProps<RotasAmbientesParamsList, 'criarAmbiente'> {}
 
-const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({ navigation }) => {
-  const { criarAmbiente } = useContext(ContextoAmbientes)
+const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({navigation}) => {
+  const {criarAmbiente} = useContext(ContextoAmbientes);
 
-  const diasSemanaRef = useRef<View>(null)
+  const diasSemanaRef = useRef<View>(null);
 
-  const [foto, setFoto] = useState<string | null>(null)
-  const [nome, setNome] = useState('')
-  const [descricao, setDescricao] = useState('')
+  const [foto, setFoto] = useState<string | null>(null);
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
 
   const salvarAmbiente = async () => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
 
     // @ts-ignore: Unreachable code error
-    let diasSemana: Array<boolean> = diasSemanaRef.current._children.map((c) => {
-      return c._internalFiberInstanceHandleDEV.child._debugOwner.memoizedProps.dia as boolean
-    })
+    let diasSemana: Array<boolean> = diasSemanaRef.current._children.map(c => {
+      return c._internalFiberInstanceHandleDEV.child._debugOwner.memoizedProps
+        .dia as boolean;
+    });
 
     let novoAmbiente: iAmbiente = {
       id: '',
@@ -58,32 +63,32 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({ navigation }) => 
         diasSemana[3],
         diasSemana[4],
         diasSemana[5],
-        diasSemana[6]
+        diasSemana[6],
       ],
-    }
+    };
 
-    const ambienteCriado = await criarAmbiente(novoAmbiente)
-    
-    if(ambienteCriado){
-      navigation.goBack()
+    const ambienteCriado = await criarAmbiente(novoAmbiente);
+
+    if (ambienteCriado) {
+      navigation.goBack();
     }
-  }
+  };
 
   return (
     <Conteiner>
       <Envolvedor showsVerticalScrollIndicator={false}>
         {foto ? (
-          <Foto source={{ uri: foto }} />
+          <Foto source={{uri: foto}} />
         ) : (
           <FotoVaziaEnvolvedor>
-            <Icon name='camera' size={24} color={tema.color.azulEscuro} />
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
           </FotoVaziaEnvolvedor>
         )}
 
         <Divisor />
 
         <EntradaDeDados
-          nome='Título'
+          nome="Título"
           validador={validadorTituloAmbiente}
           valor={nome}
           setValor={setNome}
@@ -92,7 +97,7 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({ navigation }) => 
         <Divisor />
 
         <EntradaDeDadosArea
-          nome='Descrição'
+          nome="Descrição"
           validador={validadorDescricaoAmbiente}
           valor={descricao}
           setValor={setDescricao}
@@ -100,14 +105,14 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({ navigation }) => 
 
         <Divisor />
 
-        <SeletorDiasSemana ref={diasSemanaRef}/>
+        <SeletorDiasSemana ref={diasSemanaRef} />
       </Envolvedor>
 
       <EnvolvedorBotoes>
-        <Botao tipo='preenchido' texto="Salvar" aoPressionar={salvarAmbiente}/>
+        <Botao tipo="preenchido" texto="Salvar" aoPressionar={salvarAmbiente} />
       </EnvolvedorBotoes>
     </Conteiner>
-  )
-}
+  );
+};
 
-export default CriarAmbienteScreen
+export default CriarAmbienteScreen;

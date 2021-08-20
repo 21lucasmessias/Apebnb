@@ -1,5 +1,5 @@
-import styled from 'styled-components/native'
-import { tema } from '../../../global/estilos/tema'
+import styled from 'styled-components/native';
+import {tema} from '../../../global/estilos/tema';
 
 export const Envolvedor = styled.View`
   flex: 1;
@@ -9,7 +9,7 @@ export const Envolvedor = styled.View`
 
   padding-right: 16px;
   padding-left: 16px;
-`
+`;
 
 export const SubTitulo = styled.Text`
   font-family: ${tema.fontes.WorkSans};
@@ -17,4 +17,4 @@ export const SubTitulo = styled.Text`
   font-size: 22px;
   text-align: center;
   margin-bottom: 12px;
-`
+`;

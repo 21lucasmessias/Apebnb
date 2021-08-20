@@ -1,114 +1,132 @@
-import React from 'react'
+import React from 'react';
 
-import { db } from '../configs/firebase'
+import {db} from '../configs/firebase';
 
-import { iMorador } from '../models/Morador'
+import {iMorador} from '../models/Morador';
 
-import { showToast } from '../utils/Animacoes'
-import { converterMoradorFirebase } from './ContextoMorador'
+import {mostrarAviso} from '../utils/Animacoes';
+import {converterMoradorFirebase} from './ContextoMorador';
 
 interface iContextoMoradores {
-  getAllMoradoresAprovados: () => Promise<iMorador[]>,
-  getAllMoradoresDesaprovados: () => Promise<iMorador[]>,
-  aprovarMorador: (morador: iMorador) => void,
-  adicionarAutoRefreshMoradoresReprovados: (fetchMoradoresReprovados: () => void) => () => void
-  adicionarAutoRefreshMoradoresAprovados: (fetchMoradoresAprovados: () => void) => () => void
+  listarTodosMoradoresAprovados: () => Promise<iMorador[]>;
+  listarTodosMoradoresDesaprovados: () => Promise<iMorador[]>;
+  aprovarMorador: (morador: iMorador) => void;
+  adicionarAtualizacaoAutomaticaMoradoresReprovados: (
+    atualizarMoradoresReprovados: () => void,
+  ) => () => void;
+  adicionarAtualizacaoAutomaticaMoradoresAprovados: (
+    atualizarMoradoresAprovados: () => void,
+  ) => () => void;
 }
 
-export const ContextoMoradores = React.createContext({} as iContextoMoradores)
+export const ContextoMoradores = React.createContext({} as iContextoMoradores);
 
 type iContextoMoradoresProvider = {
   children: React.ReactNode;
-}
+};
 
-const ContextoMoradoresProvider: React.FC<iContextoMoradoresProvider> = ({ children }) => {
-  const adicionarAutoRefreshMoradoresReprovados = (fetchMoradoresReprovados: () => void) => {
-    return db.collection('moradores')
+const ContextoMoradoresProvider: React.FC<iContextoMoradoresProvider> = ({
+  children,
+}) => {
+  const adicionarAtualizacaoAutomaticaMoradoresReprovados = (
+    atualizarMoradoresReprovados: () => void,
+  ) => {
+    return db
+      .collection('moradores')
       .withConverter(converterMoradorFirebase)
       .where('aprovado', '==', false)
       .onSnapshot(() => {
-        fetchMoradoresReprovados()
-      })
-  }
+        atualizarMoradoresReprovados();
+      });
+  };
 
-  const adicionarAutoRefreshMoradoresAprovados = (fetchMoradoresAprovados: () => void) => {
-    return db.collection('moradores')
+  const adicionarAtualizacaoAutomaticaMoradoresAprovados = (
+    atualizarMoradoresAprovados: () => void,
+  ) => {
+    return db
+      .collection('moradores')
       .withConverter(converterMoradorFirebase)
       .where('aprovado', '==', true)
       .onSnapshot(() => {
-        fetchMoradoresAprovados()
-      })
-  }
+        atualizarMoradoresAprovados();
+      });
+  };
 
-  const getAllMoradoresAprovados = async () => {
+  const listarTodosMoradoresAprovados = async () => {
     try {
-      const res = await db.collection('moradores')
+      const moradoresAprovados = await db
+        .collection('moradores')
         .withConverter(converterMoradorFirebase)
         .where('aprovado', '==', true)
-        .get()
-  
-      const moradores: iMorador[] = res.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          id: doc.id,
-        }
-      })
+        .get();
 
-      return moradores
-    } catch(err) {
-      console.log(err)
-      return [] as iMorador[]
+      const moradores: iMorador[] = moradoresAprovados.docs.map(
+        moradorAprovado => {
+          return {
+            ...moradorAprovado.data(),
+            id: moradorAprovado.id,
+          };
+        },
+      );
+
+      return moradores;
+    } catch (err) {
+      console.log(err);
+      return [] as iMorador[];
     }
-  }
+  };
 
-  const getAllMoradoresDesaprovados = async () => {
+  const listarTodosMoradoresDesaprovados = async () => {
     try {
-      const res = await db.collection('moradores')
+      const moradoresDesaprovados = await db
+        .collection('moradores')
         .withConverter(converterMoradorFirebase)
         .where('aprovado', '==', false)
-        .get()
-  
-      const moradores: iMorador[] = res.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          id: doc.id,
-        }
-      })
+        .get();
 
-      return moradores
-    } catch(err) {
-      console.log(err)
-      return [] as iMorador[]
+      const moradores: iMorador[] = moradoresDesaprovados.docs.map(morador => {
+        return {
+          ...morador.data(),
+          id: morador.id,
+        };
+      });
+
+      return moradores;
+    } catch (err) {
+      console.log(err);
+      return [] as iMorador[];
     }
-  }
+  };
 
   const aprovarMorador = async (morador: iMorador) => {
     try {
-      await db.collection('moradores')
+      await db
+        .collection('moradores')
         .withConverter(converterMoradorFirebase)
         .doc(morador.id)
         .update({
           aprovado: true,
-        })
+        });
 
-      showToast('Usuario aprovado com sucesso.')
-    } catch(err) {
-      console.log(err)
-      showToast('Algo deu errado.')
+      mostrarAviso('Usuario aprovado com sucesso.');
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Algo deu errado.');
     }
-  }
+  };
 
   return (
-    <ContextoMoradores.Provider value={{
-      getAllMoradoresAprovados,
-      getAllMoradoresDesaprovados,
-      aprovarMorador,
-      adicionarAutoRefreshMoradoresReprovados,
-      adicionarAutoRefreshMoradoresAprovados
-    }}>
+    <ContextoMoradores.Provider
+      value={{
+        listarTodosMoradoresAprovados,
+        listarTodosMoradoresDesaprovados,
+        aprovarMorador,
+        adicionarAtualizacaoAutomaticaMoradoresReprovados,
+        adicionarAtualizacaoAutomaticaMoradoresAprovados,
+      }}>
       {children}
-    </ContextoMoradores.Provider >
-  )
-}
+    </ContextoMoradores.Provider>
+  );
+};
 
-export default ContextoMoradoresProvider
+export default ContextoMoradoresProvider;

@@ -1,12 +1,12 @@
-import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useContext, useState } from 'react'
-import { Keyboard } from 'react-native'
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useContext} from 'react';
+import {Keyboard} from 'react-native';
 
-import Icon from 'react-native-vector-icons/Feather'
-import { ContextoTeclado } from '../../contextos/ContextoTeclado'
-import { tema } from '../../global/estilos/tema'
-import { iMorador } from '../../models/Morador'
-import { RotasMoradoresParamsList } from '../../telas/Moradores/rotas'
+import Icon from 'react-native-vector-icons/Feather';
+import {ContextoTeclado} from '../../contextos/ContextoTeclado';
+import {tema} from '../../global/estilos/tema';
+import {iMorador} from '../../models/Morador';
+import {RotasMoradoresParametrosLista} from '../../telas/Moradores/rotas';
 
 import {
   Envolvedor,
@@ -14,48 +14,47 @@ import {
   FotoVaziaEnvolvedor,
   Pressionavel,
   DetalhesEnvolvedor,
-  Texto
-} from './estilos'
+  Texto,
+} from './estilos';
 
 interface iCartaoMorador {
-  morador: iMorador,
-  navigation: StackNavigationProp<RotasMoradoresParamsList, 'moradores'>,
-  ultimo: boolean
+  morador: iMorador;
+  navigation: StackNavigationProp<RotasMoradoresParametrosLista, 'moradores'>;
+  ultimo: boolean;
 }
 
-const CartaoMorador: React.FC<iCartaoMorador> = ({ morador, navigation, ultimo }) => {
-  const {
-    tecladoVisivel
-  } = useContext(ContextoTeclado)
+const CartaoMorador: React.FC<iCartaoMorador> = ({
+  morador,
+  navigation,
+  ultimo,
+}) => {
+  const {tecladoVisivel} = useContext(ContextoTeclado);
 
   return (
     <Pressionavel
       activeOpacity={0.7}
       onPress={() => {
-        Keyboard.dismiss()
-        navigation.navigate( 'administrarMorador', {
-          morador: morador
-        })
+        Keyboard.dismiss();
+        navigation.navigate('administrarMorador', {
+          morador: morador,
+        });
       }}
-      ultimo={ultimo && tecladoVisivel}
-    >
+      ultimo={ultimo && tecladoVisivel}>
       <Envolvedor>
         {morador.foto ? (
-          <Foto source={{ uri: morador.foto }} />
+          <Foto source={{uri: morador.foto}} />
         ) : (
           <FotoVaziaEnvolvedor>
-            <Icon name='camera' size={24} color={tema.color.azulEscuro} />
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
           </FotoVaziaEnvolvedor>
         )}
 
         <DetalhesEnvolvedor>
-          <Texto>
-            {morador.nome}
-          </Texto>
+          <Texto>{morador.nome}</Texto>
         </DetalhesEnvolvedor>
       </Envolvedor>
     </Pressionavel>
-  )
-}
+  );
+};
 
-export default CartaoMorador
+export default CartaoMorador;

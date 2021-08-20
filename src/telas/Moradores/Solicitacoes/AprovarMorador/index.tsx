@@ -1,23 +1,23 @@
-import React, { useContext } from 'react'
+import React, {useContext} from 'react';
 
-import { ScrollView } from 'react-native'
+import {ScrollView} from 'react-native';
 
-import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack'
-import { RouteProp } from '@react-navigation/native'
-import { RotasMoradoresParamsList } from '../../rotas'
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
+import {RotasMoradoresParametrosLista} from '../../rotas';
 
-import { ContextoMoradores } from '../../../../contextos/ContextoMoradores'
-import { ContextoMorador } from '../../../../contextos/ContextoMorador'
+import {ContextoMoradores} from '../../../../contextos/ContextoMoradores';
+import {ContextoMorador} from '../../../../contextos/ContextoMorador';
 
-import Icon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/Feather';
 
-import { validadorEntradaStringNumero } from '../../../../utils/Validadores'
-import { tema } from '../../../../global/estilos/tema'
-import { gerarAlerta } from '../../../../utils/Utils'
+import {validadorEntradaStringNumero} from '../../../../utils/Validadores';
+import {tema} from '../../../../global/estilos/tema';
+import {gerarAlerta} from '../../../../utils/Utils';
 
-import Botao from '../../../../componentes/Botao'
-import EntradaDeDados from '../../../../componentes/EntradaDeDados'
-import Cabecalho from '../../../../componentes/Cabecalho'
+import Botao from '../../../../componentes/Botao';
+import EntradaDeDados from '../../../../componentes/EntradaDeDados';
+import Cabecalho from '../../../../componentes/Cabecalho';
 
 import {
   Conteiner,
@@ -26,105 +26,121 @@ import {
   EnvolvedorBotoes,
   SubTitulo,
   Foto,
-  EnvolvedorFoto
-} from './estilos'
+  EnvolvedorFoto,
+} from './estilos';
 
-interface iMoradorScreen extends StackScreenProps<RotasMoradoresParamsList, 'aprovarMorador'> {}
+interface iMoradorScreen
+  extends StackScreenProps<RotasMoradoresParametrosLista, 'aprovarMorador'> {}
 
 const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
-  const { morador } = route.params
-  const { aprovarMorador } = useContext(ContextoMoradores)
- 
-  const aprovarMoradorHandle = () => {
-    aprovarMorador(morador)
-    navigation.goBack()
-  }
+  const {morador} = route.params;
+  const {aprovarMorador} = useContext(ContextoMoradores);
+
+  const aprovarMoradorPressionado = () => {
+    aprovarMorador(morador);
+    navigation.goBack();
+  };
 
   return (
     <Conteiner>
       <Envolvedor>
         <SubTitulo>Verifique os dados do Morador</SubTitulo>
         {morador.foto ? (
-            <Foto source={{ uri: morador.foto }} />
-          ) : (
-            <EnvolvedorFoto>
-              <Icon name='camera' size={24} color={tema.color.azulEscuro} />
-            </EnvolvedorFoto>
-          )}
+          <Foto source={{uri: morador.foto}} />
+        ) : (
+          <EnvolvedorFoto>
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
+          </EnvolvedorFoto>
+        )}
         <ScrollView showsVerticalScrollIndicator={false}>
           <EntradaDeDados
-            nome='Nome completo'
+            nome="Nome completo"
             valor={morador.nome}
             validador={validadorEntradaStringNumero}
             editable={false}
           />
 
-          <Divisor/>
-          
+          <Divisor />
+
           <EntradaDeDados
-            nome='CPF'
+            nome="CPF"
             valor={morador.cpf}
             validador={validadorEntradaStringNumero}
             editable={false}
           />
-      
-          <Divisor/>
+
+          <Divisor />
 
           <EntradaDeDados
-            nome='Email'
+            nome="Email"
             valor={morador.email}
             validador={validadorEntradaStringNumero}
             editable={false}
           />
 
-          <Divisor/>
+          <Divisor />
 
           <EntradaDeDados
-            nome='Celular'
-            valor={morador.numero? morador.numero : ''}
+            nome="Celular"
+            valor={morador.numero ? morador.numero : ''}
             validador={validadorEntradaStringNumero}
             editable={false}
           />
 
-          <Divisor/>
+          <Divisor />
         </ScrollView>
       </Envolvedor>
 
       <EnvolvedorBotoes>
-        <Botao tipo='preenchido' texto="Aprovar" aoPressionar={aprovarMoradorHandle}/>
+        <Botao
+          tipo="preenchido"
+          texto="Aprovar"
+          aoPressionar={aprovarMoradorPressionado}
+        />
       </EnvolvedorBotoes>
     </Conteiner>
-  )
-}
+  );
+};
 
 interface iCabecalhoAprovarMorador {
-  props: StackHeaderProps
+  props: StackHeaderProps;
 }
 
-export const CabecalhoAprovarMorador: React.FC<iCabecalhoAprovarMorador> = ({props}) => {
-  const { removerMorador } = useContext(ContextoMorador)
+export const CabecalhoAprovarMorador: React.FC<iCabecalhoAprovarMorador> = ({
+  props,
+}) => {
+  const {removerMorador} = useContext(ContextoMorador);
 
-  const removerMoradorConfirm = () => {
-    removerMorador((props.scene.route as RouteProp<RotasMoradoresParamsList, "aprovarMorador">).params.morador)
-      .then(() => {
-        props.navigation.goBack()
-      })
-  }
-  
+  const removerMoradorConfirmar = () => {
+    removerMorador(
+      (
+        props.scene.route as RouteProp<
+          RotasMoradoresParametrosLista,
+          'aprovarMorador'
+        >
+      ).params.morador,
+    ).then(() => {
+      props.navigation.goBack();
+    });
+  };
+
   return (
     <Cabecalho
       stackCabecalhoProps={props}
       menusAdicionais={[
         {
           acao: () => {
-            gerarAlerta('Deseja realmente excluir o morador?', removerMoradorConfirm)
+            gerarAlerta(
+              'Deseja realmente excluir o morador?',
+              removerMoradorConfirmar,
+            );
           },
           nome: 'trash',
-          texto: 'Excluir'
-        }
+          texto: 'Excluir',
+        },
       ]}
-  />
-  )
-}
+    />
+  );
+};
 
-export default AprovarMorador
+export default AprovarMorador;
