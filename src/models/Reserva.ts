@@ -1,16 +1,16 @@
-import { iAmbiente } from "./Ambiente";
-import { iMorador } from "./Morador";
+import {iAmbiente} from './Ambiente';
+import {iMorador} from './Morador';
 
 export interface iReserva {
-  id: string,
-  morador: iMorador,
-  ambiente: iAmbiente,
+  id: string;
+  morador: iMorador;
+  ambiente: iAmbiente;
   data: {
-    dia: number,
-    mes: number,
-    ano: number,
-  },
-  horario: iHorario
+    dia: number;
+    mes: number;
+    ano: number;
+  };
+  horario: iHorario;
 }
 
 export enum iHorario {
@@ -37,5 +37,5 @@ export enum iHorario {
   '20:00-21:00',
   '21:00-22:00',
   '22:00-23:00',
-  '23:00-00:00'
+  '23:00-00:00',
 }

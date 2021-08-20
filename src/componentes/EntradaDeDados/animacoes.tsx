@@ -1,89 +1,85 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native'
+import React, {useEffect} from 'react';
+import {StyleSheet, TextInput, TouchableWithoutFeedback} from 'react-native';
 
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring
-} from 'react-native-reanimated'
+  withSpring,
+} from 'react-native-reanimated';
 
-import { tema } from '../../global/estilos/tema'
-import { comBouncing, semBouncing } from '../../utils/Animacoes'
+import {tema} from '../../global/estilos/tema';
+import {comBalanco, semBalanco} from '../../utils/Animacoes';
 
-import { Texto } from './estilos'
+import {Texto} from './estilos';
 
 interface iAnimacoesEntradaDeDados {
-  valor: string,
-  nome: string,
-  entradaTextoRef: React.Ref<TextInput> | undefined
+  valor: string;
+  nome: string;
+  entradaTextoRef: React.Ref<TextInput> | undefined;
 }
 
-const AnimacoesEntradaDeDados: React.FC<iAnimacoesEntradaDeDados> = ({ valor, nome, entradaTextoRef, children }) => {
-  const topPlaceHolder = useSharedValue(10)
-  const leftPlaceHolder = useSharedValue(20)
-  const colorPlaceHolder = useSharedValue(tema.color.fosco)
+const AnimacoesEntradaDeDados: React.FC<iAnimacoesEntradaDeDados> = ({
+  valor,
+  nome,
+  entradaTextoRef,
+  children,
+}) => {
+  const topoNomeCampo = useSharedValue(10);
+  const esquerdaNomeCampo = useSharedValue(20);
+  const corNomeCampo = useSharedValue(tema.color.fosco);
 
-  const heightEnvolvedor = useSharedValue(65)
+  const alturaEnvolvedor = useSharedValue(65);
 
-  const placeHolderAnimacao = useAnimatedStyle(() => {
+  const nomeCampoAnimacao = useAnimatedStyle(() => {
     return {
-      top: topPlaceHolder.value,
-      left: leftPlaceHolder.value,
-      color: colorPlaceHolder.value
-    }
-  })
+      top: topoNomeCampo.value,
+      left: esquerdaNomeCampo.value,
+      color: corNomeCampo.value,
+    };
+  });
 
   const envolvedorAnimacao = useAnimatedStyle(() => {
     return {
-      height: heightEnvolvedor.value
-    }
-  })
+      height: alturaEnvolvedor.value,
+    };
+  });
 
   useEffect(() => {
-    if(valor != ''){
-      topPlaceHolder.value = withSpring(-8, comBouncing)
-      leftPlaceHolder.value = withSpring(12, comBouncing)
-      colorPlaceHolder.value = tema.color.azulEscuro
+    if (valor != '') {
+      topoNomeCampo.value = withSpring(-8, comBalanco);
+      esquerdaNomeCampo.value = withSpring(12, comBalanco);
+      corNomeCampo.value = tema.color.azulEscuro;
 
-      heightEnvolvedor.value = withSpring(86, semBouncing)
+      alturaEnvolvedor.value = withSpring(86, semBalanco);
     } else {
-      topPlaceHolder.value = withSpring(15, comBouncing)
-      leftPlaceHolder.value = withSpring(20, comBouncing)
-      colorPlaceHolder.value = tema.color.fosco
+      topoNomeCampo.value = withSpring(15, comBalanco);
+      esquerdaNomeCampo.value = withSpring(20, comBalanco);
+      corNomeCampo.value = tema.color.fosco;
 
-      heightEnvolvedor.value = withSpring(65, semBouncing)
+      alturaEnvolvedor.value = withSpring(65, semBalanco);
     }
-  }, [valor])
+  }, [valor]);
 
   return (
     <Animated.View style={[envolvedorAnimacao]}>
       {children}
 
-      <Animated.View 
-        style={[styles.placeHolder, placeHolderAnimacao]} 
-        focusable={false}
-      >
+      <Animated.View
+        style={[{position: 'absolute'}, nomeCampoAnimacao]}
+        focusable={false}>
         <TouchableWithoutFeedback
           onLongPress={() => {}}
           onPress={() => {
             // @ts-ignore: Unreachable code error
-            if(!entradaTextoRef.current?.isFocused()) entradaTextoRef.current?.focus()
-          }}
-        >
-          <Texto>
-            {nome}
-          </Texto>
+            if (!entradaTextoRef.current?.isFocused())
+              // @ts-ignore: Unreachable code error
+              entradaTextoRef.current?.focus();
+          }}>
+          <Texto>{nome}</Texto>
         </TouchableWithoutFeedback>
       </Animated.View>
     </Animated.View>
-  )
-}
+  );
+};
 
-
-const styles = StyleSheet.create({
-  placeHolder: {
-    position: 'absolute',
-  },
-})
-
-export default AnimacoesEntradaDeDados
+export default AnimacoesEntradaDeDados;

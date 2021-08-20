@@ -1,15 +1,14 @@
-import React, { useContext } from 'react'
+import React, {useContext} from 'react';
 
-import moment from 'moment'
-import Icon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/Feather';
 
-import { ContextoAutenticacao } from '../../contextos/ContextoAutenticacao'
+import {ContextoAutenticacao} from '../../contextos/ContextoAutenticacao';
 
-import { StackNavigationProp } from '@react-navigation/stack'
-import { RotasReservasParamsList } from '../../telas/Reservas/rotas'
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RotasReservasParametrosLista} from '../../telas/Reservas/rotas';
 
-import { iHorario, iReserva } from '../../models/Reserva'
-import { tema } from '../../global/estilos/tema'
+import {iHorario, iReserva} from '../../models/Reserva';
+import {tema} from '../../global/estilos/tema';
 
 import {
   DetalhesEnvolvedor,
@@ -17,51 +16,42 @@ import {
   Foto,
   FotoVaziaEnvolvedor,
   Pressionavel,
-  Texto
-} from './estilos'
+  Texto,
+} from './estilos';
 
 interface iCartaoReserva {
-  reserva: iReserva,
-  navigation: StackNavigationProp<RotasReservasParamsList, 'reservas'>
+  reserva: iReserva;
+  navigation: StackNavigationProp<RotasReservasParametrosLista, 'reservas'>;
 }
 
-const CartaoReserva: React.FC<iCartaoReserva> = ({ reserva, navigation }) => {
-  const { user } = useContext(ContextoAutenticacao)
+const CartaoReserva: React.FC<iCartaoReserva> = ({reserva, navigation}) => {
+  const {usuario} = useContext(ContextoAutenticacao);
 
   const pressHandler = () => {
-    navigation.navigate('visualizarReserva', { reserva })
-  }
+    navigation.navigate('visualizarReserva', {reserva});
+  };
 
   return (
-    <Pressionavel
-      activeOpacity={0.7}
-      onPress={pressHandler}
-    >
+    <Pressionavel activeOpacity={0.7} onPress={pressHandler}>
       <Envolvedor>
         {false ? (
-          <Foto source={{ uri: 'morador.foto' }} />
+          <Foto source={{uri: 'morador.foto'}} />
         ) : (
           <FotoVaziaEnvolvedor>
-            <Icon name='camera' size={24} color={tema.color.azulEscuro} />
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
           </FotoVaziaEnvolvedor>
         )}
 
         <DetalhesEnvolvedor>
-          { user.isAdmin && (
-            <Texto>
-              {reserva.morador.nome}
-            </Texto>
+          {usuario.usuarioAdministrador && (
+            <Texto>{reserva.morador.nome}</Texto>
           )}
-          <Texto>
-            {iHorario[reserva.horario]}
-          </Texto>
-          <Texto>
-            {reserva.ambiente.nome}
-          </Texto>
+          <Texto>{iHorario[reserva.horario]}</Texto>
+          <Texto>{reserva.ambiente.nome}</Texto>
         </DetalhesEnvolvedor>
       </Envolvedor>
     </Pressionavel>
-  )
-}
+  );
+};
 
-export default CartaoReserva
+export default CartaoReserva;

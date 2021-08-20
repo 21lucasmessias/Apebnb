@@ -1,165 +1,189 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react';
 
 import moment from 'moment';
 
-import { auth, db } from '../configs/firebase'
+import {auth, db} from '../configs/firebase';
 
-import { converterMoradorFirebase } from './ContextoMorador';
-import { showToast } from '../utils/Animacoes';
-import { converterReservaFirebase } from './ContextoReservas';
+import {converterMoradorFirebase} from './ContextoMorador';
+import {mostrarAviso} from '../utils/Animacoes';
+import {converterReservaFirebase} from './ContextoReservas';
 
-type iUser = {
-  isAdmin: boolean | undefined,
-  uid: string | null
-}
+type iUsuario = {
+  usuarioAdministrador: boolean | undefined;
+  uid: string | null;
+};
 
 interface iContextoAutenticacao {
-  user: iUser,
-  autenticar: (email: string, senha: string) => Promise<void>,
-  criarConta: (nome: string, cpf: string, email: string, senha: string) => Promise<void>,
-  logout: () => Promise<void>,
-  recuperarSenha: (email: string) => Promise<void>
+  usuario: iUsuario;
+  autenticar: (email: string, senha: string) => Promise<void>;
+  criarConta: (
+    nome: string,
+    cpf: string,
+    email: string,
+    senha: string,
+  ) => Promise<void>;
+  sair: () => Promise<void>;
+  recuperarSenha: (email: string) => Promise<void>;
 }
 
-export const ContextoAutenticacao = React.createContext({} as iContextoAutenticacao)
+export const ContextoAutenticacao = React.createContext(
+  {} as iContextoAutenticacao,
+);
 
 type iContextoAutenticacaoProvider = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
-const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({ children }) => {
-  const [user, setUser] = useState<iUser>({
-    isAdmin: undefined,
-    uid: null
-  })
+const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
+  children,
+}) => {
+  const [usuario, setUsuario] = useState<iUsuario>({
+    usuarioAdministrador: undefined,
+    uid: null,
+  });
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (newUser) => {
-      if (newUser) {
+    const removerListener = auth.onAuthStateChanged(async novoUsuario => {
+      if (novoUsuario) {
         try {
-          const doc = await db.collection('moradores')
+          const morador = await db
+            .collection('moradores')
             .withConverter(converterMoradorFirebase)
-            .doc(newUser.uid)
-            .get()
+            .doc(novoUsuario.uid)
+            .get();
 
-          if (doc.exists) {
-            await atualizarReservas(newUser.uid)
+          if (morador.exists) {
+            await removerReservasAntigas(novoUsuario.uid);
 
-            setUser({
-              isAdmin: doc.data()!.isAdmin,
-              uid: newUser.uid
-            })
+            setUsuario({
+              usuarioAdministrador: morador.data()!.moradorAdministrador,
+              uid: novoUsuario.uid,
+            });
           } else {
-            showToast('Usuário excluído pelo administrador.', true)
-            newUser.delete()
+            mostrarAviso('Usuário excluído pelo administrador.', true);
+            novoUsuario.delete();
           }
-        } catch(err) {
-          console.log(err)
-          showToast('Credencias inválidas.')
-          setUser({
-            isAdmin: undefined,
-            uid: null
-          })
+        } catch (err) {
+          console.log(err);
+          mostrarAviso('Credencias inválidas.');
+          setUsuario({
+            usuarioAdministrador: undefined,
+            uid: null,
+          });
         }
       } else {
-        setUser({
-          isAdmin: undefined,
-          uid: null
-        })
+        setUsuario({
+          usuarioAdministrador: undefined,
+          uid: null,
+        });
       }
-    })
-    
-    return unsubscribe
-  }, [])
+    });
 
+    return removerListener;
+  }, []);
 
-  const atualizarReservas = async(id: string) => {
-    let hoje = moment(new Date())
+  const removerReservasAntigas = async (id: string) => {
+    let hoje = moment(new Date());
 
-    const reservas = await db.collection('reservas')
+    const reservas = await db
+      .collection('reservas')
       .withConverter(converterReservaFirebase)
       .where('morador.id', '==', id)
-      .get()
+      .get();
 
-    const batch = db.batch()
+    const batch = db.batch();
 
     reservas.docs
-      .filter((reserva) => {
-        return reserva.data().data.ano < hoje.year() || reserva.data().data.mes < hoje.month()+1 || reserva.data().data.dia < hoje.date()
+      .filter(reserva => {
+        return (
+          reserva.data().data.ano < hoje.year() ||
+          reserva.data().data.mes < hoje.month() + 1 ||
+          reserva.data().data.dia < hoje.date()
+        );
       })
-      .map((reserva) => {
-        batch.delete(reserva.ref)
-      })
+      .map(reserva => {
+        batch.delete(reserva.ref);
+      });
 
-    await batch.commit()
-  }
+    await batch.commit();
+  };
 
   const autenticar = async (email: string, senha: string) => {
     try {
-      await auth.signInWithEmailAndPassword(email, senha)
-    } catch(err) {
-      console.log(err)
-      showToast('Credencias inválidas.')
+      await auth.signInWithEmailAndPassword(email, senha);
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Credencias inválidas.');
     }
-  }
+  };
 
-  const criarConta = async (nome: string, cpf: string, email: string, senha: string) => {
-    try{
-      const res = await auth.createUserWithEmailAndPassword(email, senha)
+  const criarConta = async (
+    nome: string,
+    cpf: string,
+    email: string,
+    senha: string,
+  ) => {
+    try {
+      const novoUsuario = await auth.createUserWithEmailAndPassword(
+        email,
+        senha,
+      );
 
-      if(res.user){
+      if (novoUsuario.user) {
         try {
-          await db.collection('moradores')
+          await db
+            .collection('moradores')
             .withConverter(converterMoradorFirebase)
-            .doc(`${res.user.uid}`)
+            .doc(`${novoUsuario.user.uid}`)
             .set({
-              id: res.user.uid,
+              id: novoUsuario.user.uid,
               nome: nome,
               cpf: cpf,
               email: email,
               aprovado: false,
-              isAdmin: false,
-            })
-        } catch(err) {
-          console.log(err)
-          showToast('Algo deu errado. Contate o desenvolvedor.')
+              moradorAdministrador: false,
+            });
+        } catch (err) {
+          console.log(err);
+          mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
         }
       }
-    } catch(err) {
-      console.log(err)
-      showToast('Credencias inválidas.')
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Credencias inválidas.');
     }
-  }
+  };
 
-  const logout = async () => {
+  const sair = async () => {
     try {
-      await auth.signOut()
-    } catch(err) {
-      console.log(err)
-      showToast('Algo deu errado. Contate o desenvolvedor.')
+      await auth.signOut();
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
     }
-  }
+  };
 
   const recuperarSenha = async (email: string) => {
     try {
-      await auth.sendPasswordResetEmail(email)
-    } catch(err){
-      console.log(err)
-      showToast('Algo deu errado. Contate o desenvolvedor.')
+      await auth.sendPasswordResetEmail(email);
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
     }
-  }
+  };
 
   return (
-    <ContextoAutenticacao.Provider value={{
-      user,
-      autenticar,
-      logout,
-      criarConta,
-      recuperarSenha
-    }}>
+    <ContextoAutenticacao.Provider
+      value={{
+        usuario,
+        autenticar,
+        sair,
+        criarConta,
+        recuperarSenha,
+      }}>
       {children}
-    </ContextoAutenticacao.Provider >
-  )
-}
+    </ContextoAutenticacao.Provider>
+  );
+};
 
-export default ContextoAutenticacaoProvider
+export default ContextoAutenticacaoProvider;

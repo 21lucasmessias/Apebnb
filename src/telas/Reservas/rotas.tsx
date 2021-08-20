@@ -1,65 +1,66 @@
-import React from 'react'
+import React from 'react';
 
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import { RotasFuncionalidadesParamsList } from '../../rotasFuncionalidades'
-import { iReserva } from '../../models/Reserva'
-import { forFade } from '../../utils/Animacoes'
+import {RotasFuncionalidadesParametrosLista} from '../../rotasFuncionalidades';
+import {iReserva} from '../../models/Reserva';
+import {animacaoDesaparecer} from '../../utils/Animacoes';
 
-import Cabecalho from '../../componentes/Cabecalho'
+import Cabecalho from '../../componentes/Cabecalho';
 
-import Reservas from '.'
-import VisualizarReserva from './VisualizarReserva'
+import Reservas from '.';
+import VisualizarReserva from './VisualizarReserva';
 
-export type RotasReservasParamsList = {
-  reservas: undefined
+export type RotasReservasParametrosLista = {
+  reservas: undefined;
   visualizarReserva: {
-    reserva: iReserva
-  }
-}
+    reserva: iReserva;
+  };
+};
 
-const { Navigator, Screen } = createStackNavigator<RotasReservasParamsList>()
+const {Navigator, Screen} =
+  createStackNavigator<RotasReservasParametrosLista>();
 
-const RotasReservas: React.FC<BottomTabScreenProps<RotasFuncionalidadesParamsList, 'reservas'>> = ({navigation}) => {
+const RotasReservas: React.FC<
+  BottomTabScreenProps<RotasFuncionalidadesParametrosLista, 'reservas'>
+> = ({navigation}) => {
   return (
     <NavigationContainer independent>
       <Navigator
-        headerMode='float'
+        headerMode="float"
         screenOptions={{
-          header: props => (
-            <Cabecalho
-              stackCabecalhoProps={props}
-            />
-          ),
-          cardStyleInterpolator: (props) => forFade(props),
+          header: props => <Cabecalho stackCabecalhoProps={props} />,
+          cardStyleInterpolator: props => animacaoDesaparecer(props),
           headerTransparent: true,
           cardStyle: {
-            marginTop: 55
+            marginTop: 55,
           },
         }}>
         <Screen
           name="reservas"
           component={Reservas}
           listeners={{
-            focus: () => navigation.setOptions({
-              tabBarVisible: true
-            }),
+            focus: () =>
+              navigation.setOptions({
+                tabBarVisible: true,
+              }),
           }}
         />
         <Screen
           name="visualizarReserva"
           component={VisualizarReserva}
           listeners={{
-            focus: () => navigation.setOptions({
-              tabBarVisible: false
-            })
+            focus: () =>
+              navigation.setOptions({
+                tabBarVisible: false,
+              }),
           }}
         />
       </Navigator>
     </NavigationContainer>
-  )
-}
+  );
+};
 
-export default RotasReservas
+export default RotasReservas;

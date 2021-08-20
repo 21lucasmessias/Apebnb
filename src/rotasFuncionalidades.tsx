@@ -1,31 +1,34 @@
-import React from 'react'
+import React from 'react';
 
-import ContextoMoradorProvider from './contextos/ContextoMorador'
+import ContextoMoradorProvider from './contextos/ContextoMorador';
 
-import Icon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/Feather';
 
-import { tema } from './global/estilos/tema'
+import {tema} from './global/estilos/tema';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { StackScreenProps } from '@react-navigation/stack'
-import { RotasParamsList } from './rotas'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RotasParametrosLista} from './rotas';
 
-import RotasAmbientes from './telas/Ambientes/rotas'
-import RotasMoradores from './telas/Moradores/rotas'
-import RotasReservas from './telas/Reservas/rotas'
+import RotasAmbientes from './telas/Ambientes/rotas';
+import RotasMoradores from './telas/Moradores/rotas';
+import RotasReservas from './telas/Reservas/rotas';
 
-import { height } from './utils/Utils'
-import ContextoReservaProvider from './contextos/ContextoReservas'
+import {height} from './utils/Utils';
+import ContextoReservaProvider from './contextos/ContextoReservas';
 
-export type RotasFuncionalidadesParamsList = {
-  ambientes: undefined,
-  moradores: undefined,
-  reservas: undefined,
-}
+export type RotasFuncionalidadesParametrosLista = {
+  ambientes: undefined;
+  moradores: undefined;
+  reservas: undefined;
+};
 
-const { Navigator, Screen } = createBottomTabNavigator<RotasFuncionalidadesParamsList>()
+const {Navigator, Screen} =
+  createBottomTabNavigator<RotasFuncionalidadesParametrosLista>();
 
-const RotasFuncionalidades: React.FC<StackScreenProps<RotasParamsList, 'funcionalidades'>>  = () => {
+const RotasFuncionalidades: React.FC<
+  StackScreenProps<RotasParametrosLista, 'funcionalidades'>
+> = () => {
   return (
     <ContextoMoradorProvider>
       <ContextoReservaProvider>
@@ -39,47 +42,50 @@ const RotasFuncionalidades: React.FC<StackScreenProps<RotasParamsList, 'funciona
               borderRadius: 15,
               backgroundColor: tema.color.azulEscuro,
             },
-          }}
-        >
-          <Screen component={RotasAmbientes} name='ambientes'
+          }}>
+          <Screen
+            component={RotasAmbientes}
+            name="ambientes"
             options={{
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({color, focused}) => (
                 <Icon
-                  name='home'
+                  name="home"
                   size={24}
                   color={focused ? tema.color.branco : color}
                 />
-              )
+              ),
             }}
           />
-          <Screen component={RotasReservas} name='reservas'
+          <Screen
+            component={RotasReservas}
+            name="reservas"
             options={{
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({color, focused}) => (
                 <Icon
-                  name='clock'
+                  name="clock"
                   size={24}
                   color={focused ? tema.color.branco : color}
                 />
-              )
+              ),
             }}
           />
           <Screen
             component={RotasMoradores}
-            name='moradores'
+            name="moradores"
             options={{
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({color, focused}) => (
                 <Icon
-                  name='user'
+                  name="user"
                   size={24}
                   color={focused ? tema.color.branco : color}
                 />
-              )
+              ),
             }}
           />
         </Navigator>
       </ContextoReservaProvider>
     </ContextoMoradorProvider>
-  )
-}
+  );
+};
 
-export default RotasFuncionalidades
+export default RotasFuncionalidades;

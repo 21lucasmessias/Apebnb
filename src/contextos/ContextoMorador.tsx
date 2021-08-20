@@ -1,116 +1,132 @@
-import React from 'react'
+import React from 'react';
 
-import firebase from 'firebase'
-import { auth, db } from '../configs/firebase'
+import firebase from 'firebase';
+import {auth, db} from '../configs/firebase';
 
-import { iMorador } from '../models/Morador';
-import { showToast } from '../utils/Animacoes';
-import { converterReservaFirebase } from './ContextoReservas';
+import {iMorador} from '../models/Morador';
+import {mostrarAviso} from '../utils/Animacoes';
+import {converterReservaFirebase} from './ContextoReservas';
 
 interface iContextoMorador {
-  getMorador: (id: string) => Promise<iMorador>,
-  alterarMorador: (morador: iMorador, senha: string | null) => Promise<void>
-  adicionarListenerNomeMorador: (id: string, refreshUserNome: (nome: string) => void) => () => void,
-  removerMorador: (morador: iMorador) => Promise<void>
+  procurarMoradorPorId: (id: string) => Promise<iMorador>;
+  alterarMorador: (morador: iMorador, senha: string | null) => Promise<void>;
+  adicionarAtualizacaoAutomaticaNomeMorador: (
+    id: string,
+    atualizarNomeUsuario: (nome: string) => void,
+  ) => () => void;
+  removerMorador: (morador: iMorador) => Promise<void>;
 }
 
 type iContextoMoradorProvider = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
-export const ContextoMorador = React.createContext({} as iContextoMorador)
+export const ContextoMorador = React.createContext({} as iContextoMorador);
 
 export const converterMoradorFirebase = {
   toFirestore: (data: iMorador) => data,
-  fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => snap.data() as iMorador
-}
+  fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) =>
+    snap.data() as iMorador,
+};
 
-const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({ children }) => {
-
-  const adicionarListenerNomeMorador = (id: string, refreshUserNome: (nome: string) => void) => {
-    var unsubscribe = db.collection('moradores')
+const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({
+  children,
+}) => {
+  const adicionarAtualizacaoAutomaticaNomeMorador = (
+    id: string,
+    atualizarNomeUsuario: (nome: string) => void,
+  ) => {
+    var removerListener = db
+      .collection('moradores')
       .withConverter(converterMoradorFirebase)
       .doc(id)
-      .onSnapshot((doc) => {
-        refreshUserNome(doc.data()!.nome)
-      })
+      .onSnapshot(morador => {
+        atualizarNomeUsuario(morador.data()!.nome);
+      });
 
-    return unsubscribe
-  }
+    return removerListener;
+  };
 
-  const getMorador = async (id: string) => {
-    let dados: iMorador
+  const procurarMoradorPorId = async (id: string) => {
+    let dados: iMorador;
 
     try {
-      const doc = await db.collection('moradores')
+      const morador = await db
+        .collection('moradores')
         .withConverter(converterMoradorFirebase)
         .doc(id)
-        .get()
-      
-      if (doc.exists) {
-        dados = doc.data()!
+        .get();
+
+      if (morador.exists) {
+        dados = morador.data()!;
       }
 
-      return dados!
-    } catch(err) {
-      console.log(err)
-      showToast('Algo deu errado. Contate o desenvolvedor.')
+      return dados!;
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
     }
 
-    return dados!
-  }
+    return dados!;
+  };
 
-  const alterarMorador = async (morador: iMorador, senha: string | null) => {  
+  const alterarMorador = async (morador: iMorador, senha: string | null) => {
     try {
-      if(senha){
-        await auth.currentUser!.updatePassword(senha)
+      if (senha) {
+        await auth.currentUser!.updatePassword(senha);
       }
 
-      await db.collection('moradores')
+      await db
+        .collection('moradores')
         .withConverter(converterMoradorFirebase)
         .doc(morador.id)
-        .update(morador)
+        .update(morador);
 
-      showToast('Dados alterados com sucesso')
-    } catch(err) {
-      showToast('Algo deu errado. Contate o desenvolvedor.')
-      console.log(`Error in alterarMorador`, err)
+      mostrarAviso('Dados alterados com sucesso');
+    } catch (err) {
+      mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
+      console.log(`Error in alterarMorador`, err);
     }
-  }
+  };
 
   const removerMorador = async (morador: iMorador) => {
-    const batch = db.batch()
-    const moradorRef = db.collection('moradores').doc(morador.id)
-    const reservasRef = await db.collection('reservas')
+    const batch = db.batch();
+
+    const moradorRef = db.collection('moradores').doc(morador.id);
+
+    const reservasRef = await db
+      .collection('reservas')
       .withConverter(converterReservaFirebase)
       .where('morador.id', '==', morador.id)
-      .get()
+      .get();
 
     try {
-      batch.delete(moradorRef)
+      batch.delete(moradorRef);
+
       reservasRef.forEach(r => {
-        batch.delete(r.ref)
-      })
-      
-      await batch.commit()
-      
-      showToast('Morador e reservas removidas com sucesso.')
-    } catch(err) {
-      console.log(err)
-      showToast('Erro ao remover morador.')
+        batch.delete(r.ref);
+      });
+
+      await batch.commit();
+
+      mostrarAviso('Morador e reservas removidas com sucesso.');
+    } catch (err) {
+      console.log(err);
+      mostrarAviso('Erro ao remover morador.');
     }
-  }
+  };
 
   return (
-    <ContextoMorador.Provider value={{
-      getMorador,
-      alterarMorador,
-      adicionarListenerNomeMorador,
-      removerMorador
-    }}>
+    <ContextoMorador.Provider
+      value={{
+        procurarMoradorPorId,
+        alterarMorador,
+        adicionarAtualizacaoAutomaticaNomeMorador,
+        removerMorador,
+      }}>
       {children}
-    </ContextoMorador.Provider >
-  )
-}
+    </ContextoMorador.Provider>
+  );
+};
 
-export default ContextoMoradorProvider
+export default ContextoMoradorProvider;

@@ -1,57 +1,59 @@
-import React, { useState, useContext } from 'react'
-import { Keyboard } from 'react-native'
+import React, {useState, useContext} from 'react';
+import {Keyboard} from 'react-native';
 
-import { Dialog } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/Feather'
+import {Dialog} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Feather';
 
-import { ContextoAutenticacao } from '../../../contextos/ContextoAutenticacao'
+import {ContextoAutenticacao} from '../../../contextos/ContextoAutenticacao';
 
-import { StackScreenProps } from '@react-navigation/stack'
-import { RotasAutenticacaoParamsList } from '../rotas'
+import {StackScreenProps} from '@react-navigation/stack';
+import {RotasAutenticacaoParametrosLista} from '../rotas';
 
-import Botao from '../../../componentes/Botao'
-import EntradaDeDados from '../../../componentes/EntradaDeDados'
-import { HeaderAnimacoes } from './animacoes'
+import Botao from '../../../componentes/Botao';
+import EntradaDeDados from '../../../componentes/EntradaDeDados';
+import {HeaderAnimacoes} from './animacoes';
 
-import { validadorDeEmail, validadorString } from '../../../utils/Validadores'
-import { tema } from '../../../global/estilos/tema'
+import {validadorDeEmail, validadorString} from '../../../utils/Validadores';
+import {tema} from '../../../global/estilos/tema';
 
 import {
   Voltar,
-  Conteiner,
-  TextoConteiner,
+  Envolvedor,
+  TextoEnvolvedor,
   FormEnvolvedor,
   Descricao,
   EnvolvedorBotoes,
-} from './estilos'
+} from './estilos';
 
-interface iRecuperarSenhaScreen extends StackScreenProps<RotasAutenticacaoParamsList, 'recuperarSenha'> {}
+interface iRecuperarSenhaScreen
+  extends StackScreenProps<
+    RotasAutenticacaoParametrosLista,
+    'recuperarSenha'
+  > {}
 
 const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
-  const { recuperarSenha } = useContext(ContextoAutenticacao)
-  const [email, setEmail] = useState('')
-  const [dialogoVisivel, setDialogoVisivel] = useState(false)
+  const {recuperarSenha} = useContext(ContextoAutenticacao);
+  const [email, setEmail] = useState('');
+  const [dialogoVisivel, setDialogoVisivel] = useState(false);
 
-  const recuperarSenhaHandler = () => {
-    Keyboard.dismiss()
-    if(validadorDeEmail(email)){
-      recuperarSenha(email)
-      setDialogoVisivel(true)
-    }    
-  }
+  const recuperarSenhaPressionado = () => {
+    Keyboard.dismiss();
+    if (validadorDeEmail(email)) {
+      recuperarSenha(email);
+      setDialogoVisivel(true);
+    }
+  };
 
   return (
-    <Conteiner>
+    <Envolvedor>
       <HeaderAnimacoes />
-      <TextoConteiner>
-        <Descricao>
-          Insira seu e-mail para{'\n'}recuperar a senha
-        </Descricao>
-      </TextoConteiner>
+      <TextoEnvolvedor>
+        <Descricao>Insira seu e-mail para{'\n'}recuperar a senha</Descricao>
+      </TextoEnvolvedor>
 
       <FormEnvolvedor>
-        <EntradaDeDados 
-          nome='Email'
+        <EntradaDeDados
+          nome="Email"
           validador={validadorString}
           valor={email}
           setValor={setEmail}
@@ -60,31 +62,28 @@ const RecuperarSenha: React.FC<iRecuperarSenhaScreen> = ({navigation}) => {
 
       <EnvolvedorBotoes>
         <Botao
-          texto='Enviar'
-          aoPressionar={recuperarSenhaHandler}
-          tipo='preenchido'
+          texto="Enviar"
+          aoPressionar={recuperarSenhaPressionado}
+          tipo="preenchido"
         />
       </EnvolvedorBotoes>
       <Voltar onPress={() => navigation.goBack()}>
-          <Icon name='arrow-left' size={24} color={tema.color.ouro}/>
+        <Icon name="arrow-left" size={24} color={tema.color.ouro} />
       </Voltar>
 
       <Dialog
         visible={dialogoVisivel}
         onDismiss={() => {
-          setDialogoVisivel(false)
-          navigation.goBack()
-        }}
-      >
+          setDialogoVisivel(false);
+          navigation.goBack();
+        }}>
         <Dialog.Title>Recuperar Senha</Dialog.Title>
         <Dialog.Content>
-          <Descricao>
-            Senha enviada para o email {`\n${email}\n`}
-          </Descricao>
+          <Descricao>Senha enviada para o email {`\n${email}\n`}</Descricao>
         </Dialog.Content>
       </Dialog>
-    </Conteiner>
-  )
-}
+    </Envolvedor>
+  );
+};
 
-export default RecuperarSenha
+export default RecuperarSenha;

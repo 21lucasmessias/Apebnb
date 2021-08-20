@@ -1,23 +1,23 @@
-import React, { useContext, useState } from 'react'
+import React, {useContext, useState} from 'react';
 
-import moment from 'moment'
-import Icon from 'react-native-vector-icons/Feather'
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/Feather';
 
-import { StackScreenProps } from '@react-navigation/stack'
-import { RotasReservasParamsList } from '../rotas'
+import {StackScreenProps} from '@react-navigation/stack';
+import {RotasReservasParametrosLista} from '../rotas';
 
-import { ContextoReserva } from '../../../contextos/ContextoReservas'
+import {ContextoReserva} from '../../../contextos/ContextoReservas';
 
-import { tema } from '../../../global/estilos/tema'
-import { iHorario } from '../../../models/Reserva'
+import {tema} from '../../../global/estilos/tema';
+import {iHorario} from '../../../models/Reserva';
 
-import Botao from '../../../componentes/Botao'
-import VisualizacaoDeData from '../../../componentes/VisualizacaoDeData'
-import VisualizacaoDeHorario from '../../../componentes/VisualizacaoDeHorario'
+import Botao from '../../../componentes/Botao';
+import VisualizacaoDeData from '../../../componentes/VisualizacaoDeData';
+import VisualizacaoDeHorario from '../../../componentes/VisualizacaoDeHorario';
 
 import {
-  Conteiner,
   Envolvedor,
+  EnvolvedorReserva,
   Foto,
   FotoVaziaEnvolvedor,
   Divisor,
@@ -25,78 +25,77 @@ import {
   Titulo,
   Descricao,
   DivisorVisivel,
-  EnvolvedorData
-} from './estilos'
-import { ActivityIndicator } from 'react-native-paper'
-import { gerarAlerta } from '../../../utils/Utils'
+  EnvolvedorData,
+} from './estilos';
+import {ActivityIndicator} from 'react-native-paper';
+import {gerarAlerta} from '../../../utils/Utils';
 
-interface iReservaScreen extends StackScreenProps<RotasReservasParamsList, 'visualizarReserva'> {}
+interface iReservaScreen
+  extends StackScreenProps<RotasReservasParametrosLista, 'visualizarReserva'> {}
 
-const VisualizarReserva: React.FC<iReservaScreen> = ({ route, navigation }) => {
-  const { reserva } = route.params
+const VisualizarReserva: React.FC<iReservaScreen> = ({route, navigation}) => {
+  const {reserva} = route.params;
 
-  const [carregando, setCarregando] = useState(false)
+  const [carregando, setCarregando] = useState(false);
 
-  const { cancelarReserva } = useContext(ContextoReserva)
+  const {cancelarReserva} = useContext(ContextoReserva);
 
-  const cancelarReservaHandler = async () => {
-    setCarregando(true)
-    if(await cancelarReserva(reserva)){
-      navigation.goBack()
+  const cancelarReservaPressionado = async () => {
+    setCarregando(true);
+    if (await cancelarReserva(reserva)) {
+      navigation.goBack();
     }
-    setCarregando(false)
-  }
+    setCarregando(false);
+  };
 
   return (
-    <Conteiner>
-      <Envolvedor showsVerticalScrollIndicator={false}>
+    <Envolvedor>
+      <EnvolvedorReserva showsVerticalScrollIndicator={false}>
         {reserva.ambiente.foto ? (
-          <Foto source={{ uri: reserva.ambiente.foto }} />
+          <Foto source={{uri: reserva.ambiente.foto}} />
         ) : (
           <FotoVaziaEnvolvedor>
-            <Icon name='camera' size={24} color={tema.color.azulEscuro} />
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
           </FotoVaziaEnvolvedor>
         )}
 
         <Divisor />
 
-        <Titulo>
-          {reserva.ambiente.nome}
-        </Titulo>
+        <Titulo>{reserva.ambiente.nome}</Titulo>
 
         <Divisor />
 
-        <Descricao>
-          {reserva.ambiente.descricao}
-        </Descricao>
+        <Descricao>{reserva.ambiente.descricao}</Descricao>
 
-        <DivisorVisivel/>
+        <DivisorVisivel />
 
         <EnvolvedorData>
-          <VisualizacaoDeData data={reserva.data}/>
+          <VisualizacaoDeData data={reserva.data} />
 
-          <Divisor/>
+          <Divisor />
 
-          <VisualizacaoDeHorario horarioEscolhido={iHorario[reserva.horario]}/>
+          <VisualizacaoDeHorario horarioEscolhido={iHorario[reserva.horario]} />
         </EnvolvedorData>
-      </Envolvedor>
+      </EnvolvedorReserva>
 
       {carregando && (
-        <ActivityIndicator size='large' color={tema.color.azulEscuro} />
+        <ActivityIndicator size="large" color={tema.color.azulEscuro} />
       )}
 
       <EnvolvedorBotoes>
         <Botao
-          tipo='preenchido'
-          texto="Cancelar Reserva" 
+          tipo="preenchido"
+          texto="Cancelar Reserva"
           aoPressionar={() => {
-            gerarAlerta('Deseja realmente cancelar a reserva?', cancelarReservaHandler)
+            gerarAlerta(
+              'Deseja realmente cancelar a reserva?',
+              cancelarReservaPressionado,
+            );
           }}
         />
       </EnvolvedorBotoes>
-        
-    </Conteiner>
-  )
-}
+    </Envolvedor>
+  );
+};
 
-export default VisualizarReserva
+export default VisualizarReserva;
