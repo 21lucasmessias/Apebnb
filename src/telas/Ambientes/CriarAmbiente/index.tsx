@@ -41,15 +41,18 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({navigation}) => {
   const [foto, setFoto] = useState<string | null>(null);
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
+  const [diasSemana, setDiasSemana] = useState([
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+  ]);
 
   const salvarAmbiente = async () => {
     Keyboard.dismiss();
-
-    // @ts-ignore: Unreachable code error
-    let diasSemana: Array<boolean> = diasSemanaRef.current._children.map(c => {
-      return c._internalFiberInstanceHandleDEV.child._debugOwner.memoizedProps
-        .dia as boolean;
-    });
 
     let novoAmbiente: iAmbiente = {
       id: '',
@@ -105,7 +108,10 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({navigation}) => {
 
         <Divisor />
 
-        <SeletorDiasSemana ref={diasSemanaRef} />
+        <SeletorDiasSemana
+          diasDisponiveis={diasSemana}
+          setDiasDisponiveis={setDiasSemana}
+        />
       </Envolvedor>
 
       <EnvolvedorBotoes>
