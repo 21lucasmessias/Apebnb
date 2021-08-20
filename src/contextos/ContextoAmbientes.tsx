@@ -33,7 +33,9 @@ export const converterAmbienteFirebase = {
 const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({
   children,
 }) => {
-  const adicionarAutoRefreshAmbientes = (atualizarAmbientes: () => void) => {
+  const adicionarAtualizacaoAutomaticaAmbientes = (
+    atualizarAmbientes: () => void,
+  ) => {
     return db
       .collection('ambientes')
       .withConverter(converterAmbienteFirebase)
@@ -148,7 +150,7 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({
         atualizarAmbiente,
         listarTodosAmbientes,
         procurarAmbientePorId,
-        adicionarAtualizacaoAutomaticaAmbientes: adicionarAutoRefreshAmbientes,
+        adicionarAtualizacaoAutomaticaAmbientes,
       }}>
       {children}
     </ContextoAmbientes.Provider>
