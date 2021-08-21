@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Keyboard, ScrollView} from 'react-native';
 
+import * as ImagePicker from 'react-native-image-picker';
 import {ActivityIndicator} from 'react-native-paper';
 
 import {ContextoMorador} from '../../../contextos/ContextoMorador';
@@ -10,6 +11,9 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RotasMoradoresParametrosLista} from '../rotas';
 
 import {tema} from '../../../global/estilos/tema';
+
+import Icon from 'react-native-vector-icons/Feather';
+
 import {
   validadorCPF,
   validadorDeEmail,
@@ -17,7 +21,6 @@ import {
   validadorEntradaStringNumero,
   validadorString,
 } from '../../../utils/Validadores';
-import AnimacoesPerfil from './animacoes';
 import {iMorador} from '../../../models/Morador';
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados';
@@ -29,7 +32,10 @@ import {
   Divisor,
   BotaoEnvolvedor,
   CarregandoEnvolvedor,
+  FotoEnvolvedor,
+  FotoVaziaEnvolvedor,
 } from './estilos';
+import {ContextoTeclado} from '../../../contextos/ContextoTeclado';
 
 interface iMoradorScreen
   extends StackScreenProps<
@@ -40,6 +46,7 @@ interface iMoradorScreen
 const TelaPerfil: React.FC<iMoradorScreen> = () => {
   const {usuario} = useContext(ContextoAutenticacao);
   const {procurarMoradorPorId, alterarMorador} = useContext(ContextoMorador);
+  const {tecladoVisivel} = useContext(ContextoTeclado);
 
   const [carregando, setCarregando] = useState(true);
 
@@ -82,21 +89,43 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
     await alterarMorador(morador, senha === confirmarSenha ? senha : null);
   };
 
+  const carregarImagem = () => {
+    ImagePicker.launchImageLibrary(
+      {
+        mediaType: 'photo',
+        selectionLimit: 1,
+        includeBase64: true,
+      },
+      image => {
+        if (!image.didCancel) {
+          setFoto('data:image/png;base64,' + image!.assets![0].base64!);
+        }
+      },
+    );
+  };
+
   return carregando ? (
     <CarregandoEnvolvedor>
       <ActivityIndicator color={tema.color.azulEscuro} size="large" />
     </CarregandoEnvolvedor>
   ) : (
     <Envolvedor>
-      {foto ? <Foto source={{uri: foto}} /> : <AnimacoesPerfil />}
-
-      <Divisor />
-
       <ScrollView
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}
         focusable
         keyboardDismissMode="interactive">
+        {foto ? (
+          <FotoEnvolvedor onPress={carregarImagem}>
+            <Foto source={{uri: foto}}></Foto>
+          </FotoEnvolvedor>
+        ) : (
+          <FotoVaziaEnvolvedor onPress={carregarImagem}>
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
+          </FotoVaziaEnvolvedor>
+        )}
+
+        <Divisor />
         <EntradaDeDados
           nome="Nome completo"
           valor={nome}
@@ -154,7 +183,7 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
           tipoAutoCompletar="password"
         />
         <Divisor />
-        <BotaoEnvolvedor>
+        <BotaoEnvolvedor tecladoVisivel={tecladoVisivel}>
           <Botao
             tipo="preenchido"
             texto="Salvar"

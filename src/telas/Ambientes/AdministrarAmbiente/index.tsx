@@ -1,6 +1,7 @@
-import React, {useState, useRef, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 
-import {View, Keyboard} from 'react-native';
+import {Keyboard} from 'react-native';
+import * as ImagePicker from 'react-native-image-picker';
 
 import {RouteProp} from '@react-navigation/native';
 import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
@@ -29,7 +30,7 @@ import {
   Conteiner,
   Envolvedor,
   Foto,
-  FotoVaziaEnvolvedor,
+  FotoEnvolvedor,
   Divisor,
   EnvolvedorBotoes,
 } from './estilos';
@@ -61,15 +62,32 @@ const AdministrarAmbiente: React.FC<iAmbienteScreen> = ({route}) => {
     atualizarAmbiente(novoAmbiente);
   };
 
+  const carregarImagem = () => {
+    ImagePicker.launchImageLibrary(
+      {
+        mediaType: 'photo',
+        selectionLimit: 1,
+        includeBase64: true,
+      },
+      image => {
+        if (!image.didCancel) {
+          setFoto('data:image/png;base64,' + image!.assets![0].base64!);
+        }
+      },
+    );
+  };
+
   return (
     <Conteiner>
       <Envolvedor showsVerticalScrollIndicator={false}>
         {foto ? (
-          <Foto source={{uri: foto}} />
+          <FotoEnvolvedor onPress={carregarImagem}>
+            <Foto source={{uri: foto}} />
+          </FotoEnvolvedor>
         ) : (
-          <FotoVaziaEnvolvedor>
+          <FotoEnvolvedor onPress={carregarImagem}>
             <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-          </FotoVaziaEnvolvedor>
+          </FotoEnvolvedor>
         )}
 
         <Divisor />

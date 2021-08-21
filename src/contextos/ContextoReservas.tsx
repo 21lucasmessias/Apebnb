@@ -29,7 +29,14 @@ type iContextoReservaProvider = {
 export const ContextoReserva = React.createContext({} as iContextoReserva);
 
 export const converterReservaFirebase = {
-  toFirestore: (data: iReserva) => data,
+  toFirestore: (data: iReserva) =>
+    ({
+      ...data,
+      ambiente: {
+        ...data.ambiente,
+        foto: data.ambiente.foto ? data.ambiente.foto : null,
+      },
+    } as iReserva),
   fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) =>
     snap.data() as iReserva,
 };

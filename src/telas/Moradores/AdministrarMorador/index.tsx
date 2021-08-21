@@ -3,6 +3,9 @@ import {ScrollView, Keyboard} from 'react-native';
 
 import {ContextoMorador} from '../../../contextos/ContextoMorador';
 
+import Icon from 'react-native-vector-icons/Feather';
+import * as ImagePicker from 'react-native-image-picker';
+
 import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {RotasMoradoresParametrosLista} from '../rotas';
 import {RouteProp} from '@react-navigation/native';
@@ -13,14 +16,21 @@ import {
   validadorDeNumero,
   validadorEntradaStringNumero,
 } from '../../../utils/Validadores';
-import AnimacoesAdministrarMorador from './animacoes';
 import {gerarAlerta} from '../../../utils/Utils';
+import {tema} from '../../../global/estilos/tema';
 
 import EntradaDeDados from '../../../componentes/EntradaDeDados';
 import Botao from '../../../componentes/Botao';
 import Cabecalho from '../../../componentes/Cabecalho';
 
-import {Envolvedor, Foto, Divisor, BotaoEnvolvedor} from './estilos';
+import {
+  Envolvedor,
+  Foto,
+  Divisor,
+  BotaoEnvolvedor,
+  FotoEnvolvedor,
+  FotoVaziaEnvolvedor,
+} from './estilos';
 
 interface iMoradorScreen
   extends StackScreenProps<
@@ -58,19 +68,37 @@ const AdministrarMorador: React.FC<iMoradorScreen> = ({route}) => {
     );
   };
 
+  const carregarImagem = () => {
+    ImagePicker.launchImageLibrary(
+      {
+        mediaType: 'photo',
+        selectionLimit: 1,
+        includeBase64: true,
+      },
+      image => {
+        if (!image.didCancel) {
+          setFoto('data:image/png;base64,' + image!.assets![0].base64!);
+        }
+      },
+    );
+  };
+
   return (
     <Envolvedor>
-      {morador.foto ? (
-        <Foto source={{uri: morador.foto}} />
-      ) : (
-        <AnimacoesAdministrarMorador />
-      )}
-
-      <Divisor />
-
       <ScrollView
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}>
+        {foto ? (
+          <FotoEnvolvedor onPress={carregarImagem}>
+            <Foto source={{uri: foto}}></Foto>
+          </FotoEnvolvedor>
+        ) : (
+          <FotoVaziaEnvolvedor onPress={carregarImagem}>
+            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
+          </FotoVaziaEnvolvedor>
+        )}
+
+        <Divisor />
         <EntradaDeDados
           nome="Nome completo"
           valor={nome}

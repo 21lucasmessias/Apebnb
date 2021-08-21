@@ -34,14 +34,6 @@ const CartaoReserva: React.FC<iCartaoReserva> = ({reserva, navigation}) => {
   return (
     <Pressionavel activeOpacity={0.7} onPress={pressHandler}>
       <Envolvedor>
-        {false ? (
-          <Foto source={{uri: 'morador.foto'}} />
-        ) : (
-          <FotoVaziaEnvolvedor>
-            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-          </FotoVaziaEnvolvedor>
-        )}
-
         <DetalhesEnvolvedor>
           {usuario.usuarioAdministrador && (
             <Texto>{reserva.morador.nome}</Texto>
@@ -50,6 +42,18 @@ const CartaoReserva: React.FC<iCartaoReserva> = ({reserva, navigation}) => {
           <Texto>{reserva.ambiente.nome}</Texto>
         </DetalhesEnvolvedor>
       </Envolvedor>
+      {(!!reserva.ambiente.foto ||
+        (usuario.usuarioAdministrador && !!reserva.morador.foto)) && (
+        <Foto
+          source={{
+            uri: usuario.usuarioAdministrador
+              ? !!reserva.morador.foto
+                ? reserva.morador.foto
+                : reserva.ambiente.foto!
+              : reserva.ambiente.foto!,
+          }}
+        />
+      )}
     </Pressionavel>
   );
 };

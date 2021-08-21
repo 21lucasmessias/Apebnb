@@ -3,7 +3,7 @@ import {tema} from '../../../global/estilos/tema';
 
 export const Conteiner = styled.View`
   flex: 1;
-  padding: 12px;
+  padding: 0px 12px;
 
   background-color: ${tema.color.cinza};
 `;
@@ -19,12 +19,14 @@ export const Foto = styled.Image`
   border-radius: 10px;
 `;
 
-export const FotoVaziaEnvolvedor = styled.View`
+export const FotoEnvolvedor = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 
   width: 100%;
   height: 196px;
+
+  margin-top: 12px;
 
   border-radius: 10px;
 
@@ -38,4 +40,5 @@ export const Divisor = styled.View`
 export const EnvolvedorBotoes = styled.View`
   height: 50px;
   margin-top: 12px;
+  margin-bottom: 12px;
 `;
