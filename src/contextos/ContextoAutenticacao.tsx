@@ -60,7 +60,7 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
               uid: novoUsuario.uid,
             });
           } else {
-            mostrarAviso('Usuário excluído pelo administrador.', true);
+            mostrarAviso('Credencias inválidas.');
             novoUsuario.delete();
           }
         } catch (err) {
@@ -124,29 +124,39 @@ const ContextoAutenticacaoProvider: React.FC<iContextoAutenticacaoProvider> = ({
     senha: string,
   ) => {
     try {
-      const novoUsuario = await auth.createUserWithEmailAndPassword(
-        email,
-        senha,
-      );
+      const morador = await db
+        .collection('moradores')
+        .withConverter(converterMoradorFirebase)
+        .where('cpf', '==', cpf)
+        .get();
 
-      if (novoUsuario.user) {
-        try {
-          await db
-            .collection('moradores')
-            .withConverter(converterMoradorFirebase)
-            .doc(`${novoUsuario.user.uid}`)
-            .set({
-              id: novoUsuario.user.uid,
-              nome: nome,
-              cpf: cpf,
-              email: email,
-              aprovado: false,
-              moradorAdministrador: false,
-            });
-        } catch (err) {
-          console.log(err);
-          mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
+      if (morador.empty) {
+        const novoUsuario = await auth.createUserWithEmailAndPassword(
+          email,
+          senha,
+        );
+
+        if (novoUsuario.user) {
+          try {
+            await db
+              .collection('moradores')
+              .withConverter(converterMoradorFirebase)
+              .doc(`${novoUsuario.user.uid}`)
+              .set({
+                id: novoUsuario.user.uid,
+                nome: nome,
+                cpf: cpf,
+                email: email,
+                aprovado: false,
+                moradorAdministrador: false,
+              });
+          } catch (err) {
+            console.log(err);
+            mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
+          }
         }
+      } else {
+        mostrarAviso('CPF já registrado.');
       }
     } catch (err) {
       console.log(err);
