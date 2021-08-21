@@ -76,11 +76,28 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({
         await auth.currentUser!.updatePassword(senha);
       }
 
-      await db
+      const batch = db.batch();
+
+      const moradorRef = db
         .collection('moradores')
         .withConverter(converterMoradorFirebase)
-        .doc(morador.id)
-        .update(morador);
+        .doc(morador.id);
+
+      batch.update(moradorRef, morador);
+
+      const reservas = await db
+        .collection('reservas')
+        .withConverter(converterReservaFirebase)
+        .where('morador.id', '==', morador.id)
+        .get();
+
+      reservas.docs.forEach(reserva => {
+        batch.update(reserva.ref, {
+          morador: morador,
+        });
+      });
+
+      batch.commit();
 
       mostrarAviso('Dados alterados com sucesso');
     } catch (err) {

@@ -99,11 +99,28 @@ const ContextoAmbientesProvider: React.FC<iContextoAmbientesProvider> = ({
 
   const atualizarAmbiente = async (ambiente: iAmbiente) => {
     try {
-      await db
+      const batch = db.batch();
+
+      const ambienteRef = db
         .collection('ambientes')
         .withConverter(converterAmbienteFirebase)
-        .doc(ambiente.id)
-        .update(ambiente);
+        .doc(ambiente.id);
+
+      batch.update(ambienteRef, ambiente);
+
+      const reservas = await db
+        .collection('reservas')
+        .withConverter(converterReservaFirebase)
+        .where('ambiente.id', '==', ambiente.id)
+        .get();
+
+      reservas.docs.forEach(reserva => {
+        batch.update(reserva.ref, {
+          ambiente: ambiente,
+        });
+      });
+
+      batch.commit();
 
       mostrarAviso('Ambiente atualizado com sucesso.');
     } catch (err) {
