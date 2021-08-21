@@ -41,6 +41,7 @@ const RotasFuncionalidades: React.FC<
               marginHorizontal: 18,
               borderRadius: 15,
               backgroundColor: tema.color.azulEscuro,
+              borderTopWidth: 0,
             },
           }}>
           <Screen

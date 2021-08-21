@@ -36,6 +36,7 @@ import {
   FotoVaziaEnvolvedor,
 } from './estilos';
 import {ContextoTeclado} from '../../../contextos/ContextoTeclado';
+import {mostrarAviso} from '../../../utils/Animacoes';
 
 interface iMoradorScreen
   extends StackScreenProps<
@@ -77,16 +78,20 @@ const TelaPerfil: React.FC<iMoradorScreen> = () => {
   const salvarMorador = async () => {
     Keyboard.dismiss();
 
-    const morador: iMorador = {
-      id: usuario.uid!,
-      cpf,
-      email,
-      nome,
-      foto,
-      numero,
-    };
+    if (senha === confirmarSenha) {
+      const morador: iMorador = {
+        id: usuario.uid!,
+        cpf,
+        email,
+        nome,
+        foto,
+        numero,
+      };
 
-    await alterarMorador(morador, senha === confirmarSenha ? senha : null);
+      await alterarMorador(morador, senha === confirmarSenha ? senha : null);
+    } else {
+      mostrarAviso('Senhas incompatíveis');
+    }
   };
 
   const carregarImagem = () => {

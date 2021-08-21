@@ -35,7 +35,7 @@ const EntradaDeHorario: React.FC<iEntradaDeHorario> = ({
   return (
     <Envolvedor>
       <Entrada
-        value={horarioEscolhido ? iHorario[horarioEscolhido] : ''}
+        value={horarioEscolhido !== undefined ? iHorario[horarioEscolhido] : ''}
         editable={false}
         placeholder="Horário"
         erro={erro}></Entrada>

@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {tema} from '../../../../global/estilos/tema';
+import {width} from '../../../../utils/Utils';
 
 export const Conteiner = styled.View`
   flex: 1;
@@ -27,26 +28,39 @@ export const SubTitulo = styled.Text`
   color: ${tema.color.azulEscuro};
   font-size: 22px;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 `;
 
 export const Foto = styled.Image`
-  width: 100%;
-  height: 196px;
-  border-radius: 50px;
+  width: ${width / 2.5}px;
+  height: ${width / 2.5}px;
+  border-radius: ${width}px;
 `;
 
-export const EnvolvedorFoto = styled.View`
+export const FotoEnvolvedor = styled.View`
   align-items: center;
   justify-content: center;
   align-self: center;
 
-  width: 150px;
-  height: 150px;
+  width: ${width / 2.5}px;
+  height: ${width / 2.5}px;
 
-  border-radius: 150px;
+  margin-top: 12px;
+
+  border-radius: ${width}px;
+`;
+
+export const FotoVaziaEnvolvedor = styled.View`
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+
+  width: ${width / 2.5}px;
+  height: ${width / 2.5}px;
+
+  margin-top: 12px;
+
+  border-radius: ${width}px;
 
   background-color: ${tema.color.verdeAzulado};
-
-  margin-bottom: 12px;
 `;

@@ -26,7 +26,8 @@ import {
   EnvolvedorBotoes,
   SubTitulo,
   Foto,
-  EnvolvedorFoto,
+  FotoEnvolvedor,
+  FotoVaziaEnvolvedor,
 } from './estilos';
 
 interface iMoradorScreen
@@ -47,12 +48,16 @@ const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
         <SubTitulo>Verifique os dados do Morador</SubTitulo>
         <ScrollView showsVerticalScrollIndicator={false}>
           {morador.foto ? (
-            <Foto source={{uri: morador.foto}} />
+            <FotoEnvolvedor>
+              <Foto source={{uri: morador.foto}}></Foto>
+            </FotoEnvolvedor>
           ) : (
-            <EnvolvedorFoto>
+            <FotoVaziaEnvolvedor>
               <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-            </EnvolvedorFoto>
+            </FotoVaziaEnvolvedor>
           )}
+          <Divisor />
+
           <EntradaDeDados
             nome="Nome completo"
             valor={morador.nome}
