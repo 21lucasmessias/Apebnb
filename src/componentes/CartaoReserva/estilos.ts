@@ -4,6 +4,7 @@ import {tema} from '../../global/estilos/tema';
 export const Pressionavel = styled.TouchableOpacity`
   height: 90px;
   padding: 10px;
+  flex-direction: row;
 `;
 
 export const Envolvedor = styled.View`
@@ -16,7 +17,9 @@ export const Envolvedor = styled.View`
 `;
 
 export const Foto = styled.Image`
+  width: 75px;
   border-radius: 50px;
+  margin-left: 12px;
 `;
 
 export const FotoVaziaEnvolvedor = styled.View`

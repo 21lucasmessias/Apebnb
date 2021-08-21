@@ -85,7 +85,7 @@ const ContextoMoradorProvider: React.FC<iContextoMoradorProvider> = ({
       mostrarAviso('Dados alterados com sucesso');
     } catch (err) {
       mostrarAviso('Algo deu errado. Contate o desenvolvedor.');
-      console.log(`Error in alterarMorador`, err);
+      console.log(`Erro  ao alterarMorador`, err);
     }
   };
 

@@ -53,8 +53,12 @@ const CartaoAmbiente: React.FC<iCartaoAmbiente> = ({
       }}
       ultimo={ultimo && tecladoVisivel}>
       <Envolvedor>
-        {ambiente.foto ? (
-          <Foto source={{uri: ambiente.foto}} />
+        {!!ambiente.foto ? (
+          <Foto
+            source={{uri: ambiente.foto}}
+            resizeMethod="scale"
+            resizeMode="cover"
+          />
         ) : (
           <FotoVaziaEnvolvedor>
             <Icon name="camera" size={24} color={tema.color.azulEscuro} />

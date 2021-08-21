@@ -45,14 +45,14 @@ const AprovarMorador: React.FC<iMoradorScreen> = ({route, navigation}) => {
     <Conteiner>
       <Envolvedor>
         <SubTitulo>Verifique os dados do Morador</SubTitulo>
-        {morador.foto ? (
-          <Foto source={{uri: morador.foto}} />
-        ) : (
-          <EnvolvedorFoto>
-            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-          </EnvolvedorFoto>
-        )}
         <ScrollView showsVerticalScrollIndicator={false}>
+          {morador.foto ? (
+            <Foto source={{uri: morador.foto}} />
+          ) : (
+            <EnvolvedorFoto>
+              <Icon name="camera" size={24} color={tema.color.azulEscuro} />
+            </EnvolvedorFoto>
+          )}
           <EntradaDeDados
             nome="Nome completo"
             valor={morador.nome}

@@ -51,12 +51,8 @@ const VisualizarReserva: React.FC<iReservaScreen> = ({route, navigation}) => {
   return (
     <Envolvedor>
       <EnvolvedorReserva showsVerticalScrollIndicator={false}>
-        {reserva.ambiente.foto ? (
+        {!!reserva.ambiente.foto && (
           <Foto source={{uri: reserva.ambiente.foto}} />
-        ) : (
-          <FotoVaziaEnvolvedor>
-            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-          </FotoVaziaEnvolvedor>
         )}
 
         <Divisor />

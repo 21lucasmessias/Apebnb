@@ -1,6 +1,7 @@
-import React, {useRef, useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 
-import {Keyboard, View} from 'react-native';
+import {Keyboard} from 'react-native';
+import * as ImagePicker from 'react-native-image-picker';
 
 import {ContextoAmbientes} from '../../../contextos/ContextoAmbientes';
 
@@ -25,7 +26,7 @@ import {
   Conteiner,
   Envolvedor,
   Foto,
-  FotoVaziaEnvolvedor,
+  FotoEnvolvedor,
   Divisor,
   EnvolvedorBotoes,
 } from './estilos';
@@ -35,8 +36,6 @@ interface iCriarAmbienteScreen
 
 const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({navigation}) => {
   const {criarAmbiente} = useContext(ContextoAmbientes);
-
-  const diasSemanaRef = useRef<View>(null);
 
   const [foto, setFoto] = useState<string | null>(null);
   const [nome, setNome] = useState('');
@@ -77,15 +76,32 @@ const CriarAmbienteScreen: React.FC<iCriarAmbienteScreen> = ({navigation}) => {
     }
   };
 
+  const carregarImagem = () => {
+    ImagePicker.launchImageLibrary(
+      {
+        mediaType: 'photo',
+        selectionLimit: 1,
+        includeBase64: true,
+      },
+      image => {
+        if (!image.didCancel) {
+          setFoto('data:image/png;base64,' + image!.assets![0].base64!);
+        }
+      },
+    );
+  };
+
   return (
     <Conteiner>
       <Envolvedor showsVerticalScrollIndicator={false}>
         {foto ? (
-          <Foto source={{uri: foto}} />
+          <FotoEnvolvedor onPress={carregarImagem}>
+            <Foto source={{uri: foto}} />
+          </FotoEnvolvedor>
         ) : (
-          <FotoVaziaEnvolvedor>
+          <FotoEnvolvedor onPress={carregarImagem}>
             <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-          </FotoVaziaEnvolvedor>
+          </FotoEnvolvedor>
         )}
 
         <Divisor />

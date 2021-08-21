@@ -121,13 +121,7 @@ const VisualizarAmbiente: React.FC<iAmbienteScreen> = ({route, navigation}) => {
   return (
     <Conteiner>
       <Envolvedor showsVerticalScrollIndicator={false}>
-        {ambiente.foto ? (
-          <Foto source={{uri: ambiente.foto}} />
-        ) : (
-          <FotoVaziaEnvolvedor>
-            <Icon name="camera" size={24} color={tema.color.azulEscuro} />
-          </FotoVaziaEnvolvedor>
-        )}
+        {!!ambiente.foto && <Foto source={{uri: ambiente.foto}} />}
 
         <Divisor />
 
